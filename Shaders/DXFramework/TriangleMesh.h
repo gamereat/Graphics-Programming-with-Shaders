@@ -13,6 +13,7 @@ class TriangleMesh : public BaseMesh
 
 public:
 	TriangleMesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename);
+	TriangleMesh();
 	~TriangleMesh();
 
 protected:

@@ -5,8 +5,8 @@
 // Includes
 #include "../DXFramework/baseapplication.h"
 #include "D3D.h"
-#include "../DXFramework/trianglemesh.h"
-#include "ColourShader.h"
+#include "../DXFramework/DoubleTriangleMesh.h"
+ #include "ColourShader.h"
 
 class App1 : public BaseApplication
 {
@@ -23,7 +23,7 @@ protected:
 
 private:
 	ColourShader* m_ColourShader;
-	TriangleMesh* m_Mesh;
+	DoubleTriangleMesh* m_Mesh;
 
 	
 };

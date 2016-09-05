@@ -15,7 +15,7 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	BaseApplication::init(hinstance, hwnd, screenWidth, screenHeight, in);
 
 	// Create Mesh object
-	m_Mesh = new TriangleMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
+	m_Mesh = new DoubleTriangleMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
 
 	m_ColourShader = new ColourShader(m_Direct3D->GetDevice(), hwnd);
 
