@@ -86,6 +86,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CubeMesh.h" />
     <ClInclude Include="D3D.h" />
+    <ClInclude Include="DoubleTriangleMesh.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Mesh.h" />
@@ -110,6 +111,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CubeMesh.cpp" />
     <ClCompile Include="D3D.cpp" />
+    <ClCompile Include="DoubleTriangle.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Mesh.cpp" />
