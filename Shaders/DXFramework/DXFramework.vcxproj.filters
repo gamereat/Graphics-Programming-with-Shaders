@@ -102,6 +102,9 @@
     <ClInclude Include="Texture.h">
       <Filter>Header Files\Geometry</Filter>
     </ClInclude>
+    <ClInclude Include="DoubleTriangleMesh.h">
+      <Filter>Header Files\Geometry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseMesh.cpp">
@@ -168,6 +171,9 @@
       <Filter>Source Files\System</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp">
+      <Filter>Source Files\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="DoubleTriangle.cpp">
       <Filter>Source Files\Geometry</Filter>
     </ClCompile>
   </ItemGroup>
