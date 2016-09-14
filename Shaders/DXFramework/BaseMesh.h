@@ -27,6 +27,7 @@ public:
 	int GetIndexCount();
 	ID3D11ShaderResourceView* GetTexture();
 
+ 
 protected:
 	virtual void InitBuffers(ID3D11Device*) = 0;
 	void LoadTexture(ID3D11Device*, ID3D11DeviceContext* deviceContext,  WCHAR*);

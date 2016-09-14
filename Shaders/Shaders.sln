@@ -16,6 +16,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E01_ColourShader", "E01_Col
 		{E0B52AE7-E160-4D32-BF3F-910B785E5A8E} = {E0B52AE7-E160-4D32-BF3F-910B785E5A8E}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E02", "E02_Texture\E02.vcxproj", "{2E019AD0-CB54-443A-90CA-97D375BEFB65}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,14 @@ Global
 		{7169974C-40D1-4884-8E97-4A9D907BD9E7}.Release|Win32.ActiveCfg = Release|Win32
 		{7169974C-40D1-4884-8E97-4A9D907BD9E7}.Release|Win32.Build.0 = Release|Win32
 		{7169974C-40D1-4884-8E97-4A9D907BD9E7}.Release|x64.ActiveCfg = Release|Win32
+		{2E019AD0-CB54-443A-90CA-97D375BEFB65}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{2E019AD0-CB54-443A-90CA-97D375BEFB65}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2E019AD0-CB54-443A-90CA-97D375BEFB65}.Debug|Win32.Build.0 = Debug|Win32
+		{2E019AD0-CB54-443A-90CA-97D375BEFB65}.Debug|x64.ActiveCfg = Debug|Win32
+		{2E019AD0-CB54-443A-90CA-97D375BEFB65}.Release|Any CPU.ActiveCfg = Release|Win32
+		{2E019AD0-CB54-443A-90CA-97D375BEFB65}.Release|Win32.ActiveCfg = Release|Win32
+		{2E019AD0-CB54-443A-90CA-97D375BEFB65}.Release|Win32.Build.0 = Release|Win32
+		{2E019AD0-CB54-443A-90CA-97D375BEFB65}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

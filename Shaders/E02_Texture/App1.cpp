@@ -1,12 +1,11 @@
 // Lab1.cpp
-// Lab 1 example, simple coloured triangle mesh
+// Lab 1 example, simple textured quad
 #include "App1.h"
 
 App1::App1()
 {
-	//BaseApplication::BaseApplication();
 	m_Mesh = nullptr;
-	m_ColourShader = nullptr;
+	m_TextureShader = nullptr;
 }
 
 void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight, Input *in)
@@ -15,9 +14,9 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	BaseApplication::init(hinstance, hwnd, screenWidth, screenHeight, in);
 
 	// Create Mesh object
-	m_Mesh = new DoubleTriangleMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
-
-	m_ColourShader = new ColourShader(m_Direct3D->GetDevice(), hwnd);
+	m_Mesh = new QuadMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/bunny.png");
+	m_Second_Mesh = new QuadMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/checkerboard.png");
+	m_TextureShader = new TextureShader(m_Direct3D->GetDevice(), hwnd);
 
 }
 
@@ -34,16 +33,23 @@ App1::~App1()
 		m_Mesh = 0;
 	}
 
-	if (m_ColourShader)
+	if (m_Second_Mesh)
 	{
-		delete m_ColourShader;
-		m_ColourShader = 0;
+		delete m_Second_Mesh;
+		m_Second_Mesh = 0;
+
+	}
+	if (m_TextureShader)
+	{
+		delete m_TextureShader;
+		m_TextureShader = 0;
 	}
 }
 
 
 bool App1::Frame()
 {
+	secondQuadRotation += 45.0f;
 
 	bool result;
 
@@ -52,16 +58,11 @@ bool App1::Frame()
 	{
 		return false;
 	}
- 
+
 	ImGui::ShowTestWindow();
 
 	// Render the graphics.
- 	result = Render();
-
-
-
-	
-	
+	result = Render();
 	if (!result)
 	{
 		return false;
@@ -88,17 +89,26 @@ bool App1::Render()
 	//// Send geometry data (from mesh)
 	m_Mesh->SendData(m_Direct3D->GetDeviceContext());
 	//// Set shader parameters (matrices and texture)
-	m_ColourShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix);
+	m_TextureShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Mesh->GetTexture());
 	//// Render object (combination of mesh geometry and shader process
-	m_ColourShader->Render(m_Direct3D->GetDeviceContext(), m_Mesh->GetIndexCount());
+	m_TextureShader->Render(m_Direct3D->GetDeviceContext(), m_Mesh->GetIndexCount());
 
-	//// Present the rendered scene to the screen.
+	XMMATRIX tranformMatrix = XMMatrixTranslation(2.0, 0.0, 0.0);
+	XMMATRIX rotationMatrix = XMMatrixRotationRollPitchYaw(0, 0, secondQuadRotation);;
+
+	worldMatrix = XMMatrixMultiply(tranformMatrix, rotationMatrix);
+
+	//// Send geometry data (from mesh)
+	m_Second_Mesh->SendData(m_Direct3D->GetDeviceContext());
+	//// Set shader parameters (matrices and texture)
+	m_TextureShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Second_Mesh->GetTexture());
+	//// Render object (combination of mesh geometry and shader process
+	m_TextureShader->Render(m_Direct3D->GetDeviceContext(), m_Second_Mesh->GetIndexCount());
 
 	//// Present the rendered scene to the screen.
 	m_Direct3D->EndScene();
 
 	return true;
 }
-
 
 

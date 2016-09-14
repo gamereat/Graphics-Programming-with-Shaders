@@ -419,6 +419,8 @@ void D3D::BeginScene(float red, float green, float blue, float alpha)
 
 void D3D::EndScene()
 {
+	// render the ui
+	ImGui::Render();
 	// Present the back buffer to the screen since rendering is complete.
 	if (m_vsync_enabled)
 	{
