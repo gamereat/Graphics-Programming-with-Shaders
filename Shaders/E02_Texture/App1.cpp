@@ -59,6 +59,8 @@ bool App1::Frame()
 		return false;
 	}
 
+	ImGui::ShowTestWindow();
+
 	// Render the graphics.
 	result = Render();
 	if (!result)
