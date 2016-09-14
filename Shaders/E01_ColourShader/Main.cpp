@@ -1,12 +1,14 @@
 // Main.cpp
 #include "../DXFramework/System.h"
 #include "App1.h"
-
+#include "../imgui/examples/directx11_example/imgui_impl_dx11.h"
+#include "../imgui/imgui.h"
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow)
 {
 	App1* app = new App1();
 	System* m_System;
 
+ 	
 	// Create the system object.
 	m_System = new System(app);
 

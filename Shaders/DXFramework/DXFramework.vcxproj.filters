@@ -31,6 +31,12 @@
     <Filter Include="Source Files\System">
       <UniqueIdentifier>{7cf94828-2d95-480c-a62c-09fb1c1f0821}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\IMGUI">
+      <UniqueIdentifier>{ebf02dbb-54e6-49a7-a2e7-daff28d1d3fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\IMGUI">
+      <UniqueIdentifier>{eb3af1b0-43c6-4c23-9027-29d682a9e71c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -105,6 +111,27 @@
     <ClInclude Include="DoubleTriangleMesh.h">
       <Filter>Header Files\Geometry</Filter>
     </ClInclude>
+    <ClInclude Include="..\imgui\imconfig.h">
+      <Filter>Header Files\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imgui.h">
+      <Filter>Header Files\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imgui_internal.h">
+      <Filter>Header Files\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\stb_rect_pack.h">
+      <Filter>Header Files\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\stb_textedit.h">
+      <Filter>Header Files\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\stb_truetype.h">
+      <Filter>Header Files\IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\examples\directx11_example\imgui_impl_dx11.h">
+      <Filter>Header Files\IMGUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseMesh.cpp">
@@ -175,6 +202,18 @@
     </ClCompile>
     <ClCompile Include="DoubleTriangle.cpp">
       <Filter>Source Files\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui.cpp">
+      <Filter>Source Files\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui_demo.cpp">
+      <Filter>Source Files\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui_draw.cpp">
+      <Filter>Source Files\IMGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\examples\directx11_example\imgui_impl_dx11.cpp">
+      <Filter>Source Files\IMGUI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

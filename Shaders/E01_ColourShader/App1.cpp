@@ -44,6 +44,8 @@ App1::~App1()
 
 bool App1::Frame()
 {
+
+
 	bool result;
 
 	result = BaseApplication::Frame();
@@ -51,9 +53,16 @@ bool App1::Frame()
 	{
 		return false;
 	}
+ 
+	ImGui::ShowTestWindow();
 
 	// Render the graphics.
-	result = Render();
+ 	result = Render();
+
+	PostRender();
+
+	
+	
 	if (!result)
 	{
 		return false;
@@ -85,9 +94,24 @@ bool App1::Render()
 	m_ColourShader->Render(m_Direct3D->GetDeviceContext(), m_Mesh->GetIndexCount());
 
 	//// Present the rendered scene to the screen.
+	ImGui_ImplDX11_NewFrame();
+	{
+		ImGui::ShowTestWindow();
+		//ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiSetCond_FirstUseEver);
+		//static float f = 0.0f;
+		//ImGui::Begin("Debug Stuff", 0, ImGuiWindowFlags_NoResize);
+		//ImGui::SliderFloat("float", &f, 0.0f,1.0f);
+		//ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		//ImGui::Text("IDID A THING");
+
+		//ImGui::End();
+	}
+	ImGui::Render();
+	//// Present the rendered scene to the screen.
 	m_Direct3D->EndScene();
 
 	return true;
 }
+
 
 

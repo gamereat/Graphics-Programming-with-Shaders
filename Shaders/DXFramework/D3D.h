@@ -6,10 +6,14 @@
 
 #include <Windows.h>
 #include <d3d11.h>
+ #include <d3dcompiler.h>
 #include <DirectXMath.h>
-
+#include "../imgui/examples/directx11_example/imgui_impl_dx11.h"
 using namespace DirectX;
-
+struct VERTEX_CONSTANT_BUFFER
+{
+	float        mvp[4][4];
+};
 class D3D
 {
 public:
@@ -48,6 +52,9 @@ public:
 	void SetBackBufferRenderTarget();
 	void ResetViewport();
 
+
+
+ 
 protected:
 	bool m_vsync_enabled;
 	int m_videoCardMemory;
@@ -68,6 +75,8 @@ protected:
 	ID3D11BlendState* m_alphaEnableBlendingState;
 	ID3D11BlendState* m_alphaDisableBlendingState;
 	D3D11_VIEWPORT viewport;
+
+
 };
 
 #endif

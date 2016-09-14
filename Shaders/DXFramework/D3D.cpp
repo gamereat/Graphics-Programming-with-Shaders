@@ -1,10 +1,13 @@
 // D3D.cpp
 // Direct3D setup
 #include "d3d.h"
-
+ 
 D3D::D3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscreen, float screenDepth, float screenNear)
 {
-	IDXGIFactory* factory;
+
+
+
+ 	IDXGIFactory* factory;
 	IDXGIAdapter* adapter;
 	IDXGIOutput* adapterOutput;
 	unsigned int numModes, i, numerator, denominator, stringLength;
@@ -169,6 +172,11 @@ D3D::D3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscre
 	depthBufferDesc.CPUAccessFlags = 0;
 	depthBufferDesc.MiscFlags = 0;
 
+	// Create the constant buffer
+
+
+	
+ 
 	// Create the texture for the depth buffer using the filled out description.
 	m_device->CreateTexture2D(&depthBufferDesc, NULL, &m_depthStencilBuffer);
 	
@@ -249,6 +257,7 @@ D3D::D3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscre
 	// Create the viewport.
 	m_deviceContext->RSSetViewports(1, &viewport);
 
+
 	// Setup the projection matrix.
 	fieldOfView = (float)XM_PI / 4.0f;
 	screenAspect = (float)screenWidth / (float)screenHeight;
@@ -306,6 +315,10 @@ D3D::D3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscre
 
 	// Create the second blend state using the description.
 	m_device->CreateBlendState(&blendStateDescription, &m_alphaDisableBlendingState);
+
+
+
+
 }
 
 D3D::~D3D()
