@@ -50,17 +50,20 @@ void DoubleTriangleMesh::InitBuffers(ID3D11Device* device)
 	vertices[2].texture = XMFLOAT2(1.0f, 0.0f);
 	vertices[2].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
 
+
+
+
 	// Load the vertex array with data.
-	vertices[3].position = XMFLOAT3(0.0f, 2.0f, 0.0f);  // Top.
-	vertices[3].texture = XMFLOAT2(0.0f, 1.0f);
+	vertices[3].position = XMFLOAT3(1.0f, 1.0f, 0.0f);// Top.
+	vertices[3].texture = XMFLOAT2(1.0f, 0.0f);
 	vertices[3].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
 
 	vertices[4].position = XMFLOAT3(2.0f, 0.0f, 0.0f);  // Bottom left.
-	vertices[4].texture = XMFLOAT2(0.0f, 0.0f);
-	vertices[4].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
+	vertices[4].texture  = XMFLOAT2(0.0f, 0.0f);
+	vertices[4].normal   = XMFLOAT3(0.0f, 0.0f, -1.0f);
 
-	vertices[5].position = XMFLOAT3(-2.0f, 0.0f, .0f);  // Bottom right.
-	vertices[5].texture = XMFLOAT2(1.0f, 0.0f);
+	vertices[5].position = XMFLOAT3(1.0f, 2.0f, 0.0f);  // Bottom right.
+	vertices[5].texture = XMFLOAT2(0.0f, 1.0f);
 	vertices[5].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
 
 	// Load the index array with data.

@@ -35,6 +35,8 @@ BaseApplication::~BaseApplication()
 
 void BaseApplication::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight, Input *in)
 {
+
+	
 	m_Input = in;
 	wnd = hwnd;
 	sWidth = screenWidth;
@@ -57,10 +59,17 @@ void BaseApplication::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int 
 
 	// Create the timer object.
 	m_Timer = new Timer();
+
+	ImGui_ImplDX11_Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext());
+	
 }
 
+
 bool BaseApplication::Frame()
-{
+{	
+	ImGui_ImplDX11_NewFrame();
+
+	
 	// Check if the user pressed escape and wants to exit the application.
 	if (m_Input->isKeyDown(VK_ESCAPE) == true)
 	{
@@ -72,13 +81,24 @@ bool BaseApplication::Frame()
 
 	// Do the frame input processing.
 	HandleInput(m_Timer->GetTime());
-
+ 
 	return true;
 }
 
 
 void BaseApplication::HandleInput(float frameTime)
 {
+	ImGuiIO& io = ImGui::GetIO();
+
+	io.MousePos = ImVec2( m_Input->getMouseX(),m_Input->getMouseY());
+	io.MouseDown[0] = m_Input->isLeftMouseDown();
+	io.MouseDown[1] = m_Input->isRightMouseDown();
+
+	for (int i = 0; i < 256; i++)
+	{
+		io.KeysDown[i] = m_Input->isKeyDown(i);
+	}
+
 	// Set the frame time for calculating the updated position.
 	m_Camera->SetFrameTime(frameTime);
 
@@ -163,3 +183,14 @@ void BaseApplication::HandleInput(float frameTime)
 
 	
 }
+
+void BaseApplication::PostRender()
+{
+
+	// 1. Show a simple window
+	// Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets appears in a window automatically called "Debug"
+
+
+}
+
+

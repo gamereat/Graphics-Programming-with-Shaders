@@ -18,6 +18,7 @@ System::System(BaseApplication* application)
 	m_Application = application;
 	m_Application->init(m_hinstance, m_hwnd, screenWidth, screenHeight, &m_Input);
 
+
 }
 
 
@@ -84,6 +85,7 @@ bool System::Frame()
 
 	// Do the frame processing for the application object.
 	result = m_Application->Frame();
+
 	if (!result)
 	{
 		return false;
@@ -183,6 +185,9 @@ void System::InitializeWindows(int& screenWidth, int& screenHeight)
 
 void System::ShutdownWindows()
 {
+
+	ImGui_ImplDX11_Shutdown();
+
 	// Show the mouse cursor.
 	ShowCursor(true);
 
@@ -264,5 +269,8 @@ LRESULT CALLBACK System::WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM
 		}
 
 	}
+	if (ImGui_ImplDX11_WndProcHandler(hwnd, umessage, wparam, lparam))
+		return true;
+
 	return ApplicationHandle->MessageHandler(hwnd, umessage, wparam, lparam);
 }

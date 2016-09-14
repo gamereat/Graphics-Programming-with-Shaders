@@ -14,6 +14,7 @@ const float SCREEN_NEAR = 0.1f;		//0.1f
 #include "d3d.h"
 #include "camera.h"
 #include "timer.h"
+#include "../imgui/examples/directx11_example/imgui_impl_dx11.h"
 
 class BaseApplication
 {
@@ -24,10 +25,13 @@ public:
 	virtual void init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight, Input *in);
 
 	virtual bool Frame();
+	void PostRender();
 
 protected:
 	virtual void HandleInput(float);
 	virtual bool Render() = 0;
+
+
 
 protected:
 	HWND wnd;
@@ -37,6 +41,7 @@ protected:
 	D3D* m_Direct3D;
 	Camera* m_Camera;
 	Timer* m_Timer;
-};
+
+};	
 
 #endif
