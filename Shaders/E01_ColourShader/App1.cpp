@@ -44,6 +44,7 @@ App1::~App1()
 
 bool App1::Frame()
 {
+ 
 	bool result;
 
 	result = BaseApplication::Frame();
@@ -51,9 +52,15 @@ bool App1::Frame()
 	{
 		return false;
 	}
+ 
+	ImGui::ShowTestWindow();
 
 	// Render the graphics.
-	result = Render();
+ 	result = Render();
+
+
+	
+	
 	if (!result)
 	{
 		return false;
@@ -85,9 +92,14 @@ bool App1::Render()
 	m_ColourShader->Render(m_Direct3D->GetDeviceContext(), m_Mesh->GetIndexCount());
 
 	//// Present the rendered scene to the screen.
+ 
+	// render the ui
+	ImGui::Render();
+	//// Present the rendered scene to the screen.
 	m_Direct3D->EndScene();
 
 	return true;
 }
+
 
 
