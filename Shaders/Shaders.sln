@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DXFramework", "DXFramework\DXFramework.vcxproj", "{E887C38B-1273-433A-9DAC-A153DA5CF145}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E01_ColourShader", "E01_Col
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E02", "E02_Texture\E02.vcxproj", "{2E019AD0-CB54-443A-90CA-97D375BEFB65}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E03", "\\StuHome\HomeDrive2$\1402402\Shaders\Shaders\E03_Lighting1\E03.vcxproj", "{F275C074-3CE4-4B7D-B0D5-40FA9581FE38}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +64,14 @@ Global
 		{2E019AD0-CB54-443A-90CA-97D375BEFB65}.Release|Win32.ActiveCfg = Release|Win32
 		{2E019AD0-CB54-443A-90CA-97D375BEFB65}.Release|Win32.Build.0 = Release|Win32
 		{2E019AD0-CB54-443A-90CA-97D375BEFB65}.Release|x64.ActiveCfg = Release|Win32
+		{F275C074-3CE4-4B7D-B0D5-40FA9581FE38}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{F275C074-3CE4-4B7D-B0D5-40FA9581FE38}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F275C074-3CE4-4B7D-B0D5-40FA9581FE38}.Debug|Win32.Build.0 = Debug|Win32
+		{F275C074-3CE4-4B7D-B0D5-40FA9581FE38}.Debug|x64.ActiveCfg = Debug|Win32
+		{F275C074-3CE4-4B7D-B0D5-40FA9581FE38}.Release|Any CPU.ActiveCfg = Release|Win32
+		{F275C074-3CE4-4B7D-B0D5-40FA9581FE38}.Release|Win32.ActiveCfg = Release|Win32
+		{F275C074-3CE4-4B7D-B0D5-40FA9581FE38}.Release|Win32.Build.0 = Release|Win32
+		{F275C074-3CE4-4B7D-B0D5-40FA9581FE38}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
