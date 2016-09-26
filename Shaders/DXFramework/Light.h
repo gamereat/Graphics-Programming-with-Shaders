@@ -30,6 +30,11 @@ public:
 	void SetSpecularPower(float);
 	void SetPosition(float, float, float);
 	void SetLookAt(float, float, float);
+	void SetRange(float);
+
+	void SetAttenuationContantFactor(float);
+	void SetAttenuationLinearFactor(float);
+	void SetAttenuationQuadraticFactor(float);
 
 	// Getters
 	XMFLOAT4 GetAmbientColour();
@@ -40,7 +45,10 @@ public:
 	XMFLOAT3 GetPosition();
 	XMMATRIX GetViewMatrix();
 	XMMATRIX GetProjectionMatrix();
-
+	float GetRange();
+	float GetAttenuationContantFactor();
+	float GetAttenuationLinearFactor();
+	float GetAttenuationQuadraticFactor();
 
 protected:
 	XMFLOAT4 m_ambientColour;
@@ -52,6 +60,11 @@ protected:
 	XMMATRIX m_viewMatrix;
 	XMMATRIX m_projectionMatrix;
 	XMVECTOR m_lookAt; 
+	float m_range;
+	float m_attenuationConstantFactor;
+	float m_attenuationLinearFactor;
+	float m_attenuationQuadraticFactor;
+
 };
 
 #endif
