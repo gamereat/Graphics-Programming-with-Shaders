@@ -22,6 +22,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E03", "\\StuHome\HomeDrive2
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E03_LightingSpecular", "E03_LightingSpecular\E03_LightingSpecular.vcxproj", "{99FB34A1-CFC5-4D23-AD4F-74B389D2F69E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E04_LightingLab4", "E04_LightingLab4\E04_LightingLab4.vcxproj", "{79BC39F8-9E89-4A72-B1E7-C146D081E19D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,14 @@ Global
 		{99FB34A1-CFC5-4D23-AD4F-74B389D2F69E}.Release|Win32.ActiveCfg = Release|Win32
 		{99FB34A1-CFC5-4D23-AD4F-74B389D2F69E}.Release|Win32.Build.0 = Release|Win32
 		{99FB34A1-CFC5-4D23-AD4F-74B389D2F69E}.Release|x64.ActiveCfg = Release|Win32
+		{79BC39F8-9E89-4A72-B1E7-C146D081E19D}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{79BC39F8-9E89-4A72-B1E7-C146D081E19D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{79BC39F8-9E89-4A72-B1E7-C146D081E19D}.Debug|Win32.Build.0 = Debug|Win32
+		{79BC39F8-9E89-4A72-B1E7-C146D081E19D}.Debug|x64.ActiveCfg = Debug|Win32
+		{79BC39F8-9E89-4A72-B1E7-C146D081E19D}.Release|Any CPU.ActiveCfg = Release|Win32
+		{79BC39F8-9E89-4A72-B1E7-C146D081E19D}.Release|Win32.ActiveCfg = Release|Win32
+		{79BC39F8-9E89-4A72-B1E7-C146D081E19D}.Release|Win32.Build.0 = Release|Win32
+		{79BC39F8-9E89-4A72-B1E7-C146D081E19D}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

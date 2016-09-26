@@ -97,6 +97,28 @@ void Light::SetLookAt(float x, float y, float z)
 	m_lookAt = XMVectorSet(x, y, z, 1.0f);
 }
 
+void Light::SetRange(float newRange)
+{
+	m_range = newRange;
+
+}
+
+void Light::SetAttenuationContantFactor(float newValue)
+{
+
+	m_attenuationConstantFactor = newValue;
+}
+
+void Light::SetAttenuationLinearFactor(float newValue)
+{
+	m_attenuationLinearFactor = newValue;
+}
+
+void Light::SetAttenuationQuadraticFactor(float newValue)
+{
+	m_attenuationQuadraticFactor = newValue;
+}
+
 XMMATRIX Light::GetViewMatrix()
 {
 	return m_viewMatrix;
@@ -105,4 +127,24 @@ XMMATRIX Light::GetViewMatrix()
 XMMATRIX Light::GetProjectionMatrix()
 {
 	return m_projectionMatrix;
+}
+
+float Light::GetRange()
+{
+	return m_range;
+}
+
+float Light::GetAttenuationContantFactor()
+{
+	return m_attenuationConstantFactor;
+}
+
+float Light::GetAttenuationLinearFactor()
+{
+	return m_attenuationLinearFactor;
+}
+
+float Light::GetAttenuationQuadraticFactor()
+{
+	return m_attenuationQuadraticFactor;
 }
