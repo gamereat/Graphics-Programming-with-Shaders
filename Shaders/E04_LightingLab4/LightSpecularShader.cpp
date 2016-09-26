@@ -114,7 +114,7 @@ void LightSpecularShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 }
 
 
-void LightSpecularShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, Light* light, XMFLOAT3 cammeraPostion)
+void LightSpecularShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, Light* light[], XMFLOAT3 cammeraPostion)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -144,37 +144,65 @@ void LightSpecularShader::SetShaderParameters(ID3D11DeviceContext* deviceContext
 	// Unlock the constant buffer.
 	deviceContext->Unmap(m_matrixBuffer, 0);
 
-	// Set the position of the constant buffer in the vertex shader.
-	bufferNumber = 0;
+		// Set the position of the constant buffer in the vertex shader.
+		bufferNumber = 0;
 
 	// Now set the constant buffer in the vertex shader with the updated values.
 	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
-
 	//Additional
 	// Send light data to pixel shader
 	deviceContext->Map(m_lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	lightPtr = (LightBufferType*)mappedResource.pData;
-	lightPtr->diffuse = light->GetDiffuseColour();
-	lightPtr->ambient = light->GetAmbientColour();
-	lightPtr->direction = light->GetDirection();
-	lightPtr->specularPower = light->GetSpecularPower();
-	lightPtr->specularColour = light->GetSpecularColour();
-	lightPtr->position = light->GetPosition();
-
-	lightPtr->padding = 0;
-	lightPtr->constantAttenuationFactor = light->GetAttenuationContantFactor();
-	lightPtr->linearAttenuationFactor = light->GetAttenuationLinearFactor();
-	lightPtr->quadraticAttenuationFactor = light->GetAttenuationQuadraticFactor();
-	lightPtr->range = light->GetRange();
+	for (int i = 0; i < NUM_LIGHTS; i++)
+	{
 
 
+		lightPtr->diffuse[i] = light[i]->GetDiffuseColour();
+		lightPtr->ambient[i] = light[i]->GetAmbientColour();
+		lightPtr->direction[i] = XMFLOAT4(light[i]->GetDirection().x, light[i]->GetDirection().y, light[i]->GetDirection().z, 0);
+		lightPtr->specularPower[i].x = light[i]->GetSpecularPower();
+		lightPtr->specularColour[i] = light[i]->GetSpecularColour();
+		lightPtr->position[i] = XMFLOAT4(light[i]->GetPosition().x, light[i]->GetPosition().y, light[i]->GetPosition().z, 0);
+		//	lightPtr->padding[i] = 0;
+
+		switch (light[i]->GetLightType())
+		{
+		case Light::lightType::directional:
+			lightPtr->isDirectionalLight[i].x = true;
+			lightPtr->isSpotLight[i].x = false;
+			lightPtr->isPointLight[i].x = false;
+			break;
+
+
+		case Light::lightType::point:
+			lightPtr->isDirectionalLight[i].x = false;
+			lightPtr->isSpotLight[i].x = false;
+			lightPtr->isPointLight[i].x = true;
+			break;
+
+
+		case Light::lightType::spot:
+			lightPtr->isDirectionalLight[i].x = false;
+			lightPtr->isSpotLight[i].x = true;
+			lightPtr->isPointLight[i].x = false;
+			break;
+		default:
+			break;
+		}
+		lightPtr->isSpecular[i].x = light[i]->GetMakesSpecular();
+
+		lightPtr->constantAttenuationFactor[i].x = light[i]->GetAttenuationContantFactor();
+		lightPtr->linearAttenuationFactor[i].x = light[i]->GetAttenuationLinearFactor();
+		lightPtr->quadraticAttenuationFactor[i].x = light[i]->GetAttenuationQuadraticFactor();
+		lightPtr->range[i].x = light[i]->GetRange();
+
+
+	}
 	deviceContext->Unmap(m_lightBuffer, 0);
 	bufferNumber = 0;
 	deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_lightBuffer);
-
 	deviceContext->Map(m_camBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	cammeraPtr = (CammeraBufferType*)mappedResource.pData;
-	ImGui::Text("Cammera Pos: (%f,%f,%f)", cammeraPostion.x, cammeraPostion.y, cammeraPostion.z);
 	cammeraPtr->cammeraPostion = cammeraPostion;
 		
 	cammeraPtr->padding = 0.0f;

@@ -8,7 +8,14 @@ using namespace DirectX;
 class Light
 {
 
+
 public:
+	enum class lightType
+	{
+		directional,
+		point,
+		spot
+	};
 	void* operator new(size_t i)
 	{
 		return _mm_malloc(i, 16);
@@ -21,6 +28,8 @@ public:
 
 	void GenerateViewMatrix();
 	void GenerateProjectionMatrix(float, float);
+
+	void DisplayGUIEditor(int lightNum, bool* is_open);
 
 	// Setters
 	void SetAmbientColour(float, float, float, float);
@@ -49,7 +58,8 @@ public:
 	float GetAttenuationContantFactor();
 	float GetAttenuationLinearFactor();
 	float GetAttenuationQuadraticFactor();
-
+	lightType GetLightType();
+	bool GetMakesSpecular();
 protected:
 	XMFLOAT4 m_ambientColour;
 	XMFLOAT4 m_diffuseColour;
@@ -65,6 +75,9 @@ protected:
 	float m_attenuationLinearFactor;
 	float m_attenuationQuadraticFactor;
 
+	bool m_makeSpecular;
+	lightType m_lightType;
+	
 };
 
 #endif

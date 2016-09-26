@@ -5,10 +5,11 @@
 
 // Globals
 const bool FULL_SCREEN = false;
-const bool VSYNC_ENABLED = true;
+const bool VSYNC_ENABLED = false;
 const float SCREEN_DEPTH = 200.0f;	// 1000.0f
 const float SCREEN_NEAR = 0.1f;		//0.1f
-
+const float SCREEN_WIDTH = 1000;
+const float SCREEN_HEIGHT = 860;
 // Includes
 #include "input.h"
 #include "d3d.h"
@@ -25,11 +26,10 @@ public:
 	virtual void init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight, Input *in);
 
 	virtual bool Frame();
-	void PostRender();
-
 protected:
 	virtual void HandleInput(float);
 	virtual bool Render() = 0;
+	virtual void CreateMainMenuBar() = 0;
 
 
 
@@ -41,6 +41,7 @@ protected:
 	D3D* m_Direct3D;
 	Camera* m_Camera;
 	Timer* m_Timer;
+
 
 };	
 

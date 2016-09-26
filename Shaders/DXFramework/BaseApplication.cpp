@@ -61,7 +61,8 @@ void BaseApplication::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int 
 	m_Timer = new Timer();
 
 	ImGui_ImplDX11_Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext());
-	
+	ImGui_ImplDX11_NewFrame();
+
 }
 
 
@@ -75,6 +76,10 @@ bool BaseApplication::Frame()
 	{
 		return false;
 	}
+
+
+	CreateMainMenuBar();
+ 
 
 	// Update the system stats.
 	m_Timer->Frame();
@@ -184,13 +189,5 @@ void BaseApplication::HandleInput(float frameTime)
 	
 }
 
-void BaseApplication::PostRender()
-{
-
-	// 1. Show a simple window
-	// Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets appears in a window automatically called "Debug"
-
-
-}
-
+ 
 

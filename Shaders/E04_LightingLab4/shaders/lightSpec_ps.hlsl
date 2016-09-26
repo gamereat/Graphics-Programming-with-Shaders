@@ -6,18 +6,23 @@ SamplerState SampleType : register(s0);
 
 cbuffer LightBuffer : register(b0)
 {
-    float4 diffuseColour;
-    float3 lightDirection;
-	float specularPower;
-	float4  ambientColour;
-	float4 specularColour;
-	float3 position;
-	float padding;
+    float4 diffuseColour[4];
+    float4 lightDirection[4];
+	float4  ambientColour[4];
+	float4 specularColour[4];
+	float4 position[4];
+	 	
+	float4 specularPower[4];
 
-	float constantAttenuationFactor;
-	float linearAttenuationFactor;
-	float quadraticAttenuationFactor;
-	float range;
+	float4 constantAttenuationFactor[4];
+	float4 linearAttenuationFactor[4];
+	float4 quadraticAttenuationFactor[4];
+	float4 range[4];
+
+	int4 isSpecular[4];
+	int4 isDirectionalLight[4];
+	int4 isSpotLight[4];
+	int4 isPointLight[4];
 };
 
 struct InputType
@@ -32,6 +37,10 @@ struct InputType
 
 float4 main(InputType input) : SV_TARGET
 {
+	
+	
+	//
+	
 	float4 textureColour;
 	float3 lightDir;
 	float lightIntensity;
@@ -43,58 +52,81 @@ float4 main(InputType input) : SV_TARGET
 	float distance;
 
 	// set colour to default ambient colour
-	colour = ambientColour;
+	colour = ambientColour[0];
 
-    // Sample the pixel color from the texture using the sampler at this texture coordinate location.
+	// Sample the pixel color from the texture using the sampler at this texture coordinate location.
 	textureColour = shaderTexture.Sample(SampleType, input.tex);
 
+	for (int i = 0; i < 4; i++)
+	{
+		distance = length(input.position3D - position[i].xyz);
 
-	distance = length(input.position3D - position);
+		if (distance < range[i].x || isDirectionalLight[i].x)
+		{
 
-		if (distance < range)
-		{	
 
-			// Invert the light direction for calculations.
-			lightDir = normalize(input.position3D - position);
+			if (isPointLight[i].x)
+			{
+				// Invert the light direction for calculations.
+				lightDir = normalize(input.position3D - position[i].xyz);
 
-			// Calculate the amount of light on this pixel.
-			lightIntensity = saturate(dot(input.normal, -lightDir));
+				// Calculate the amount of light on this pixel.
+				lightIntensity = saturate(dot(input.normal, -lightDir));
 
+			}
+			else if(isDirectionalLight[i].x)
+			{
+
+				// Invert the light direction for calculations.
+				lightDir = -lightDirection[i].xyz;
+
+				// Calculate the amount of light on this pixel.
+				lightIntensity = saturate(dot(input.normal, lightDir));
+			}
 
 
 
 			if (lightIntensity > 0.0f)
 			{
-				// Work out the attenation value
-				attenuation = 1 / (constantAttenuationFactor +
-					linearAttenuationFactor * distance + pow(quadraticAttenuationFactor, 2));
+				if (isPointLight[i].x)
+				{
+					// Work out the attenation value
+					attenuation = 1 / (constantAttenuationFactor[i].x +
+						linearAttenuationFactor[i].x * distance + pow(quadraticAttenuationFactor[i].x, 2));
+				}
 
 
-					
-					colour += (diffuseColour * lightIntensity);
+				colour += (diffuseColour[i] * lightIntensity);
 
-				colour = colour * attenuation;
-
+				if (isPointLight[i].x)
+				{
+					colour = colour * attenuation;
+				}
 				colour = saturate(colour);
 
-				// Calculate reflection vector based on the light intensity, normal vector and light direction
-				reflection = reflect(lightDir, input.normal);
+				if (isSpecular[i].x)
+				{
+					// Calculate reflection vector based on the light intensity, normal vector and light direction
+					reflection = reflect(lightDir, input.normal);
 
-				// Determine the amount of specular light based on the reflection vector, viewing direction, and specular power.
-				specular = pow(saturate(dot(reflection, input.viewDirection)), specularPower);
+					// Determine the amount of specular light based on the reflection vector, viewing direction, and specular power.
+					specular = pow(saturate(dot(reflection, input.viewDirection)), specularPower[i]);
 
-				//sum up specular light
-				finalSpec = specularColour * specular;
+					//sum up specular light
+					finalSpec = specularColour[i] * specular;
 
-				// Add the specular component last to the output colour.
-				colour = saturate(colour + finalSpec);
+					// Add the specular component last to the output colour.
+					colour = saturate(colour + finalSpec);
+				}
 			}
 		}
+
+
+
+	}	
 	// Multiply the texture pixel and the final diffuse color to get the final pixel color result.
 	colour = colour * textureColour;
+	return colour;
 
-
-
-    return colour;
 }
 

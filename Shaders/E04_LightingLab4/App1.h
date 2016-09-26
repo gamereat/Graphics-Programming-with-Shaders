@@ -21,9 +21,10 @@ public:
 
 protected:
 	bool Render();
+	void CreateMainMenuBar();
 
 private:
-	Light* m_Light;
+	Light* m_Lights[4];
 	LightSpecularShader* m_Light_Shader;
 	PlaneMesh* m_Quad_Mesh;
 	SphereMesh* m_Sphere_Mesh;

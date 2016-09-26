@@ -158,8 +158,8 @@ void System::InitializeWindows(int& screenWidth, int& screenHeight)
 	else
 	{
 		// If windowed then set it to 800x600 resolution.
-		screenWidth = 800;
-		screenHeight = 600;
+		screenWidth = SCREEN_WIDTH;
+		screenHeight = SCREEN_HEIGHT;
 
 		// Place the window in the middle of the screen.
 		posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
@@ -268,6 +268,7 @@ LRESULT CALLBACK System::WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM
 			return 0;
 		}
 
+		
 	}
 	if (ImGui_ImplDX11_WndProcHandler(hwnd, umessage, wparam, lparam))
 		return true;

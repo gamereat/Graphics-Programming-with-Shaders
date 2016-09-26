@@ -274,6 +274,8 @@ extern IMGUI_API LRESULT ImGui_ImplDX11_WndProcHandler(HWND, UINT msg, WPARAM wP
         if (wParam > 0 && wParam < 0x10000)
             io.AddInputCharacter((unsigned short)wParam);
         return true;
+
+  
     }
     return 0;
 }
@@ -555,7 +557,7 @@ void ImGui_ImplDX11_NewFrame()
 
     // Setup display size (every frame to accommodate for window resizing)
     RECT rect;
-    GetClientRect(g_hWnd, &rect);
+	GetWindowRect(g_hWnd, &rect);
     io.DisplaySize = ImVec2((float)(rect.right - rect.left), (float)(rect.bottom - rect.top));
 
     // Setup time step
@@ -577,6 +579,7 @@ void ImGui_ImplDX11_NewFrame()
     // Hide OS mouse cursor if ImGui is drawing it
     SetCursor(io.MouseDrawCursor ? NULL : LoadCursor(NULL, IDC_ARROW));
 
-    // Start the frame
+     // Start the frame
     ImGui::NewFrame();
+	
 }

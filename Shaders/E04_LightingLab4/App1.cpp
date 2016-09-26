@@ -17,12 +17,11 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	m_Quad_Mesh = new PlaneMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
 	m_Sphere_Mesh = new SphereMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
 	m_Light_Shader = new LightSpecularShader(m_Direct3D->GetDevice(), hwnd);
-	m_Light = new Light();
-	m_Light->SetDiffuseColour(1.0f, 1.0f, 1.0f, 1.0f);
-	m_Light->SetDirection(-1.0f, 0.0f, 0.0f);
-	m_Light->SetAmbientColour(0.0f, 0.0f, 0.0f,1.0f);
-	m_Light->SetSpecularColour(1.0f, 1.0f, 1.0f, 1.0f);
-	m_Light->SetSpecularPower(25);
+
+	for (int i = 0; i < 4; i++)
+	{
+		m_Lights[i] = new Light();
+	}
 
 }
 
@@ -50,11 +49,13 @@ App1::~App1()
 		delete m_Light_Shader;
 		m_Light_Shader = 0;
 	}
-
-	if (m_Light)
+	for (int i = 0; i < 4; i++)
 	{
-		delete m_Light;
-		m_Light = 0;
+		if (m_Lights[i])
+		{
+			delete m_Lights[i];
+			m_Lights[i] = 0;
+		}
 	}
 }
 
@@ -70,18 +71,6 @@ bool App1::Frame()
 	{
 		return false;
 	}
-	ImGui::Begin("Light Data");
-	ImGui::DragFloat3("Light Pos", &lightPos.x);
-	m_Light->SetPosition(lightPos.x, lightPos.y, lightPos.z );
-
-
-	ImGui::DragFloat3("Light attenation", &lightAttenation.x);
-	ImGui::DragFloat("Range", &lightRange);
-	m_Light->SetAttenuationContantFactor(lightAttenation.x);
-	m_Light->SetAttenuationLinearFactor(lightAttenation.y);
-	m_Light->SetAttenuationQuadraticFactor(lightAttenation.z);
-	m_Light->SetRange(lightRange);
-	ImGui::End();
 
   	// Render the graphics.
 	result = Render();
@@ -107,11 +96,11 @@ bool App1::Render()
 	m_Direct3D->GetWorldMatrix(worldMatrix);
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_Direct3D->GetProjectionMatrix(projectionMatrix);
-
+ 
 	//// Send geometry data (from mesh)
 	m_Sphere_Mesh->SendData(m_Direct3D->GetDeviceContext());
 
-	m_Light_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Sphere_Mesh->GetTexture(), m_Light, m_Camera->GetPosition());
+	m_Light_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Sphere_Mesh->GetTexture(), m_Lights, m_Camera->GetPosition());
 
 	m_Light_Shader->Render(m_Direct3D->GetDeviceContext(), m_Sphere_Mesh->GetIndexCount());
 
@@ -120,7 +109,7 @@ bool App1::Render()
 	//// Send geometry data (from mesh)
 	m_Quad_Mesh->SendData(m_Direct3D->GetDeviceContext());
    
-	m_Light_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Quad_Mesh->GetTexture(), m_Light, m_Camera->GetPosition());
+	m_Light_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Quad_Mesh->GetTexture(), m_Lights, m_Camera->GetPosition());
 
 	m_Light_Shader->Render(m_Direct3D->GetDeviceContext(), m_Quad_Mesh->GetIndexCount());
 
@@ -139,4 +128,31 @@ bool App1::Render()
 	return true;
 }
 
+void App1::CreateMainMenuBar()
+{
+	static bool show_light_option[4];
+ 	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("Lights"))
+		{ 
+			for (int i = 0; i < 4; i++)
+			{
+				if (ImGui::MenuItem("Light "))
+				{
+					show_light_option[i] = show_light_option[i] ? false : true;
+				}
+			}
+ 
+			ImGui::EndMenu();
+
+		}
+ 
+		ImGui::EndMainMenuBar();
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		m_Lights[i]->DisplayGUIEditor(i,&show_light_option[i]);
+	}
+
+}
 
