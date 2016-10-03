@@ -24,6 +24,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E03_LightingSpecular", "E03
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E04_LightingLab4", "E04_LightingLab4\E04_LightingLab4.vcxproj", "{79BC39F8-9E89-4A72-B1E7-C146D081E19D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E05_vertexManipulation", "E05_vertexManipulation\E05_vertexManipulation.vcxproj", "{75CED48B-2220-41C9-8FCD-1036756B4D76}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +94,14 @@ Global
 		{79BC39F8-9E89-4A72-B1E7-C146D081E19D}.Release|Win32.ActiveCfg = Release|Win32
 		{79BC39F8-9E89-4A72-B1E7-C146D081E19D}.Release|Win32.Build.0 = Release|Win32
 		{79BC39F8-9E89-4A72-B1E7-C146D081E19D}.Release|x64.ActiveCfg = Release|Win32
+		{75CED48B-2220-41C9-8FCD-1036756B4D76}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{75CED48B-2220-41C9-8FCD-1036756B4D76}.Debug|Win32.ActiveCfg = Debug|Win32
+		{75CED48B-2220-41C9-8FCD-1036756B4D76}.Debug|Win32.Build.0 = Debug|Win32
+		{75CED48B-2220-41C9-8FCD-1036756B4D76}.Debug|x64.ActiveCfg = Debug|Win32
+		{75CED48B-2220-41C9-8FCD-1036756B4D76}.Release|Any CPU.ActiveCfg = Release|Win32
+		{75CED48B-2220-41C9-8FCD-1036756B4D76}.Release|Win32.ActiveCfg = Release|Win32
+		{75CED48B-2220-41C9-8FCD-1036756B4D76}.Release|Win32.Build.0 = Release|Win32
+		{75CED48B-2220-41C9-8FCD-1036756B4D76}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

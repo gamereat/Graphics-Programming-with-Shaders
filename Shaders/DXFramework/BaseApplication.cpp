@@ -77,8 +77,12 @@ bool BaseApplication::Frame()
 		return false;
 	}
 
+	if (ImGui::BeginMainMenuBar())
+	{
+		CreateMainMenuBar();
 
-	CreateMainMenuBar();
+		ImGui::EndMainMenuBar();
+	}
  
 
 	// Update the system stats.
