@@ -543,6 +543,63 @@ void D3D::ResetViewport()
 
 	return;
 }
+void D3D::DirectXSettingsMenu(bool* is_open)
+{
+	if (*is_open == true)
+	{
+		// Create the window
+		if (!ImGui::Begin("Direct X Settings", is_open, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ImGui::End();
+			return;
+		}
+
+		if (ImGui::Checkbox("WireFrame mode", &m_is_WireFrame_on))
+		{
+			if (m_is_WireFrame_on)
+			{
+				TurnOnWireframe();
+			}
+			else
+			{
+				TurnOffWireframe();
+
+			}
+		}
+		if (ImGui::Checkbox("Z buffer mode", &m_is_ZBuffer_on))
+		{
+			if (m_is_ZBuffer_on)
+			{
+				TurnZBufferOn();
+			}
+			else
+			{
+				TurnZBufferOff();
+
+			}
+		}		
+		if (ImGui::Checkbox("Alpha Bending mode", &m_is_AlphaBending_on))
+		{
+			if (m_is_AlphaBending_on)
+			{
+				TurnOnAlphaBlending();
+			}
+			else
+			{
+				TurnOffAlphaBlending();
+
+			}
+		}
+	
+ 		
+ 
+		m_is_AlphaBending_on;
+		m_is_ZBuffer_on;
+
+		ImGui::End();
+
+	}
+}
 void D3D::TurnOnWireframe()
 {
 	// Now set the rasterizer state.

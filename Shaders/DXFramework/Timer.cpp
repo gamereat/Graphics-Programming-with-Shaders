@@ -13,6 +13,8 @@ Timer::Timer()
 	m_ticksPerS = (float)(m_frequency);
 
 	QueryPerformanceCounter((LARGE_INTEGER*)&m_startTime);
+
+	m_totalTime = 0.0f;
 }
 
 
@@ -38,6 +40,8 @@ void Timer::Frame()
 	// Restart the timer.
 	m_startTime = currentTime;
 
+	// Increase the total time that has passed
+	m_totalTime += m_frameTime;
 	return;
 }
 
@@ -45,4 +49,9 @@ void Timer::Frame()
 float Timer::GetTime()
 {
 	return m_frameTime;
+}
+
+float Timer::GetTotalTimePast()
+{
+	return m_totalTime;
 }

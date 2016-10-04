@@ -53,7 +53,7 @@ public:
 	void ResetViewport();
 
 
-
+	void DirectXSettingsMenu(bool* is_open);
  
 protected:
 	bool m_vsync_enabled;
@@ -76,6 +76,9 @@ protected:
 	ID3D11BlendState* m_alphaDisableBlendingState;
 	D3D11_VIEWPORT viewport;
 
+	bool m_is_WireFrame_on;
+	bool m_is_AlphaBending_on;
+	bool m_is_ZBuffer_on;
 
 };
 
