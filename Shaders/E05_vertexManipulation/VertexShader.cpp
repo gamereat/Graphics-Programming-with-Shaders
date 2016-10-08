@@ -124,7 +124,7 @@ void VertexShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 }
 
 
-void VertexShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, Light* light[], XMFLOAT3 cammeraPostion, float delatTime,float vertexFequancy, float vertexHeight)
+void VertexShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, Light* light[], XMFLOAT3 cammeraPostion, float delatTime,float vertexFequancy, float vertexHeight, typeOfVertexMinimulation typeOfMinimulation)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -225,11 +225,55 @@ void VertexShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const
 
 	deviceContext->Map(m_timeBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	timePtr = (TimeBufferType*)mappedResource.pData;
-
 	timePtr->delatTime = delatTime;
-	timePtr->padding = 0.0f;
-	timePtr->height = vertexHeight;
+ 	timePtr->height = vertexHeight;
 	timePtr->frequancy = vertexFequancy;
+
+	switch (typeOfMinimulation)
+	{
+	case VertexShader::sin:
+		timePtr->isCosWave = false;
+		timePtr->isSinWave = true;
+		timePtr->isThirdWave = false;
+		timePtr->isForthWave = false;
+		timePtr->isFithWave = false;
+
+		break;
+	case VertexShader::cos:
+		timePtr->isCosWave = true;
+		timePtr->isSinWave = false;
+		timePtr->isThirdWave = false;
+		timePtr->isForthWave = false;
+		timePtr->isFithWave = false;
+
+		break;
+	case VertexShader::third:
+		timePtr->isCosWave = false;
+		timePtr->isSinWave = false;
+		timePtr->isThirdWave = true;
+		timePtr->isForthWave = false;
+		timePtr->isFithWave = false;
+
+		break;
+	case VertexShader::forth:
+		timePtr->isCosWave = false;
+		timePtr->isSinWave = false;
+		timePtr->isThirdWave = false;
+		timePtr->isForthWave = true;
+		timePtr->isFithWave = false;
+
+		break;
+	case VertexShader::fith:
+		timePtr->isCosWave = false;
+		timePtr->isSinWave = false;
+		timePtr->isThirdWave = false;
+		timePtr->isForthWave = false;
+		timePtr->isFithWave = true;
+
+		break;
+	default:
+		break;
+	}
 	deviceContext->Unmap(m_timeBuffer, 0);
 
 	bufferNumber = 2;

@@ -47,16 +47,32 @@ private:
 	{
 		float delatTime;
 		float height;
-		float frequancy;
-		float padding;
+		float frequancy;		
+		int isSinWave;
+
+		int isCosWave;
+		int isThirdWave;
+		int isForthWave;
+		int isFithWave;
 
 	};
+
+	
 public:
+
+	enum typeOfVertexMinimulation
+	{
+		sin,
+		cos,
+		third,
+		forth,
+		fith
+	};
 
 	VertexShader(ID3D11Device* device, HWND hwnd);
 	~VertexShader();
 
-	void SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, Light* light[], XMFLOAT3 cammeraPostion, float delatTime, float vertexFequancy, float vertexHeight);
+	void SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, Light* light[], XMFLOAT3 cammeraPostion, float delatTime, float vertexFequancy, float vertexHeight, typeOfVertexMinimulation typeOfMinimulation);
 	void Render(ID3D11DeviceContext* deviceContext, int vertexCount);
 
 private:

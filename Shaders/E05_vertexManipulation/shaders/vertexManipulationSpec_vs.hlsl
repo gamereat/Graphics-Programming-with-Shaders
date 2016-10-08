@@ -19,7 +19,12 @@ cbuffer TimeBufferType : register(b2)
 	float delatTime;
 	float height;
 	float frequancy;
-	float padding1;
+
+	int  isSinWave;
+	int  isCosWave;
+	int  isThirdWave;
+	int  isForthWave;
+	int  isFithWave;
 
 };
 struct InputType
@@ -48,15 +53,66 @@ OutputType main(InputType input)
     // Change the position vector to be 4 units for proper matrix calculations.
     input.position.w = 1.0f;
 
-	//offset position based on sine wave
-	input.position.y += height * sin(input.position.x + delatTime * frequancy);
+	if (isSinWave == 1)
+	{
+		//offset position based on sine wave
+		input.position.y += height * sin(input.position.x + delatTime * frequancy);
 
-	//input.position.y = height * cos(input.position.x + delatTime * frequancy);
-	//modify normals
-	input.normal.x = 1 - height * cos(input.position.x + delatTime * frequancy);
-	input.normal.y = abs(height * cos(input.position.x + delatTime * frequancy));
+		//input.position.y = height * cos(input.position.x + delatTime * frequancy);
+		//modify normals
+		input.normal.x = 1 - height * cos(input.position.x + delatTime * frequancy);
+		input.normal.y = abs(height * cos(input.position.x + delatTime * frequancy));
 
 
+	}
+	else if (isCosWave == 1)
+	{
+		//offset position based on sine wave
+		input.position.y += height * cos(input.position.x + delatTime * frequancy);
+
+		//input.position.y = height * cos(input.position.x + delatTime * frequancy);
+		//modify normals
+		input.normal.x = 1 - height * sin(input.position.x + delatTime * frequancy);
+		input.normal.y = abs(height * sin(input.position.x + delatTime * frequancy));
+
+	}
+	else if (isThirdWave == 1)
+	{
+  
+		////offset position based on sine wave
+		input.position.y += height * input.position.x * sin((1/input.position.x + delatTime) * frequancy);
+
+		//input.position.y = height * cos(input.position.x + delatTime * frequancy);
+		//modify normals
+		input.normal.x = 1 - height * input.position.x * sin((1 / input.position.x + delatTime) * frequancy);
+		input.normal.y = abs(height * input.position.x * sin((1 / input.position.x + delatTime) * frequancy));
+
+	}
+	else if (isForthWave == 1)
+	{
+
+		////offset position based on sine wave
+		input.position.y += height * sin(input.position.x + (delatTime * 3)  * frequancy);
+		input.position.x += height * sin( input.position.x + (delatTime *2)  * frequancy);
+
+		//input.position.y = height * cos(input.position.x + delatTime * frequancy);
+		//modify normals
+		input.normal.x = 1 - height * sin((1 / input.position.x + (delatTime * 3)) * frequancy);
+		input.normal.y = abs(height * sin((1 / input.position.x + (delatTime * 2)) * frequancy));
+
+	}
+	else if (isFithWave == 1)
+	{
+
+		////offset position based on sine wave
+		input.position.y += height * sin((input.position.x + delatTime) * frequancy) * sin(((input.position.x + delatTime) *2 )* frequancy);
+ 
+		//input.position.y = height * cos(input.position.x + delatTime * frequancy);
+		//modify normals
+		input.normal.x = 1 - height * sin((1 / input.position.x + (delatTime * 3)) * frequancy);
+		input.normal.y = abs(height * sin((1 / input.position.x + (delatTime * 2)) * frequancy));
+
+	}
     // Calculate the position of the vertex against the world, view, and projection matrices.
     output.position = mul(input.position, worldMatrix);
     output.position = mul(output.position, viewMatrix);

@@ -2,7 +2,7 @@
 #define _LIGHT_H_
 
 #include <directxmath.h>
-
+#include <string>
 using namespace DirectX;
 
 class Light
@@ -29,7 +29,7 @@ public:
 	void GenerateViewMatrix();
 	void GenerateProjectionMatrix(float, float);
 
-	void DisplayGUIEditor(int lightNum, bool* is_open);
+	void DisplayGUIEditor(std::string lightNum, bool* is_open);
 
 	// Setters
 	void SetAmbientColour(float, float, float, float);

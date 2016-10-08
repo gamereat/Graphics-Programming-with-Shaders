@@ -35,6 +35,8 @@ protected:
 	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
 	int m_vertexCount, m_indexCount;
 	Texture* m_Texture;
+
+ 
 };
 
 #endif

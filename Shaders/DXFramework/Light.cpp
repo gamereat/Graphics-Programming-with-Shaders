@@ -28,13 +28,12 @@ void Light::GenerateProjectionMatrix(float screenNear, float screenFar)
 	m_projectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenFar);
 }
 
-void Light::DisplayGUIEditor(int lightNum,bool* is_open)
+void Light::DisplayGUIEditor(std::string  lightNum,bool* is_open)
 {
-	std::string name = "Lights" ;
-	name += (char)lightNum;
-	name+="Settings";
-
-	if (*is_open == true)
+	std::string name = "Lights " ;
+	name += "Settings ";
+	name+= lightNum;
+ 	if (*is_open == true)
 	{
 
 		// Create the window
@@ -51,10 +50,13 @@ void Light::DisplayGUIEditor(int lightNum,bool* is_open)
 		ImGui::RadioButton("Spot", &lightType, 2);
 		m_lightType = (Light::lightType)lightType;
 
-
+		ImGui::Text("Colour of light");
 		// Allow the colours of the light be changed
 		ImGui::ColorEdit4("Diffuse Colour", &m_diffuseColour.x, true);
 		ImGui::ColorEdit4("Ambient Colour", &m_ambientColour.x, true);
+
+		ImGui::Text("Specular Settings");
+
 
 		// Change based off the specular colour
 		ImGui::Checkbox("Make specular ", &m_makeSpecular);
@@ -70,6 +72,7 @@ void Light::DisplayGUIEditor(int lightNum,bool* is_open)
 		switch (m_lightType)
 		{
 		case Light::lightType::directional:
+			ImGui::Text("Directional light settings");
 
 			ImGui::DragFloat3("Direction", &m_direction.x, 0.005f, 0.0f, 1.0);
 
@@ -77,11 +80,13 @@ void Light::DisplayGUIEditor(int lightNum,bool* is_open)
 		case Light::lightType::point:
 
 			// Allow the position of the light be changed
+			ImGui::Text("Point light settings");
 
 			lightPos = XMFLOAT3(XMVectorGetX(m_position), XMVectorGetY(m_position), XMVectorGetZ(m_position));
 			ImGui::DragFloat3("Set Light Pos", &lightPos.x);
 			m_position = XMVectorSet(lightPos.x, lightPos.y, lightPos.z, 1.0f);
 
+			ImGui::Text("Attenuation settings");
 
 			ImGui::DragFloat("Range", &m_range, 0.5f, 0.0f, 100.0f);
 			ImGui::DragFloat("Attenuation Constant Factor", &m_attenuationConstantFactor, 0.1f, 0.1f, 10.0f);

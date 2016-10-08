@@ -83,7 +83,7 @@ bool BaseApplication::Frame()
 
 		ImGui::EndMainMenuBar();
 	}
- 
+	ImGui::ShowTestWindow();
 
 	// Update the system stats.
 	m_Timer->Frame();
