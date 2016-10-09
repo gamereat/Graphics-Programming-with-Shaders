@@ -1,7 +1,7 @@
 // Lab1.cpp
 // Lab 1 example, simple textured quad
 #include "App1.h"
-
+#include <string>
 App1::App1()
 {
 	m_Quad_Mesh = nullptr;
@@ -22,6 +22,9 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	{
 		m_Lights[i] = new Light();
 	}
+
+	m_Lights[0]->SetDirection(-1, 0, 0);
+	m_Lights[0]->SetDiffuseColour(1, 1, 1, 1);
 
 }
 
@@ -72,7 +75,6 @@ bool App1::Frame()
 		return false;
 	}
 
-	time += m_Timer->GetTime();
   	// Render the graphics.
 	result = Render();
 	if (!result)
@@ -98,10 +100,11 @@ bool App1::Render()
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_Direct3D->GetProjectionMatrix(projectionMatrix);
  
+ 
 	//// Send geometry data (from mesh)
 	m_Sphere_Mesh->SendData(m_Direct3D->GetDeviceContext());
 
-	m_Light_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Sphere_Mesh->GetTexture(), m_Lights, m_Camera->GetPosition(),m_Timer->GetTotalTimePast(), freqnacy, height);
+	m_Light_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Sphere_Mesh->GetTexture(), m_Lights, m_Camera->GetPosition(),m_Timer->GetTotalTimePast(), sphereFreqnacy ,sphereHeight , sphereManipulation);
 
 	m_Light_Shader->Render(m_Direct3D->GetDeviceContext(), m_Sphere_Mesh->GetIndexCount());
 
@@ -110,7 +113,7 @@ bool App1::Render()
 	//// Send geometry data (from mesh)
 	m_Quad_Mesh->SendData(m_Direct3D->GetDeviceContext());
    
-	m_Light_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Quad_Mesh->GetTexture(), m_Lights, m_Camera->GetPosition(), m_Timer->GetTotalTimePast(), freqnacy, height);
+	m_Light_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Quad_Mesh->GetTexture(), m_Lights, m_Camera->GetPosition(), m_Timer->GetTotalTimePast(), planeFreqnacy, planeHeight, planesManipulation);
 
 	m_Light_Shader->Render(m_Direct3D->GetDeviceContext(), m_Quad_Mesh->GetIndexCount());
 
@@ -135,37 +138,53 @@ void App1::CreateMainMenuBar()
 	static bool showVertex;
 	static bool directxSetting ;
 	
-	if (ImGui::BeginMenu("Lights"))
-	{ 
-		for (int i = 0; i < 4; i++)
+	if (ImGui::BeginMenu("Window Settings"))
+	{
+		if (ImGui::MenuItem("DirectX Options"))
 		{
-			if (ImGui::MenuItem("Light "))
-			{
-				show_light_option[i] = show_light_option[i] ? false : true;
-			}
+			directxSetting = directxSetting ? false : true;
+
 		}
- 
 		ImGui::EndMenu();
 
 	}
-	if (ImGui::BeginMenu("Directx setting"))
+	if (ImGui::BeginMenu("Application Settings"))
 	{
-		directxSetting = directxSetting ? false : true;
+		if (ImGui::MenuItem("Vertex Changes"))
+		{
+			showVertex = showVertex ? false : true;
+		//	ImGui::EndMenu();
+
+		}
+		if (ImGui::BeginMenu("Lights"))
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				std::string name = "Light " + std::to_string(i +1);
+				if (ImGui::MenuItem(name.data()))
+				{
+					show_light_option[i] = show_light_option[i] ? false : true;
+				}
+			}
+			ImGui::EndMenu();
+
+		}
+
+	
 		ImGui::EndMenu();
 
 	}
-	if (ImGui::BeginMenu("Vertex Changes"))
-	{
-		showVertex = showVertex ? false : true;
-		ImGui::EndMenu();
 
-	}
+
+
+
 
 	m_Direct3D->DirectXSettingsMenu(&directxSetting);
 	vertexChangesMenu(&showVertex);
  	for (int i = 0; i < 4; i++)
 	{
-		m_Lights[i]->DisplayGUIEditor(i,&show_light_option[i]);
+		
+		m_Lights[i]->DisplayGUIEditor(std::to_string(i),&show_light_option[i]);
 	}
 	
 }
@@ -181,13 +200,60 @@ void App1::vertexChangesMenu(bool* is_open)
 			ImGui::End();
 			return;
 		}
+		const char* items[] = { "Plane", "Sphere"  };
+
+		static int selectedMesh ;
+		ImGui::Combo("Mesh", &selectedMesh, items,2);
   
 		// Allow the colours of the light be changed
-		ImGui::SliderFloat("Height", &height, 0.0f, 25.0f);
-		ImGui::SliderFloat("Freqancy", &freqnacy, 0.0f, 25.0f);
+
+
+		int minimulationType = 0;
+		switch (selectedMesh)
+		{
+		case 0:
+			minimulationType = planesManipulation;
+			ImGui::SliderFloat("Height", &planeHeight, 0.0f, 25.0f);
+			ImGui::SliderFloat("Freqancy", &planeFreqnacy, 0.0f, 25.0f);
+			break;
+
+		case 1:
+			minimulationType = sphereManipulation;
+			ImGui::SliderFloat("Height", &sphereHeight, 0.0f, 25.0f);
+			ImGui::SliderFloat("Freqancy", &sphereFreqnacy, 0.0f, 25.0f);
+			break;
+		default:
+			minimulationType = planesManipulation;
+
+			break;
+		}
+		// Setting the light Type 
  
+ 
+		ImGui::Text("Type Of Vertex Minimulation");
+		ImGui::RadioButton("Sin Wave", &minimulationType, 0); ImGui::SameLine();
+		ImGui::RadioButton("Cos Wave", &minimulationType, 1); ImGui::SameLine();
+		ImGui::RadioButton(" Third Wave", &minimulationType, 2);
+		ImGui::RadioButton(" Forth Wave ", &minimulationType, 3); ImGui::SameLine();
+		ImGui::RadioButton(" Fith Wave ", &minimulationType, 4);
 		 
 
+
+		switch (selectedMesh)
+		{
+		case 0:
+			planesManipulation =  (VertexShader::typeOfVertexMinimulation)minimulationType;
+			break;
+
+		case 1:
+			sphereManipulation = (VertexShader::typeOfVertexMinimulation)minimulationType;;
+
+			break;
+		default:
+			planesManipulation = (VertexShader::typeOfVertexMinimulation)minimulationType;;
+
+			break;
+		}
 
 		ImGui::End();
 	}

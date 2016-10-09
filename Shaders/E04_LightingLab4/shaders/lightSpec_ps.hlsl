@@ -39,8 +39,7 @@ float4 main(InputType input) : SV_TARGET
 {
 	
 	
-	//
-	
+
 	float4 textureColour;
 	float3 lightDir;
 	float lightIntensity;

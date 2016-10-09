@@ -35,9 +35,13 @@ private:
 	XMFLOAT3 lightPos;
 	XMFLOAT3 lightAttenation;
 	float lightRange;
-	float height;
-	float freqnacy;
-	float time;
+	float planeHeight;
+	float planeFreqnacy;
+ 	float sphereHeight;
+	float sphereFreqnacy;
+
+	VertexShader::typeOfVertexMinimulation planesManipulation;
+	VertexShader::typeOfVertexMinimulation sphereManipulation;
  };
 
 #endif
