@@ -76,14 +76,50 @@ bool BaseApplication::Frame()
 	{
 		return false;
 	}
+	// Create the starting menu which should stay statics between applications
+	static bool directxSetting;
+	static bool imguiMetrics;
 
 	if (ImGui::BeginMainMenuBar())
 	{
+
+		if (ImGui::BeginMenu("Window Settings"))
+		{
+			if (ImGui::MenuItem("DirectX Options"))
+			{
+				directxSetting = directxSetting ? false : true;
+
+			}
+
+			if (ImGui::BeginMenu("Imgui Options"))
+			{
+				if (ImGui::MenuItem("Metrics"))
+				{
+					imguiMetrics = imguiMetrics ? false : true;
+
+				}
+				ImGui::EndMenu();
+
+			}
+
+
+
+			ImGui::EndMenu();
+
+		}
+
 		CreateMainMenuBar();
 
 		ImGui::EndMainMenuBar();
 	}
 	ImGui::ShowTestWindow();
+
+	m_Direct3D->DirectXSettingsMenu(&directxSetting);
+
+	if (imguiMetrics)
+	{
+		ImGui::ShowMetricsWindow(&imguiMetrics);
+	}
 
 	// Update the system stats.
 	m_Timer->Frame();

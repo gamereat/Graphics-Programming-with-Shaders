@@ -12,7 +12,6 @@
 
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
-
 // Data
 static INT64                    g_Time = 0;
 static INT64                    g_TicksPerSecond = 0;
@@ -558,8 +557,9 @@ void ImGui_ImplDX11_NewFrame()
     // Setup display size (every frame to accommodate for window resizing)
     RECT rect;
 	GetWindowRect(g_hWnd, &rect);
-    io.DisplaySize = ImVec2((float)(rect.right - rect.left), (float)(rect.bottom - rect.top));
 
+    io.DisplaySize = ImVec2((float)(rect.right - rect.left), (float)(rect.bottom - rect.top));
+	
     // Setup time step
     INT64 current_time;
     QueryPerformanceCounter((LARGE_INTEGER *)&current_time);

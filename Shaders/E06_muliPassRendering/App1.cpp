@@ -5,7 +5,12 @@
 App1::App1()
 {
 	m_Quad_Mesh = nullptr;
-	m_Light_Shader = nullptr;
+	m_Vertex_Manipulation_Shader = nullptr;
+
+	m_Ortho_Mesh = nullptr;
+	m_Texture_Shader = nullptr;
+
+	m_Render_Texture = nullptr;
 }
 
 void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight, Input *in)
@@ -16,8 +21,9 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	// Create Mesh object
 	m_Quad_Mesh = new PlaneMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
 	m_Sphere_Mesh = new SphereMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
-	m_Light_Shader = new VertexShader(m_Direct3D->GetDevice(), hwnd);
+	m_Vertex_Manipulation_Shader = new VertexShader(m_Direct3D->GetDevice(), hwnd);
 
+	m_Texture_Shader =  new TextureShader(m_Direct3D->GetDevice(), hwnd);
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -27,6 +33,9 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	m_Lights[0]->SetDirection(-1, 0, 0);
 	m_Lights[0]->SetDiffuseColour(1, 1, 1, 1);
 
+	m_Ortho_Mesh = new OrthoMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), SCREEN_WIDTH/4, SCREEN_HEIGHT /4, -((SCREEN_WIDTH / 4) + (SCREEN_WIDTH / 8)), ((SCREEN_HEIGHT / 4) + (SCREEN_HEIGHT / 8)));
+
+	m_Render_Texture = new  RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
 
 }
 
@@ -36,8 +45,23 @@ App1::~App1()
 	// Run base application deconstructor
 	BaseApplication::~BaseApplication();
 
+	if (m_Render_Texture)
+	{
+		delete m_Render_Texture;
+		m_Render_Texture = nullptr;
+	}
 
+	if (m_Texture_Shader)
+	{
+		delete m_Texture_Shader;
+		m_Texture_Shader = nullptr;
+	}
 
+	if (m_Ortho_Mesh)
+	{
+		delete m_Ortho_Mesh;
+		m_Ortho_Mesh = nullptr;
+	}
 	// Release the Direct3D object.
 	if (m_Quad_Mesh)
 	{
@@ -51,10 +75,10 @@ App1::~App1()
 		m_Sphere_Mesh = 0;
 	}
 
-	if (m_Light_Shader)
+	if (m_Vertex_Manipulation_Shader)
 	{
-		delete m_Light_Shader;
-		m_Light_Shader = 0;
+		delete m_Vertex_Manipulation_Shader;
+		m_Vertex_Manipulation_Shader = 0;
 	}
 	for (int i = 0; i < 4; i++)
 	{
@@ -78,7 +102,6 @@ bool App1::Frame()
 	{
 		return false;
 	}
-
   	// Render the graphics.
 	result = Render();
 	if (!result)
@@ -91,7 +114,61 @@ bool App1::Frame()
 
 bool App1::Render()
 {
+
+
+	// Render the first pass
+	RenderToTexture();
+
+	// Render the second pass
+	RenderToScreen();
+	return true;
+}
+
+void App1::RenderToTexture()
+{
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
+
+	// Set the render target to be the render to texture.
+	m_Render_Texture->SetRenderTarget(m_Direct3D->GetDeviceContext());
+
+	// Clear the render to texture.
+	m_Render_Texture->ClearRenderTarget(m_Direct3D->GetDeviceContext(),0.0f, 0.0f, 1.0f, 1.0f);
+
+	// Generate the view matrix based on the camera's position.
+	m_Camera->Update();
+
+	// Get the world, view, and projection matrices from the camera and d3d objects.
+	m_Direct3D->GetWorldMatrix(worldMatrix);
+	m_Camera->GetViewMatrix(viewMatrix);
+	m_Direct3D->GetProjectionMatrix(projectionMatrix);
+
+
+	//// Send geometry data (from mesh)
+	m_Sphere_Mesh->SendData(m_Direct3D->GetDeviceContext());
+
+	m_Vertex_Manipulation_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Sphere_Mesh->GetTexture(), m_Lights, m_Camera->GetPosition(), m_Timer->GetTotalTimePast(), sphereFreqnacy, sphereHeight, sphereManipulation);
+
+	m_Vertex_Manipulation_Shader->Render(m_Direct3D->GetDeviceContext(), m_Sphere_Mesh->GetIndexCount());
+
+	worldMatrix = XMMatrixTranslation(-50, -10, -50);
+
+	////// Send geometry data (from mesh)
+	m_Quad_Mesh->SendData(m_Direct3D->GetDeviceContext());
+
+	m_Vertex_Manipulation_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Quad_Mesh->GetTexture(), m_Lights, m_Camera->GetPosition(), m_Timer->GetTotalTimePast(), planeFreqnacy, planeHeight, planesManipulation);
+
+	m_Vertex_Manipulation_Shader->Render(m_Direct3D->GetDeviceContext(), m_Quad_Mesh->GetIndexCount());
+
+
+	// Reset the render target back to the original back buffer and not the render to texture anymore.
+	m_Direct3D->SetBackBufferRenderTarget();
+
+
+}
+
+void App1::RenderToScreen()
+{
+	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, baseViewMatrix, orthoMatrix;
 
 	//// Clear the scene. (default blue colour)
 	m_Direct3D->BeginScene(0.39f, 0.58f, 0.92f, 1.0f);
@@ -103,54 +180,58 @@ bool App1::Render()
 	m_Direct3D->GetWorldMatrix(worldMatrix);
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_Direct3D->GetProjectionMatrix(projectionMatrix);
- 
- 
+
+
 	//// Send geometry data (from mesh)
 	m_Sphere_Mesh->SendData(m_Direct3D->GetDeviceContext());
 
-	m_Light_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Sphere_Mesh->GetTexture(), m_Lights, m_Camera->GetPosition(),m_Timer->GetTotalTimePast(), sphereFreqnacy ,sphereHeight , sphereManipulation);
+	m_Vertex_Manipulation_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Sphere_Mesh->GetTexture(), m_Lights, m_Camera->GetPosition(), m_Timer->GetTotalTimePast(), sphereFreqnacy, sphereHeight, sphereManipulation);
 
-	m_Light_Shader->Render(m_Direct3D->GetDeviceContext(), m_Sphere_Mesh->GetIndexCount());
+	m_Vertex_Manipulation_Shader->Render(m_Direct3D->GetDeviceContext(), m_Sphere_Mesh->GetIndexCount());
 
 	worldMatrix = XMMatrixTranslation(-50, -10, -50);
-  
+
 	//// Send geometry data (from mesh)
 	m_Quad_Mesh->SendData(m_Direct3D->GetDeviceContext());
-   
-	m_Light_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Quad_Mesh->GetTexture(), m_Lights, m_Camera->GetPosition(), m_Timer->GetTotalTimePast(), planeFreqnacy, planeHeight, planesManipulation);
 
-	m_Light_Shader->Render(m_Direct3D->GetDeviceContext(), m_Quad_Mesh->GetIndexCount());
+	m_Vertex_Manipulation_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Quad_Mesh->GetTexture(), m_Lights, m_Camera->GetPosition(), m_Timer->GetTotalTimePast(), planeFreqnacy, planeHeight, planesManipulation);
+
+	m_Vertex_Manipulation_Shader->Render(m_Direct3D->GetDeviceContext(), m_Quad_Mesh->GetIndexCount());
+	
+
+	// Reset the world martix back to starting point
+	m_Direct3D->GetWorldMatrix(worldMatrix);
 
 
+	// To render ortho mesh
+	// Turn off the Z buffer to begin all 2D rendering.
+	m_Direct3D->TurnZBufferOff();
 
-	//// Present the rendered scene to the screen.
+	m_Direct3D->GetOrthoMatrix(orthoMatrix);// ortho matrix for 2D rendering
+	m_Camera->GetBaseViewMatrix(baseViewMatrix);
+
+	m_Ortho_Mesh->SendData(m_Direct3D->GetDeviceContext());
+	m_Texture_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, baseViewMatrix, orthoMatrix, m_Render_Texture->GetShaderResourceView());
+	m_Texture_Shader->Render(m_Direct3D->GetDeviceContext(), m_Ortho_Mesh->GetIndexCount());
+
+	m_Direct3D->TurnZBufferOn();
+
+	// Present the rendered scene to the screen.
 	m_Direct3D->EndScene();
 
-	return true;
+
 }
 
 void App1::CreateMainMenuBar()
 {
 	static bool show_light_option[4];
 	static bool showVertex;
-	static bool directxSetting ;
-	
-	if (ImGui::BeginMenu("Window Settings"))
-	{
-		if (ImGui::MenuItem("DirectX Options"))
-		{
-			directxSetting = directxSetting ? false : true;
 
-		}
-		ImGui::EndMenu();
-
-	}
 	if (ImGui::BeginMenu("Application Settings"))
 	{
 		if (ImGui::MenuItem("Vertex Changes"))
 		{
 			showVertex = showVertex ? false : true;
-		//	ImGui::EndMenu();
 
 		}
 		if (ImGui::BeginMenu("Lights"))
@@ -176,7 +257,6 @@ void App1::CreateMainMenuBar()
 
 
 
-	m_Direct3D->DirectXSettingsMenu(&directxSetting);
 	vertexChangesMenu(&showVertex);
  	for (int i = 0; i < 4; i++)
 	{
@@ -185,6 +265,7 @@ void App1::CreateMainMenuBar()
 	}
 	
 }
+
 
 void App1::vertexChangesMenu(bool* is_open)
 {
