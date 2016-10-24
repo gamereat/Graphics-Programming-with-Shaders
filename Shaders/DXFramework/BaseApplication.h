@@ -30,9 +30,12 @@ protected:
 	virtual void HandleInput(float);
 	virtual bool Render() = 0;
 	virtual void CreateMainMenuBar() = 0;
-
-
-
+	
+	/*
+		Used to open sub menu systems that can be either open or closed from the
+		main menu bar
+	*/
+	virtual void OpenSubMenus();
 protected:
 	HWND wnd;
 	int sWidth, sHeight;
@@ -41,7 +44,16 @@ protected:
 	D3D* m_Direct3D;
 	Camera* m_Camera;
 	Timer* m_Timer;
-
+	
+private:
+	// Create the starting menu which should stay statics between applications
+	static bool directxSetting;
+	static bool imguiMetrics;
+	static bool imguiStyle;
+	static bool applicationInformation;
+	static bool applicationFPS;
+	static bool mouseInformation;
+	static bool keyboardInformation;
 
 };	
 
