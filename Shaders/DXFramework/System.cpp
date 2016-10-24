@@ -168,7 +168,7 @@ void System::InitializeWindows(int& screenWidth, int& screenHeight)
 
 	// Create the window with the screen settings and get the handle to it.
 	m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_applicationName, m_applicationName,
-		WS_OVERLAPPEDWINDOW,
+		WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
 		posX, posY, screenWidth, screenHeight, NULL, NULL, m_hinstance, NULL);
  
 	// Bring the window up on the screen and set it as main focus.
@@ -244,6 +244,11 @@ LRESULT CALLBACK System::WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM
 			ApplicationHandle->m_Input.setRightMouse(true);
 			break;
 		}
+		case WM_MBUTTONDOWN:
+		{
+			ApplicationHandle->m_Input.setMiddleMouse(true);
+			break;
+		}
 		case WM_LBUTTONUP:
 		{
 			ApplicationHandle->m_Input.setLeftMouse(false);
@@ -253,6 +258,12 @@ LRESULT CALLBACK System::WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM
 		{
 			 ApplicationHandle->m_Input.setRightMouse(false);
 			 break;
+		}
+
+		case WM_MBUTTONUP:
+		{
+			ApplicationHandle->m_Input.setMiddleMouse(false);
+			break;
 		}
 		// Check if the window is being destroyed.
 		case WM_DESTROY:
