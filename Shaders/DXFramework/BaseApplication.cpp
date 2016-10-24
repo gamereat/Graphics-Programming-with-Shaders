@@ -1,11 +1,18 @@
 // BaseApplication.cpp
 // Base application functionality for inheritnace.
 #include "BaseApplication.h"
-
+	
+bool	BaseApplication::directxSetting = false;
+bool	BaseApplication::imguiMetrics = false;
+bool	BaseApplication::applicationInformation = false;
+bool	BaseApplication::applicationFPS = false;
+bool	BaseApplication::mouseInformation = false;
+bool	BaseApplication::imguiStyle = false;
+bool	BaseApplication::keyboardInformation = false;
 
 BaseApplication::BaseApplication()
 {
-	
+
 }
 
 
@@ -76,9 +83,7 @@ bool BaseApplication::Frame()
 	{
 		return false;
 	}
-	// Create the starting menu which should stay statics between applications
-	static bool directxSetting;
-	static bool imguiMetrics;
+
 
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -98,35 +103,55 @@ bool BaseApplication::Frame()
 					imguiMetrics = imguiMetrics ? false : true;
 
 				}
+				if (ImGui::MenuItem("Gui Style options"))
+				{
+					imguiStyle = imguiStyle ? false : true;
+
+
+				}
 				ImGui::EndMenu();
 
 			}
-
-
-
+ 
 			ImGui::EndMenu();
 
 		}
+		if (ImGui::BeginMenu("Debug Options"))
+		{
+			if (ImGui::MenuItem("FPS"))
+			{
+				applicationFPS = applicationFPS ? false : true;
 
+			}
+			
+			if (ImGui::MenuItem("Keyboard Information"))
+			{
+				keyboardInformation = keyboardInformation ? false : true;
+
+			}
+			if (ImGui::MenuItem("Mouse Information"))
+			{
+				mouseInformation = mouseInformation ? false : true;
+
+			}
+			ImGui::EndMenu();
+
+		}
 		CreateMainMenuBar();
+
 
 		ImGui::EndMainMenuBar();
 	}
 	ImGui::ShowTestWindow();
-
-	m_Direct3D->DirectXSettingsMenu(&directxSetting);
-
-	if (imguiMetrics)
-	{
-		ImGui::ShowMetricsWindow(&imguiMetrics);
-	}
 
 	// Update the system stats.
 	m_Timer->Frame();
 
 	// Do the frame input processing.
 	HandleInput(m_Timer->GetTime());
- 
+
+	// Opens revent windows where needed based off the menu
+	OpenSubMenus();
 	return true;
 }
 
@@ -227,6 +252,46 @@ void BaseApplication::HandleInput(float frameTime)
 	}
 
 	
+}
+
+void BaseApplication::OpenSubMenus()
+{
+
+
+	m_Direct3D->DirectXSettingsMenu(&directxSetting);
+
+	if (imguiMetrics)
+	{
+		ImGui::ShowMetricsWindow(&imguiMetrics);
+	}
+	if (imguiStyle)
+	{
+		ImGui::Begin("Style Editor", &imguiStyle);
+		ImGui::ShowStyleEditor(); 
+		ImGui::End();
+	}
+	if (mouseInformation)
+	{
+	
+		m_Input->debugMouseMenu(&mouseInformation);
+	}
+	
+	if (keyboardInformation)
+	{
+
+		m_Input->debugKeyBoardMenu(&keyboardInformation);
+
+		//// Create the window
+		//if (!ImGui::Begin("Application FPS", &applicationFPS, ImGuiWindowFlags_AlwaysAutoResize))
+		//{
+		//	ImGui::End();
+		//	return;
+		//}
+		//ImGui::Text("Frame Time: %f", m_Timer->GetTime());
+
+ 
+		//ImGui::End();
+	}
 }
 
  
