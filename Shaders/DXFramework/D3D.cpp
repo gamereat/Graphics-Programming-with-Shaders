@@ -419,6 +419,13 @@ void D3D::BeginScene(float red, float green, float blue, float alpha)
 
 void D3D::EndScene()
 {
+
+	// Turn back off the shaders to allow for the gui stuff to render properlly
+	GetDeviceContext()->HSSetShader(NULL, NULL, 0);
+	GetDeviceContext()->DSSetShader(NULL, NULL, 0);
+	GetDeviceContext()->GSSetShader(NULL, NULL, 0);
+
+
 	// render the ui
 	ImGui::Render();
 	// Present the back buffer to the screen since rendering is complete.
