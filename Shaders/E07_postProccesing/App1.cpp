@@ -7,18 +7,32 @@ App1::App1()
 	m_Quad_Mesh = nullptr;
 	m_Vertex_Manipulation_Shader = nullptr;
 
-	m_Ortho_Mesh = nullptr;
+	m_Ortho_Mesh_downScaled = nullptr;
+	m_Ortho_Mesh_normalScaled = nullptr;
+
 	m_Texture_Shader = nullptr;
 
 	m_Render_Texture = nullptr;
 
 	m_BoxBur_Shader = nullptr;
+
+	m_DownSampleTexture = nullptr;
+
+	m_VerticalBlur_Shader = nullptr;
+
+	m_VerticalBlurTexture = nullptr;
+
+	m_HoizontalBlurTexture = nullptr;
 }
 
 void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight, Input *in)
 {
 	// Call super init function (required!)
 	BaseApplication::init(hinstance, hwnd, screenWidth, screenHeight, in);
+
+
+	// Default value of the downscaling for post processing
+	downScaleAmmount = 2;
 
 	// Create Mesh object
 	m_Quad_Mesh = new PlaneMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/bunny.png");
@@ -29,6 +43,10 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 
 	m_BoxBur_Shader = new BoxBlurShader(m_Direct3D->GetDevice(), hwnd);
 
+	m_HorizontalBlur_Shader = new HorizontalBlurShader(m_Direct3D->GetDevice(), hwnd);
+	m_VerticalBlur_Shader = new VerticalBlurShader(m_Direct3D->GetDevice(), hwnd);
+
+
 	for (int i = 0; i < 4; i++)
 	{
 		m_Lights[i] = new Light();
@@ -37,11 +55,23 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	m_Lights[0]->SetDirection(-1, 0, 0);
 	m_Lights[0]->SetDiffuseColour(1, 1, 1, 1);
 
-	m_Ortho_Mesh = new OrthoMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), SCREEN_WIDTH, SCREEN_HEIGHT , 0, 0);
+	m_Ortho_Mesh_downScaled = new OrthoMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), SCREEN_WIDTH/ downScaleAmmount, SCREEN_HEIGHT/ downScaleAmmount, 0, 0);
+
+	m_Ortho_Mesh_normalScaled = new OrthoMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), SCREEN_WIDTH, SCREEN_HEIGHT , 0, 0);
 
 	m_Render_Texture = new  RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
 
+ 
+
 	m_Render_VextexMinulation = new RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
+
+
+	m_DownSampleTexture = new RenderTexture(m_Direct3D->GetDevice(), screenWidth / downScaleAmmount, screenHeight / downScaleAmmount, SCREEN_NEAR, SCREEN_DEPTH);
+	m_HoizontalBlurTexture = new RenderTexture(m_Direct3D->GetDevice(), screenWidth / downScaleAmmount, screenHeight / downScaleAmmount, SCREEN_NEAR, SCREEN_DEPTH);
+	m_VerticalBlurTexture = new RenderTexture(m_Direct3D->GetDevice(), screenWidth / downScaleAmmount, screenHeight / downScaleAmmount, SCREEN_NEAR, SCREEN_DEPTH);
+
+	m_UpScaleTexture = new RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
+
 }
 
 
@@ -49,6 +79,43 @@ App1::~App1()
 {
 	// Run base application deconstructor
 	BaseApplication::~BaseApplication();
+
+	if (m_UpScaleTexture)
+	{
+		delete m_UpScaleTexture;
+		m_UpScaleTexture = nullptr;
+	}
+
+	if (m_HoizontalBlurTexture)
+	{
+		delete m_HoizontalBlurTexture;
+		m_HoizontalBlurTexture = nullptr;
+	}
+	if (m_VerticalBlurTexture)
+	{
+		delete m_VerticalBlurTexture;
+		m_VerticalBlurTexture = nullptr;
+	}
+
+
+	if (m_HorizontalBlur_Shader)
+	{
+		delete m_HorizontalBlur_Shader;
+		m_HorizontalBlur_Shader = nullptr;
+	}
+
+	if (m_VerticalBlur_Shader)
+	{
+		delete m_VerticalBlur_Shader;
+		m_VerticalBlur_Shader = nullptr;
+	}
+
+	if (m_DownSampleTexture)
+	{
+		delete m_DownSampleTexture;
+		m_DownSampleTexture = nullptr;
+
+	}
 
 	if (m_BoxBur_Shader)
 	{
@@ -72,10 +139,17 @@ App1::~App1()
 		m_Texture_Shader = nullptr;
 	}
 
-	if (m_Ortho_Mesh)
+	if (m_Ortho_Mesh_downScaled)
 	{
-		delete m_Ortho_Mesh;
-		m_Ortho_Mesh = nullptr;
+		delete m_Ortho_Mesh_downScaled;
+		m_Ortho_Mesh_downScaled = nullptr;
+	}
+
+
+	if (m_Ortho_Mesh_normalScaled)
+	{
+		delete m_Ortho_Mesh_normalScaled;
+		m_Ortho_Mesh_normalScaled = nullptr;
 	}
 	// Release the Direct3D object.
 	if (m_Quad_Mesh)
@@ -132,14 +206,18 @@ bool App1::Render()
 
 	// Render world with minulation
 	RenderVertexMinulation();
+	
+	DownSample();
 
+	HorizontalBlur();
 
+	VerticalBlur();
 
-	RenderToTexture();
-
-	// Add Box blur
+	UpScale();
 
 	// Render the second pass
+
+	// 
 	RenderToScreen();
 
 	return true;
@@ -151,10 +229,10 @@ void App1::RenderVertexMinulation()
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
 
 	// Set the render target to be the render to texture.
-	m_Render_VextexMinulation->SetRenderTarget(m_Direct3D->GetDeviceContext());
+	m_Render_Texture->SetRenderTarget(m_Direct3D->GetDeviceContext());
 
 	// Clear the render to texture.
-	m_Render_VextexMinulation->ClearRenderTarget(m_Direct3D->GetDeviceContext(), 0.0f, 0.0f, 1.0f, 1.0f);
+	m_Render_Texture->ClearRenderTarget(m_Direct3D->GetDeviceContext(), 0.0f, 0.0f, 1.0f, 1.0f);
 
 	// Generate the view matrix based on the camera's position.
 	m_Camera->Update();
@@ -181,65 +259,157 @@ void App1::RenderVertexMinulation()
 
 	m_Vertex_Manipulation_Shader->Render(m_Direct3D->GetDeviceContext(), m_Quad_Mesh->GetIndexCount());
 
+
 	// Reset the render target back to the original back buffer and not the render to texture anymore.
 	m_Direct3D->SetBackBufferRenderTarget();
 
 }
-void App1::RenderToTexture()
+
+void App1::DownSample()
 {
+	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, baseViewMatrix, orthoMartix;
 
-	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
-
-	// Set the render target to be the render to texture.
-	m_Render_Texture->SetRenderTarget(m_Direct3D->GetDeviceContext());
+ 	
+	m_DownSampleTexture->SetRenderTarget(m_Direct3D->GetDeviceContext());
 
 	// Clear the render to texture.
-	m_Render_Texture->ClearRenderTarget(m_Direct3D->GetDeviceContext(), 0.0f, 0.0f, 1.0f, 1.0f);
+	m_DownSampleTexture->ClearRenderTarget(m_Direct3D->GetDeviceContext(), 0.0f, 0.0f, 1.0f, 1.0f);
 
-	// Generate the view matrix based on the camera's position.
-	m_Camera->Update();
 
-	// Get the world, view, and projection matrices from the camera and d3d objects.
 	m_Direct3D->GetWorldMatrix(worldMatrix);
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_Direct3D->GetProjectionMatrix(projectionMatrix);
 
 
-	//// Send geometry data (from mesh)
-	m_Sphere_Mesh->SendData(m_Direct3D->GetDeviceContext());
 
-	m_Texture_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Sphere_Mesh->GetTexture());
-
-	m_Texture_Shader->Render(m_Direct3D->GetDeviceContext(), m_Sphere_Mesh->GetIndexCount());
-
-	worldMatrix = XMMatrixTranslation(-50, -10, -50);
-
-	////// Send geometry data (from mesh)
-	m_Quad_Mesh->SendData(m_Direct3D->GetDeviceContext());
-
-	m_Texture_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Quad_Mesh->GetTexture());
-
-	m_Texture_Shader->Render(m_Direct3D->GetDeviceContext(), m_Quad_Mesh->GetIndexCount());
+	m_Camera->GetBaseViewMatrix(baseViewMatrix);
 
 
-	// Reset the render target back to the original back buffer and not the render to texture anymore.
+	orthoMartix = m_DownSampleTexture->GetOrthoMatrix();
+
+	// ortho matrix for 2D rendering
+	// To render ortho mesh
+	// Turn off the Z buffer to begin all 2D rendering.
+	m_Direct3D->TurnZBufferOff();
+
+	m_Ortho_Mesh_downScaled->SendData(m_Direct3D->GetDeviceContext());
+
+	m_Texture_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, baseViewMatrix, orthoMartix, m_Render_Texture->GetShaderResourceView());
+	m_Texture_Shader->Render(m_Direct3D->GetDeviceContext(), m_Ortho_Mesh_downScaled->GetIndexCount());
+
+	m_Direct3D->TurnZBufferOn();
+
 	m_Direct3D->SetBackBufferRenderTarget();
 
-
 }
 
-void App1::RenderBoxBlur()
+void App1::HorizontalBlur()
 {
- 
+
+	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, baseViewMatrix, orthoMartix;
+
+	m_HoizontalBlurTexture->SetRenderTarget(m_Direct3D->GetDeviceContext());
+
+
+	// Clear the render to texture.
+	m_HoizontalBlurTexture->ClearRenderTarget(m_Direct3D->GetDeviceContext(), 0.0f, 0.0f, 0.0f, 1.0f);
+
+	m_Direct3D->GetWorldMatrix(worldMatrix);
+	m_Camera->GetViewMatrix(viewMatrix);
+	m_Direct3D->GetProjectionMatrix(projectionMatrix);
+
+
+	// To render ortho mesh
+	// Turn off the Z buffer to begin all 2D rendering.
+	m_Direct3D->TurnZBufferOff();
+
+	orthoMartix = m_HoizontalBlurTexture->GetOrthoMatrix();// ortho matrix for 2D rendering
+	m_Camera->GetBaseViewMatrix(baseViewMatrix);
+
+	m_Ortho_Mesh_downScaled->SendData(m_Direct3D->GetDeviceContext());
+
+	m_HorizontalBlur_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, baseViewMatrix, orthoMartix, m_DownSampleTexture->GetShaderResourceView(),SCREEN_WIDTH / downScaleAmmount, neiboursusedToBlur);
+	m_HorizontalBlur_Shader->Render(m_Direct3D->GetDeviceContext(), m_Ortho_Mesh_downScaled->GetIndexCount());
+
+	m_Direct3D->TurnZBufferOn();
+
+	m_Direct3D->SetBackBufferRenderTarget();
 }
+
+void App1::VerticalBlur()
+{
+
+	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, baseViewMatrix, orthoMartix;
+
+	m_VerticalBlurTexture->SetRenderTarget(m_Direct3D->GetDeviceContext());
+
+
+
+	// Clear the render to texture.
+	m_VerticalBlurTexture->ClearRenderTarget(m_Direct3D->GetDeviceContext(), 0.0f, 0.0f, 0.0f, 1.0f);
+
+	m_Direct3D->GetWorldMatrix(worldMatrix);
+	m_Camera->GetViewMatrix(viewMatrix);
+	m_Direct3D->GetProjectionMatrix(projectionMatrix);
+
+	// To render ortho mesh
+	// Turn off the Z buffer to begin all 2D rendering.
+	m_Direct3D->TurnZBufferOff();
+
+	orthoMartix = m_VerticalBlurTexture->GetOrthoMatrix();// ortho matrix for 2D rendering
+	m_Camera->GetBaseViewMatrix(baseViewMatrix);
+
+	m_Ortho_Mesh_downScaled->SendData(m_Direct3D->GetDeviceContext());
+
+	m_VerticalBlur_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, baseViewMatrix, orthoMartix, m_DownSampleTexture->GetShaderResourceView(), SCREEN_HEIGHT / downScaleAmmount, neiboursusedToBlur);
+	m_VerticalBlur_Shader->Render(m_Direct3D->GetDeviceContext(), m_Ortho_Mesh_downScaled->GetIndexCount());
+
+	m_Direct3D->TurnZBufferOn();
+
+	m_Direct3D->SetBackBufferRenderTarget();
+}
+
+void App1::UpScale()
+{
+	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, baseViewMatrix, orthoMartix;
+
+	m_UpScaleTexture->SetRenderTarget(m_Direct3D->GetDeviceContext());
+
+	// Clear the render to texture.
+	m_UpScaleTexture->ClearRenderTarget(m_Direct3D->GetDeviceContext(), 0.0f, 0.0f, 0.0f, 1.0f);
+
+	m_Direct3D->GetWorldMatrix(worldMatrix);
+	m_Camera->GetViewMatrix(viewMatrix);
+	m_Direct3D->GetProjectionMatrix(projectionMatrix);
+
+	// To render ortho mesh
+	// Turn off the Z buffer to begin all 2D rendering.
+	m_Direct3D->TurnZBufferOff();
+
+	orthoMartix = m_UpScaleTexture->GetOrthoMatrix();// ortho matrix for 2D rendering
+	m_Camera->GetBaseViewMatrix(baseViewMatrix);
+
+	m_Ortho_Mesh_normalScaled->SendData(m_Direct3D->GetDeviceContext());
+
+	m_Texture_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, baseViewMatrix, orthoMartix, m_VerticalBlurTexture->GetShaderResourceView());
+	m_Texture_Shader->Render(m_Direct3D->GetDeviceContext(), m_Ortho_Mesh_normalScaled->GetIndexCount());
+
+	m_Direct3D->TurnZBufferOn();
+
+	m_Direct3D->SetBackBufferRenderTarget();
+}
+ 
+
 void App1::RenderToScreen()
 {
 
-	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, baseViewMatrix, orthoMatrix;
+	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, baseViewMatrix, orthoMartix;
 
 	//// Clear the scene. (default blue colour)
 	m_Direct3D->BeginScene(0.39f, 0.58f, 0.92f, 1.0f);
 
+	//// Generate the view matrix based on the camera's position.
+	m_Camera->Update();
 
 	// Reset the world martix back to starting point
 	m_Direct3D->GetWorldMatrix(worldMatrix);
@@ -249,20 +419,21 @@ void App1::RenderToScreen()
 	// Turn off the Z buffer to begin all 2D rendering.
 	m_Direct3D->TurnZBufferOff();
 
-	m_Direct3D->GetOrthoMatrix(orthoMatrix);// ortho matrix for 2D rendering
+	m_Direct3D->GetOrthoMatrix(orthoMartix);// ortho matrix for 2D rendering
 	m_Camera->GetBaseViewMatrix(baseViewMatrix);
 
-	m_Ortho_Mesh->SendData(m_Direct3D->GetDeviceContext());
+	m_Ortho_Mesh_normalScaled->SendData(m_Direct3D->GetDeviceContext());
 
+	// Check if blur is enabled
 	if (isUsingBoxBlur)
 	{
-		m_BoxBur_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, baseViewMatrix, orthoMatrix, m_Render_Texture->GetShaderResourceView());
-		m_BoxBur_Shader->Render(m_Direct3D->GetDeviceContext(), m_Ortho_Mesh->GetIndexCount());
+		m_BoxBur_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, baseViewMatrix, orthoMartix, m_UpScaleTexture->GetShaderResourceView());
+		m_BoxBur_Shader->Render(m_Direct3D->GetDeviceContext(), m_Ortho_Mesh_normalScaled->GetIndexCount());
 	}
 	else
 	{
-		m_Texture_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, baseViewMatrix, orthoMatrix, m_Render_Texture->GetShaderResourceView());
-		m_Texture_Shader->Render(m_Direct3D->GetDeviceContext(), m_Ortho_Mesh->GetIndexCount());
+		m_Texture_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, baseViewMatrix, orthoMartix, m_UpScaleTexture->GetShaderResourceView());
+		m_Texture_Shader->Render(m_Direct3D->GetDeviceContext(), m_Ortho_Mesh_normalScaled->GetIndexCount());
 	}
 
 
@@ -279,6 +450,7 @@ void App1::CreateMainMenuBar()
 	static bool show_light_option[4];
 	static bool showVertex;
 	static bool boxBlurMenu;
+	static bool GaussianMenu;
 
 	if (ImGui::BeginMenu("Application Settings"))
 	{
@@ -312,14 +484,17 @@ void App1::CreateMainMenuBar()
 		{
 			boxBlurMenu = boxBlurMenu ? false : true;
 		}
-
+		if (ImGui::MenuItem("Gaussian Options"))
+		{
+			GaussianMenu = GaussianMenu ? false : true;
+		}
 		ImGui::EndMenu();
 
 	}
 
 
 	
-	
+	GaussianChangesMenu(&GaussianMenu);
 	boxBlurChangesMenu(&boxBlurMenu);
 	vertexChangesMenu(&showVertex);
  	for (int i = 0; i < 4; i++)
@@ -416,5 +591,35 @@ void App1::boxBlurChangesMenu(bool* is_open)
 
 
 		ImGui::End();
+	}
+}
+
+void App1::GaussianChangesMenu(bool * is_open)
+{
+	if (*is_open == true)
+	{
+		// Create the window
+		if (!ImGui::Begin("Gaussian Settings", is_open, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ImGui::End();
+			return;
+		}
+		if (ImGui::InputFloat("DownScale ammount (The number the image will be devided by )", &downScaleAmmount, 0.05f, 0.0f, 3))
+		{
+			m_DownSampleTexture = new RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH / downScaleAmmount, SCREEN_HEIGHT / downScaleAmmount, SCREEN_NEAR, SCREEN_DEPTH);
+
+			m_HoizontalBlurTexture = new RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH / downScaleAmmount, SCREEN_HEIGHT / downScaleAmmount, SCREEN_NEAR, SCREEN_DEPTH);
+			m_VerticalBlurTexture = new RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH / downScaleAmmount, SCREEN_HEIGHT / downScaleAmmount, SCREEN_NEAR, SCREEN_DEPTH);
+
+			m_Ortho_Mesh_downScaled = new OrthoMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), SCREEN_WIDTH / downScaleAmmount, SCREEN_HEIGHT / downScaleAmmount, 0, 0);
+
+		}
+
+		if (ImGui::DragInt("Neightbours to check", &neiboursusedToBlur, 0.05f, 0, 5))
+		{	
+		}
+	
+		ImGui::End();
+	
 	}
 }

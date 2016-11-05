@@ -125,21 +125,31 @@
   <ItemGroup>
     <ClCompile Include="App1.cpp" />
     <ClCompile Include="BoxBlurShader.cpp" />
+    <ClCompile Include="HorizontalBlurShader.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="TextureShader.cpp" />
     <ClCompile Include="VertexShader.cpp" />
+    <ClCompile Include="VerticalBlurShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App1.h" />
     <ClInclude Include="BoxBlurShader.h" />
+    <ClInclude Include="HorizontalBlurShader.h" />
     <ClInclude Include="TextureShader.h" />
     <ClInclude Include="VertexShader.h" />
+    <ClInclude Include="VerticalBlurShader.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\boxBlur_ps.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="shaders\boxBlur_vs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shaders\horizontalBlur_ps.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shaders\horizontalBlur_vs.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="shaders\texture_ps.hlsl">
@@ -152,6 +162,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="shaders\vertexManipulationSpec_vs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shaders\verticalBlur_ps.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shaders\verticalBlur_vs.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>

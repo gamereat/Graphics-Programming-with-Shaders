@@ -9,6 +9,7 @@
 using namespace std;
 using namespace DirectX;
 
+
 class BoxBlurShader : public BaseShader
 {
 	struct ScreenSizeBufferType
@@ -17,7 +18,8 @@ class BoxBlurShader : public BaseShader
 		float screenHeight;
 		XMFLOAT2 padding;
 	};
-	
+
+
 public:
 
 
