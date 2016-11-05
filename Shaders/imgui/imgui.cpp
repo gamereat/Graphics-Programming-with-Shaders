@@ -2658,6 +2658,7 @@ void ImGui::EndFrame()
 
 void ImGui::Render()
 {
+
     ImGuiContext& g = *GImGui;
     IM_ASSERT(g.Initialized);   // Forgot to call ImGui::NewFrame()
 
