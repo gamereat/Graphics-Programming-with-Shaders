@@ -3,8 +3,7 @@
 #include "App1.h"
 #include <string>
 
-#pragma enable_d3d11_debug_symbols
-
+ 
 App1::App1()
 {
 	m_Quad_Mesh = nullptr;
@@ -15,24 +14,14 @@ App1::App1()
 
 	m_Render_Texture = nullptr;
 
-	m_BoxBur_Shader = nullptr;
-	
+ 	
 	m_Tessellation_Shader = nullptr;
 
 
-	m_Ortho_Mesh_downScaled = nullptr;
 
-	m_Ortho_Mesh_normalScaled = nullptr;
+	m_Ortho_Mesh_normalScaled = nullptr; 
 
-
-	m_DownSampleTexture = nullptr;
-
-	m_VerticalBlur_Shader = nullptr;
-
-	m_VerticalBlurTexture = nullptr;
-
-	m_HoizontalBlurTexture = nullptr;
-
+ 
 }
 
 void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight, Input *in)
@@ -41,11 +30,9 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	BaseApplication::init(hinstance, hwnd, screenWidth, screenHeight, in);
 
 
-	// Default value of the downscaling for post processing
-	downScaleAmmount = 2;
 
-	interTess =  XMINT3(12, 12, 12);
-	outerTess = 12;
+	interTess = XMINT4(12, 12, 12,12);
+	outerTess = XMINT2(2,2);
 
 	// Create Mesh object
 	m_Quad_Mesh = new PlaneMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/bunny.png");
@@ -54,10 +41,8 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 
 	m_Texture_Shader =  new TextureShader(m_Direct3D->GetDevice(), hwnd);
 
-	m_BoxBur_Shader = new BoxBlurShader(m_Direct3D->GetDevice(), hwnd);
-
-	m_VerticalBlur_Shader = new VerticalBlurShader(m_Direct3D->GetDevice(), hwnd);
-
+ 
+ 
 	for (int i = 0; i < 4; i++)
 	{
 		m_Lights[i] = new Light();
@@ -67,7 +52,6 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	m_Lights[0]->SetDiffuseColour(1, 1, 1, 1);
 
 
-	m_Ortho_Mesh_downScaled = new OrthoMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), SCREEN_WIDTH / downScaleAmmount, SCREEN_HEIGHT / downScaleAmmount, 0, 0);
 
 	m_Ortho_Mesh_normalScaled = new OrthoMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0);
 
@@ -78,19 +62,14 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	m_Render_VextexMinulation = new RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
 
 	postPro.Init(m_Direct3D, hwnd);
-
-	//m_DownSampleTexture = new RenderTexture(m_Direct3D->GetDevice(), screenWidth / downScaleAmmount, screenHeight / downScaleAmmount, SCREEN_NEAR, SCREEN_DEPTH);
-	m_HoizontalBlurTexture = new RenderTexture(m_Direct3D->GetDevice(), screenWidth / downScaleAmmount, screenHeight / downScaleAmmount, SCREEN_NEAR, SCREEN_DEPTH);
-	m_VerticalBlurTexture = new RenderTexture(m_Direct3D->GetDevice(), screenWidth / downScaleAmmount, screenHeight / downScaleAmmount, SCREEN_NEAR, SCREEN_DEPTH);
-
-	//m_UpScaleTexture = new RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
-
+ 
 
 	m_Tessellation_Shader = new TessellationShader(m_Direct3D->GetDevice(), hwnd);
 
 
 	m_Tessellation_mesh = new TessellationMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/bunny.png");
 
+	quad  = new QuadMesh (m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/bunny.png");
 }
 
 
@@ -104,41 +83,14 @@ App1::~App1()
 		delete m_UpScaleTexture;
 		m_UpScaleTexture = nullptr;
 	}
-
-	if (m_HoizontalBlurTexture)
-	{
-		delete m_HoizontalBlurTexture;
-		m_HoizontalBlurTexture = nullptr;
-	}
-	if (m_VerticalBlurTexture)
-	{
-		delete m_VerticalBlurTexture;
-		m_VerticalBlurTexture = nullptr;
-	} 
-
-	if (m_VerticalBlur_Shader)
-	{
-		delete m_VerticalBlur_Shader;
-		m_VerticalBlur_Shader = nullptr;
-	}
-
-	if (m_DownSampleTexture)
-	{
-		delete m_DownSampleTexture;
-		m_DownSampleTexture = nullptr;
-
-	}
+	 
 	if (m_Tessellation_Shader)
 	{
 		delete m_Tessellation_Shader;
 		m_Tessellation_Shader = nullptr;
 	}
 
-	if (m_BoxBur_Shader)
-	{
-		delete m_BoxBur_Shader;
-		m_BoxBur_Shader = nullptr;
-	}
+ 
 	if (m_Render_Texture)
 	{
 		delete m_Render_Texture;
@@ -202,36 +154,38 @@ bool App1::Frame()
 	{
 		return false;
 	}
-
 	return true;
 }
 
 bool App1::Render()
 {
 
-//	RenderTessellation();
+	RenderTessellation();
 
 	// Render world with minulation
-	RenderVertexMinulation();
+	//RenderVertexMinulation();
 
 
+	// disable wireframe mode for the post processing effects
+	if (m_Direct3D->getWireFrameMode())
+	{
+ 		m_Direct3D->TurnOffWireframe();
+	}
 
-
-
-//	DownSample();
-
-//	HorizontalBlur();
-
-//	VerticalBlur();
-
-	//UpScale();
-
+	// Apply any post processing effecst 
 	m_UpScaleTexture = postPro.ApplyPostProccessing(m_Ortho_Mesh_normalScaled,m_Render_Texture, m_Direct3D, m_Camera);
 
 	//// Render the second pass
 
 	//// 
 	RenderToScreen();
+
+
+	// disable wireframe mode for the post processing effects
+	if (m_Direct3D->getWireFrameMode())
+	{
+		m_Direct3D->TurnOnWireframe();
+	}
 
 	return true;
 }
@@ -240,8 +194,12 @@ void App1::RenderTessellation()
 
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, baseViewMatrixs;
 
-	//// Clear the scene. (default blue colour)
-	m_Direct3D->BeginScene(0.39f, 0.58f, 0.92f, 1.0f);
+	// Set the render target to be the render to texture.
+	m_Render_Texture->SetRenderTarget(m_Direct3D->GetDeviceContext());
+
+	// Clear the render to texture.
+	m_Render_Texture->ClearRenderTarget(m_Direct3D->GetDeviceContext(), 0.0f, 0.0f, 1.0f, 1.0f);
+
 
 	m_Camera->Update();
 	
@@ -257,7 +215,7 @@ void App1::RenderTessellation()
 
 
 	// Present the rendered scene to the screen.
-	m_Direct3D->EndScene();
+	m_Direct3D->SetBackBufferRenderTarget();
 }
 
 
@@ -300,42 +258,7 @@ void App1::RenderVertexMinulation()
 	// Reset the render target back to the original back buffer and not the render to texture anymore.
 	m_Direct3D->SetBackBufferRenderTarget();
 
-}
-
- 
-void App1::VerticalBlur()
-{
-
-	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, baseViewMatrix, orthoMartix;
-
-	m_VerticalBlurTexture->SetRenderTarget(m_Direct3D->GetDeviceContext());
-
-
-
-	// Clear the render to texture.
-	m_VerticalBlurTexture->ClearRenderTarget(m_Direct3D->GetDeviceContext(), 0.0f, 0.0f, 0.0f, 1.0f);
-
-	m_Direct3D->GetWorldMatrix(worldMatrix);
-	m_Camera->GetViewMatrix(viewMatrix);
-	m_Direct3D->GetProjectionMatrix(projectionMatrix);
-
-	// To render ortho mesh
-	// Turn off the Z buffer to begin all 2D rendering.
-	m_Direct3D->TurnZBufferOff();
-
-	orthoMartix = m_VerticalBlurTexture->GetOrthoMatrix();// ortho matrix for 2D rendering
-	m_Camera->GetBaseViewMatrix(baseViewMatrix);
-
-	m_Ortho_Mesh_downScaled->SendData(m_Direct3D->GetDeviceContext());
-
-	m_VerticalBlur_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, baseViewMatrix, orthoMartix, m_DownSampleTexture->GetShaderResourceView(), SCREEN_HEIGHT / downScaleAmmount, neiboursusedToBlur);
-	m_VerticalBlur_Shader->Render(m_Direct3D->GetDeviceContext(), m_Ortho_Mesh_downScaled->GetIndexCount());
-
-	m_Direct3D->TurnZBufferOn();
-
-	m_Direct3D->SetBackBufferRenderTarget();
-}
-
+} 
 
 void App1::RenderToScreen()
 {
@@ -361,17 +284,10 @@ void App1::RenderToScreen()
 
 	m_Ortho_Mesh_normalScaled->SendData(m_Direct3D->GetDeviceContext());
 
-	// Check if blur is enabled
-	if (isUsingBoxBlur)
-	{
-		m_BoxBur_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, baseViewMatrix, orthoMartix, m_UpScaleTexture->GetShaderResourceView());
-		m_BoxBur_Shader->Render(m_Direct3D->GetDeviceContext(), m_Ortho_Mesh_normalScaled->GetIndexCount());
-	}
-	else
-	{
-		m_Texture_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, baseViewMatrix, orthoMartix, m_UpScaleTexture->GetShaderResourceView());
-		m_Texture_Shader->Render(m_Direct3D->GetDeviceContext(), m_Ortho_Mesh_normalScaled->GetIndexCount());
-	}
+
+	m_Texture_Shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, baseViewMatrix, orthoMartix, m_UpScaleTexture->GetShaderResourceView());
+	m_Texture_Shader->Render(m_Direct3D->GetDeviceContext(), m_Ortho_Mesh_normalScaled->GetIndexCount());
+
 
 
 	m_Direct3D->TurnZBufferOn();
@@ -387,9 +303,7 @@ void App1::CreateMainMenuBar()
 {
 	static bool show_light_option[4];
 	static bool showVertex;
-	static bool boxBlurMenu;
 	static bool tessellationMenuOption;
-	static bool GaussianMenu;
 
 	if (ImGui::BeginMenu("Application Settings"))
 	{
@@ -428,7 +342,6 @@ void App1::CreateMainMenuBar()
 	postPro.PostProccessingMenu(); 
 
 
-	GaussianChangesMenu(&GaussianMenu);
  	vertexChangesMenu(&showVertex);
 	tessellationMenu(&tessellationMenuOption);
 
@@ -522,41 +435,11 @@ void App1::tessellationMenu(bool * is_open)
 		}
 
  
-		ImGui::SliderInt3("Outer Tessellation Factor", &interTess.x, 1, 64);
-		ImGui::SliderInt("Inner Tessellation Factor", &outerTess, 1, 64);
+		ImGui::SliderInt4("Outer Tessellation Factor", &interTess.x, 1, 64);
+		ImGui::SliderInt2("Inner Tessellation Factor", &outerTess.x, 1, 64);
 
 		ImGui::End();
 
-
-	}
-}
-
-void App1::GaussianChangesMenu(bool * is_open)
-{
-	if (*is_open == true)
-	{
-		// Create the window
-		if (!ImGui::Begin("Gaussian Settings", is_open, ImGuiWindowFlags_AlwaysAutoResize))
-		{
-			ImGui::End();
-			return;
-		}
-		if (ImGui::InputFloat("DownScale ammount (The number the image will be devided by )", &downScaleAmmount, 0.05f, 0.0f, 3))
-		{
-			m_DownSampleTexture = new RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH / downScaleAmmount, SCREEN_HEIGHT / downScaleAmmount, SCREEN_NEAR, SCREEN_DEPTH);
-
-			m_HoizontalBlurTexture = new RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH / downScaleAmmount, SCREEN_HEIGHT / downScaleAmmount, SCREEN_NEAR, SCREEN_DEPTH);
-			m_VerticalBlurTexture = new RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH / downScaleAmmount, SCREEN_HEIGHT / downScaleAmmount, SCREEN_NEAR, SCREEN_DEPTH);
-
-			m_Ortho_Mesh_downScaled = new OrthoMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), SCREEN_WIDTH / downScaleAmmount, SCREEN_HEIGHT / downScaleAmmount, 0, 0);
-
-		}
-
-		if (ImGui::DragInt("Neightbours to check", &neiboursusedToBlur, 0.05f, 0, 5))
-		{
-		}
-
-		ImGui::End();
 
 	}
 }

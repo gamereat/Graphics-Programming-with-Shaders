@@ -607,6 +607,10 @@ void D3D::DirectXSettingsMenu(bool* is_open)
 
 	}
 }
+bool D3D::getWireFrameMode()
+{
+	return m_is_WireFrame_on;
+}
 void D3D::TurnOnWireframe()
 {
 	// Now set the rasterizer state.

@@ -59,11 +59,13 @@ void PostProcessingHorizontalBlur::MenuOptions(bool * isOpen)
 		}
 		ImGui::Checkbox("Enable Horizontal Blur", &isEnabled);
 
-
-		if (ImGui::DragInt("Neightbours to check", &neighboursToUse, 0.05f, 0, 5))
+		if (isEnabled)
 		{
-		}
 
+			if (ImGui::DragInt("Neightbours to check", &neighboursToUse, 0.05f, 0, 5))
+			{
+			}
+		}
 		ImGui::End();
 	}
 }

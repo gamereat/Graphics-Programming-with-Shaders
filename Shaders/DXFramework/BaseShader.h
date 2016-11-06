@@ -49,6 +49,14 @@ protected:
 	void loadGeometryShader(WCHAR* filename);
 	void loadPixelShader(WCHAR* filename);
 
+
+
+
+	void loadVertexShader(WCHAR* filename, const  char*  functionEntyPoint);
+	void loadHullShader(WCHAR* filename, const  char*  functionEntyPoint);
+	void loadDomainShader(WCHAR* filename, const  char* functionEntyPoint);
+	void loadGeometryShader(WCHAR* filename, const  char* functionEntyPoint);
+	void loadPixelShader(WCHAR* filename, const  char* functionEntyPoint);
 protected:
 	ID3D11Device* m_device;
 	HWND m_hwnd;

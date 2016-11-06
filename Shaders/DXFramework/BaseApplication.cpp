@@ -5,7 +5,7 @@
 bool	BaseApplication::directxSetting = false;
 bool	BaseApplication::imguiMetrics = false;
 bool	BaseApplication::applicationInformation = false;
-bool	BaseApplication::applicationFPS = false;
+bool	BaseApplication::applicationFPS = true;
 bool	BaseApplication::mouseInformation = false;
 bool	BaseApplication::imguiStyle = false;
 bool	BaseApplication::keyboardInformation = false;
@@ -84,31 +84,21 @@ bool BaseApplication::Frame()
 		return false;
 	}
 
-
+	ImGui::ShowTestWindow();
 	if (ImGui::BeginMainMenuBar())
 	{
 
 		if (ImGui::BeginMenu("Window Settings"))
 		{
-			if (ImGui::MenuItem("DirectX Options"))
-			{
-				directxSetting = directxSetting ? false : true;
+			ImGui::MenuItem("DirectX Options", NULL, &directxSetting);
 
-			}
 
 			if (ImGui::BeginMenu("Imgui Options"))
 			{
-				if (ImGui::MenuItem("Metrics"))
-				{
-					imguiMetrics = imguiMetrics ? false : true;
+				ImGui::MenuItem("Metrics", NULL, &imguiMetrics);
+	
+				ImGui::MenuItem("Gui Style options", NULL, &imguiStyle);
 
-				}
-				if (ImGui::MenuItem("Gui Style options"))
-				{
-					imguiStyle = imguiStyle ? false : true;
-
-
-				}
 				ImGui::EndMenu();
 
 			}
@@ -118,22 +108,13 @@ bool BaseApplication::Frame()
 		}
 		if (ImGui::BeginMenu("Debug Options"))
 		{
-			if (ImGui::MenuItem("FPS"))
-			{
-				applicationFPS = applicationFPS ? false : true;
+			ImGui::MenuItem("FPS", NULL, &applicationFPS);
 
-			}
-			
-			if (ImGui::MenuItem("Keyboard Information"))
-			{
-				keyboardInformation = keyboardInformation ? false : true;
+			ImGui::MenuItem("Keyboard Information", NULL, &keyboardInformation);
 
-			}
-			if (ImGui::MenuItem("Mouse Information"))
-			{
-				mouseInformation = mouseInformation ? false : true;
 
-			}
+			ImGui::MenuItem("Mouse Information", NULL, &mouseInformation);
+	 
 			ImGui::EndMenu();
 
 		}
@@ -142,7 +123,7 @@ bool BaseApplication::Frame()
 
 		ImGui::EndMainMenuBar();
 	}
-	ImGui::ShowTestWindow();
+
 
 	// Update the system stats.
 	m_Timer->Frame();
@@ -276,21 +257,27 @@ void BaseApplication::OpenSubMenus()
 		m_Input->debugMouseMenu(&mouseInformation);
 	}
 	
+
+	if (applicationFPS)
+	{
+		// Put a fps monitor in bottom left cornor 
+		ImGui::SetNextWindowPos(ImVec2(10, SCREEN_HEIGHT -40));
+		if (!ImGui::Begin("Example: Fixed Overlay", &applicationFPS, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
+		{
+			ImGui::End();
+			return;
+		}
+		ImGui::Text("Frame raate at(%.1f FPS)", ImGui::GetIO().Framerate);
+
+		ImGui::End();
+
+
+	}
 	if (keyboardInformation)
 	{
 
 		m_Input->debugKeyBoardMenu(&keyboardInformation);
 
-		//// Create the window
-		//if (!ImGui::Begin("Application FPS", &applicationFPS, ImGuiWindowFlags_AlwaysAutoResize))
-		//{
-		//	ImGui::End();
-		//	return;
-		//}
-		//ImGui::Text("Frame Time: %f", m_Timer->GetTime());
-
- 
-		//ImGui::End();
 	}
 }
 

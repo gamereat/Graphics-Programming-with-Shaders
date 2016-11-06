@@ -54,6 +54,11 @@ public:
 
 
 	void DirectXSettingsMenu(bool* is_open);
+	
+	/*
+		Returns what the wire frame mode is currently at
+	*/
+	bool getWireFrameMode();
  
 protected:
 	bool m_vsync_enabled;

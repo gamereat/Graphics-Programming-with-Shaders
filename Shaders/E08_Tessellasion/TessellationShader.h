@@ -14,16 +14,16 @@ class TessellationShader : public BaseShader
 
 	struct TessellationBufferType
 	{
-
-		int innerTesselastionValue;
-		XMINT3 outerTessellationValue;
+		XMINT4 outerTessellationValue;
+		XMINT2 innerTesselastionValue;
+		XMINT2 padding;
 	};
 public:
 
 	TessellationShader(ID3D11Device* device, HWND hwnd);
 	~TessellationShader();
 
-	void SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &world, const XMMATRIX &view, const XMMATRIX &projection, ID3D11ShaderResourceView* texture, int innerTess, XMINT3 outerTess);
+	void SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &world, const XMMATRIX &view, const XMMATRIX &projection, ID3D11ShaderResourceView* texture, XMINT2 innerTess, XMINT4 outerTess);
 	void Render(ID3D11DeviceContext* deviceContext, int vertexCount);
 
 private:

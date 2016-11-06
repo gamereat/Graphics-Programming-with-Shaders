@@ -584,4 +584,3 @@ void SphereMesh::InitBuffers(ID3D11Device* device)
 	delete[] indices;
 	indices = 0;
 }
-

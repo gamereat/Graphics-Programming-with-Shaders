@@ -107,8 +107,8 @@ void TessellationShader::InitShader(WCHAR* vsFilename, WCHAR* hsFilename, WCHAR*
 	InitShader(vsFilename, psFilename);
 
 	// Load other required shaders.
-	loadHullShader(hsFilename);
-	loadDomainShader(dsFilename);
+	loadHullShader(hsFilename, "triEnty");
+	loadDomainShader(dsFilename,"triEnty");
 
 
 	// Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
@@ -156,7 +156,7 @@ void TessellationShader::InitShader(WCHAR* vsFilename, WCHAR* hsFilename, WCHAR*
 }
 
 
-void TessellationShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, int innerTess, XMINT3 outerTess)
+void TessellationShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, XMINT2 innerTess, XMINT4 outerTess)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -191,6 +191,10 @@ void TessellationShader::SetShaderParameters(ID3D11DeviceContext* deviceContext,
 	// Now set the constant buffer in the vertex shader with the updated values.
 	deviceContext->DSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
 
+
+	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
+
+
 	// Set shader texture resource in the pixel shader.
 	deviceContext->PSSetShaderResources(0, 1, &texture);
 
@@ -201,6 +205,7 @@ void TessellationShader::SetShaderParameters(ID3D11DeviceContext* deviceContext,
 
 	tessPtr->innerTesselastionValue = innerTess;
 	tessPtr->outerTessellationValue = outerTess;
+	tessPtr->padding = XMINT2(0, 0);
 
 	// Unlock the constant buffer.
 	deviceContext->Unmap(m_tessellationBuffer, 0);
@@ -212,6 +217,7 @@ void TessellationShader::SetShaderParameters(ID3D11DeviceContext* deviceContext,
 	deviceContext->HSSetConstantBuffers(bufferNumber, 1, &m_tessellationBuffer);
 
 
+	 
  
 }
 

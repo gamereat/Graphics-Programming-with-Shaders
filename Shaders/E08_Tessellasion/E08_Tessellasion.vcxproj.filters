@@ -22,6 +22,12 @@
     <Filter Include="Source Files\Post Proccessing">
       <UniqueIdentifier>{715bce90-8081-434e-ab16-01a4f2722f9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders\Tessellation">
+      <UniqueIdentifier>{8d065e93-6772-4858-ae45-99bd578ceacd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\PostProcessing">
+      <UniqueIdentifier>{5a3697e6-10e0-4d75-ab1b-3874a2b72fdf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Object Include="M:\Third Year\Shaders\Shaders\res\drone.obj">
@@ -85,9 +91,6 @@
     <ClCompile Include="HorizontalBlurShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PostProcessing.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PostProcessingBase.cpp">
       <Filter>Source Files\Post Proccessing</Filter>
     </ClCompile>
@@ -101,6 +104,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PostProcessingHorizontalBlur.cpp">
+      <Filter>Source Files\Post Proccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessing.cpp">
+      <Filter>Source Files\Post Proccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessingVerticalBlur.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -126,9 +135,6 @@
     <ClInclude Include="VerticalBlurShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PostProcessing.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PostProcessingBase.h">
       <Filter>Header Files\Post Proccessing</Filter>
     </ClInclude>
@@ -142,6 +148,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PostProcessingHorizontalBlur.h">
+      <Filter>Header Files\Post Proccessing</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProcessing.h">
+      <Filter>Header Files\Post Proccessing</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProcessingVerticalBlur.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -158,35 +170,35 @@
     <FxCompile Include="shaders\texture_vs.hlsl">
       <Filter>shaders</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\boxBlur_ps.hlsl">
-      <Filter>shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\boxBlur_vs.hlsl">
-      <Filter>shaders</Filter>
+    <FxCompile Include="shaders\tessellation_ds.hlsl">
+      <Filter>shaders\Tessellation</Filter>
     </FxCompile>
     <FxCompile Include="shaders\tessellation_hs.hlsl">
-      <Filter>shaders</Filter>
+      <Filter>shaders\Tessellation</Filter>
     </FxCompile>
     <FxCompile Include="shaders\tessellation_ps.hlsl">
-      <Filter>shaders</Filter>
+      <Filter>shaders\Tessellation</Filter>
     </FxCompile>
     <FxCompile Include="shaders\tessellation_vs.hlsl">
-      <Filter>shaders</Filter>
+      <Filter>shaders\Tessellation</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\tessellation_ds.hlsl">
-      <Filter>shaders</Filter>
+    <FxCompile Include="shaders\boxBlur_ps.hlsl">
+      <Filter>shaders\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\boxBlur_vs.hlsl">
+      <Filter>shaders\PostProcessing</Filter>
     </FxCompile>
     <FxCompile Include="shaders\horizontalBlur_ps.hlsl">
-      <Filter>shaders</Filter>
+      <Filter>shaders\PostProcessing</Filter>
     </FxCompile>
     <FxCompile Include="shaders\horizontalBlur_vs.hlsl">
-      <Filter>shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\verticalBlur_ps.hlsl">
-      <Filter>shaders</Filter>
+      <Filter>shaders\PostProcessing</Filter>
     </FxCompile>
     <FxCompile Include="shaders\verticalBlur_vs.hlsl">
-      <Filter>shaders</Filter>
+      <Filter>shaders\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\verticalBlur_ps.hlsl">
+      <Filter>shaders\PostProcessing</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
