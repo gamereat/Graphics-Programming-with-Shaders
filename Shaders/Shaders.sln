@@ -34,6 +34,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E08_Tessellasion", "E08_Tes
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E09_ShadowMaps", "E09_ShadowMaps\E09_ShadowMaps.vcxproj", "{F264193D-47AF-4970-BDF3-1B07521637EE}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E11_Geomety", "E11_Geomety\E11_Geomety.vcxproj", "{A6AD67B4-19A4-4385-9035-5D2AC19042C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,6 +155,14 @@ Global
 		{F264193D-47AF-4970-BDF3-1B07521637EE}.Release|Win32.ActiveCfg = Release|Win32
 		{F264193D-47AF-4970-BDF3-1B07521637EE}.Release|Win32.Build.0 = Release|Win32
 		{F264193D-47AF-4970-BDF3-1B07521637EE}.Release|x64.ActiveCfg = Release|Win32
+		{A6AD67B4-19A4-4385-9035-5D2AC19042C0}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{A6AD67B4-19A4-4385-9035-5D2AC19042C0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A6AD67B4-19A4-4385-9035-5D2AC19042C0}.Debug|Win32.Build.0 = Debug|Win32
+		{A6AD67B4-19A4-4385-9035-5D2AC19042C0}.Debug|x64.ActiveCfg = Debug|Win32
+		{A6AD67B4-19A4-4385-9035-5D2AC19042C0}.Release|Any CPU.ActiveCfg = Release|Win32
+		{A6AD67B4-19A4-4385-9035-5D2AC19042C0}.Release|Win32.ActiveCfg = Release|Win32
+		{A6AD67B4-19A4-4385-9035-5D2AC19042C0}.Release|Win32.Build.0 = Release|Win32
+		{A6AD67B4-19A4-4385-9035-5D2AC19042C0}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
