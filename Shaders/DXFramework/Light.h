@@ -26,6 +26,7 @@ public:
 		_mm_free(p);
 	}
 
+ 
 	void GenerateViewMatrix();
 	void GenerateProjectionMatrix(float, float);
 

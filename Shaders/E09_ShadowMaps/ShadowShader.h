@@ -24,6 +24,8 @@ private:
 	{
 		XMFLOAT4 ambient;
 		XMFLOAT4 diffuse;
+
+		 
 	};
 
 	struct LightBufferType2

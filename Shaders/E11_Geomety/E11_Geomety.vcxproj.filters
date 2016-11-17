@@ -43,6 +43,12 @@
     <Filter Include="shaders\Geometry">
       <UniqueIdentifier>{eb05f938-c672-4ce8-a3a8-141da411b2fb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Post Proccessing\GaussianBlur">
+      <UniqueIdentifier>{589ecd25-d838-45a5-aed4-3f682c7e9b23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Post Proccessing\GaussianBlur">
+      <UniqueIdentifier>{ad880ea9-2f48-406b-a80f-7cead6c45043}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Object Include="M:\Third Year\Shaders\Shaders\res\drone.obj">
@@ -100,12 +106,6 @@
     <ClCompile Include="TessellationShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="VerticalBlurShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HorizontalBlurShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PostProcessingBase.cpp">
       <Filter>Source Files\Post Proccessing</Filter>
     </ClCompile>
@@ -115,16 +115,10 @@
     <ClCompile Include="PostProccessingDownScale.cpp">
       <Filter>Source Files\Post Proccessing</Filter>
     </ClCompile>
-    <ClCompile Include="PostProcessingHorizontalBlur.cpp">
-      <Filter>Source Files\Post Proccessing</Filter>
-    </ClCompile>
     <ClCompile Include="PostProcessing.cpp">
       <Filter>Source Files\Post Proccessing</Filter>
     </ClCompile>
     <ClCompile Include="PostProccessingUpScale.cpp">
-      <Filter>Source Files\Post Proccessing</Filter>
-    </ClCompile>
-    <ClCompile Include="PostProcessingVerticalBlur.cpp">
       <Filter>Source Files\Post Proccessing</Filter>
     </ClCompile>
     <ClCompile Include="ShadowShader.cpp">
@@ -134,6 +128,21 @@
       <Filter>Source Files\Depth</Filter>
     </ClCompile>
     <ClCompile Include="GeomentryShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessingGaussianBlur.cpp">
+      <Filter>Source Files\Post Proccessing\GaussianBlur</Filter>
+    </ClCompile>
+    <ClCompile Include="VerticalBlurShader.cpp">
+      <Filter>Source Files\Post Proccessing\GaussianBlur</Filter>
+    </ClCompile>
+    <ClCompile Include="HorizontalBlurShader.cpp">
+      <Filter>Source Files\Post Proccessing\GaussianBlur</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessingChromaticAberration.cpp">
+      <Filter>Source Files\Post Proccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="ChromaticAberrationsShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -153,12 +162,6 @@
     <ClInclude Include="TessellationShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HorizontalBlurShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VerticalBlurShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PostProcessingBase.h">
       <Filter>Header Files\Post Proccessing</Filter>
     </ClInclude>
@@ -168,16 +171,10 @@
     <ClInclude Include="PostProccessingDownScale.h">
       <Filter>Header Files\Post Proccessing</Filter>
     </ClInclude>
-    <ClInclude Include="PostProcessingHorizontalBlur.h">
-      <Filter>Header Files\Post Proccessing</Filter>
-    </ClInclude>
     <ClInclude Include="PostProcessing.h">
       <Filter>Header Files\Post Proccessing</Filter>
     </ClInclude>
     <ClInclude Include="PostProccessingUpScale.h">
-      <Filter>Header Files\Post Proccessing</Filter>
-    </ClInclude>
-    <ClInclude Include="PostProcessingVerticalBlur.h">
       <Filter>Header Files\Post Proccessing</Filter>
     </ClInclude>
     <ClInclude Include="ShadowShader.h">
@@ -187,6 +184,21 @@
       <Filter>Header Files\Depth</Filter>
     </ClInclude>
     <ClInclude Include="GeomentryShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProcessingGaussianBlur.h">
+      <Filter>Header Files\Post Proccessing\GaussianBlur</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProcessingChromaticAberration.h">
+      <Filter>Header Files\Post Proccessing</Filter>
+    </ClInclude>
+    <ClInclude Include="VerticalBlurShader.h">
+      <Filter>Header Files\Post Proccessing\GaussianBlur</Filter>
+    </ClInclude>
+    <ClInclude Include="HorizontalBlurShader.h">
+      <Filter>Header Files\Post Proccessing\GaussianBlur</Filter>
+    </ClInclude>
+    <ClInclude Include="ChromaticAberrationsShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -253,6 +265,12 @@
     </FxCompile>
     <FxCompile Include="shaders\Geometry_Triangle_gs.hlsl">
       <Filter>shaders\Geometry</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\ChromaticAberration_ps.hlsl">
+      <Filter>shaders\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\ChromaticAberration_vs.hlsl">
+      <Filter>shaders\PostProcessing</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

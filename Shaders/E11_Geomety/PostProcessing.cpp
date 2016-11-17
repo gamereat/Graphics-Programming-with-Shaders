@@ -11,10 +11,10 @@ PostProcessing::PostProcessing()
 PostProcessing::~PostProcessing()
 {
 	// Tidy up memory 
-	if (horizontalBlur)
+	if (gaussianBlur)
 	{
-		delete horizontalBlur;
-		horizontalBlur = nullptr;
+		delete gaussianBlur;
+		gaussianBlur = nullptr;
 	}
 	if (downScale)
 	{
@@ -33,7 +33,12 @@ PostProcessing::~PostProcessing()
 		boxBlur = nullptr;
 	}
 
- 
+	if (chromaticAberration)
+	{
+
+		delete chromaticAberration;
+		chromaticAberration = nullptr;
+	}
 	if (orthoMeshDownScaled)
 	{
 		delete orthoMeshDownScaled;
@@ -42,8 +47,10 @@ PostProcessing::~PostProcessing()
  
 }
 
-void PostProcessing::Init(D3D* directX3D, HWND hwnd)
+void PostProcessing::Init(D3D* directX3D, HWND hwnd, Timer* timer)
 {
+
+	this->timer = timer;
 
 	// Init var 
 	// Set the down scale ammount to half the size of the screen
@@ -63,21 +70,17 @@ void PostProcessing::Init(D3D* directX3D, HWND hwnd)
 
 	boxBlur = new PostProccessBoxBlur(directX3D, hwnd, downScaleAmmount);
 
-	horizontalBlur = new PostProcessingHorizontalBlur(directX3D, hwnd, downScaleAmmount);
+	gaussianBlur = new PostProcessingGaussianBlur(directX3D, hwnd, downScaleAmmount);
 
-	verticalBlur = new PostProcessingVerticalBlur(directX3D, hwnd, downScaleAmmount);
+	chromaticAberration = new PostProcessingChromaticAberration(directX3D, hwnd, downScaleAmmount);
 
+ 
 
 }
 
 RenderTexture* PostProcessing::ApplyPostProccessing(OrthoMesh*& orthNormalSized, RenderTexture* lastRenderTexture, D3D* directX3D, Camera* camera)
 {
-	//bool isWireFrameOn = false;
-	//if (directX3D->getWireFrameMode())
-	//{
-	//	isWireFrameOn = true;
-	//}	
-	//directX3D->TurnOffWireframe();
+ 
 
 	// Create a pointer to the current render texture being used for post processing 
 	RenderTexture*  currentRenderTexture = nullptr;
@@ -93,14 +96,10 @@ RenderTexture* PostProcessing::ApplyPostProccessing(OrthoMesh*& orthNormalSized,
 
 	// Guassian blur effect
 	
-	currentRenderTexture = verticalBlur->Render(directX3D, camera, orthoMeshDownScaled, downScaleTexture);
-	currentRenderTexture = horizontalBlur->Render(directX3D, camera, orthoMeshDownScaled, currentRenderTexture);
-
-	/*if (isWireFrameOn)
-	{
-		directX3D->TurnOnWireframe();
-	}*/
-
+	currentRenderTexture = gaussianBlur->Render(directX3D, camera, orthoMeshDownScaled, downScaleTexture);
+ 
+ 
+	currentRenderTexture = chromaticAberration->Render(directX3D, camera, orthoMeshDownScaled, downScaleTexture, timer->GetTotalTimePast());
 
  	// Upscale the scene again 
 	// Return the render texture so i can be rendered to the scene 
@@ -130,14 +129,16 @@ void PostProcessing::PostProccessingMenu()
 		}
 
 
-		if (ImGui::MenuItem("Horizontal Blur"))
+		if (ImGui::MenuItem("Gaussian Blur"))
 		{
-			horizontalBlur->ToggleMenu();
+			gaussianBlur->ToggleMenu();
 		}
 
-		if (ImGui::MenuItem("Vertical Blur"))
+
+
+		if (ImGui::MenuItem("chromatic Aberration "))
 		{
-			verticalBlur->ToggleMenu();
+			chromaticAberration->ToggleMenu();
 		}
 		ImGui::EndMenu();
 

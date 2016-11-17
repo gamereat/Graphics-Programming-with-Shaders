@@ -15,6 +15,7 @@
 #include "TessellationShader.h"
 #include "../DXFramework/TessellationMesh.h"
 #include "../DXFramework/QuadMesh.h"
+#include "../DXFramework/Model.h"
 #include "VerticalBlurShader.h"
 #include "PostProcessing.h"
 #include "DepthShader.h"
@@ -23,6 +24,8 @@
 class App1 : public BaseApplication
 {
 public:
+	const int SHADOWMAP_WIDTH = 1024;
+	const int SHADOWMAP_HEIGHT = 1024;
 
 	App1();
 	~App1();
@@ -44,7 +47,7 @@ private:
 	void RenderToTexture();
 	void RenderToScreen();
   
-
+	void RenderShadow();
 
 	void RenderVertexMinulation();
  
@@ -53,7 +56,7 @@ private:
 
 	void vertexChangesMenu(bool * is_open);
 
-
+	Model* teaTop;
 
 	DepthShader* m_DepthShader;
 	ShadowShader* m_ShadowShader;
@@ -66,6 +69,9 @@ private:
 	TextureShader* m_Texture_Shader;
 
  	RenderTexture* m_Render_Texture;
+
+	RenderTexture* m_Shadow_Texture;
+
 
 	RenderTexture* m_Render_VextexMinulation;
 	RenderTexture* m_UpScaleTexture;

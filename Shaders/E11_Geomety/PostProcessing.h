@@ -11,8 +11,8 @@
 #include "PostProccessBoxBlur.h"
 #include "PostProccessingDownScale.h"
 #include "PostProccessingUpScale.h"
-#include "PostProcessingHorizontalBlur.h"
-#include "PostProcessingVerticalBlur.h"
+#include "PostProcessingGaussianBlur.h"
+#include "PostProcessingChromaticAberration.h" 
 /*
 	Adds any post processing effects to the scene 
 	Can enable or disable any during run time using menu system
@@ -29,8 +29,9 @@ public:
 	Inilizes the post proccessing effects ready to be used 
 	@param directX3D	The directx object being used on the scene 
 	@param hwnd			The window pointer
+	@param timer		Pointer to the window timer to get deltatime from
 	*/
-	void Init(D3D* directX3D, HWND hwnd);
+	void Init(D3D* directX3D, HWND hwnd, Timer* timer);
 
 
 	/*
@@ -60,14 +61,11 @@ private:
 	// Guassain Blur
 	////////////////////////////
 
+ 
 	/*
-	Vertical blur effect (used to create gaussain blur)
+	Guassain blur effect
 	*/
-	PostProcessingVerticalBlur* verticalBlur;
-	/*
-	Horizontal blur effect (used to create gaussain blur)
-	*/
-	PostProcessingHorizontalBlur* horizontalBlur;
+	PostProcessingGaussianBlur* gaussianBlur;
 
 	/////////////////////////////////////////////
 	
@@ -87,8 +85,11 @@ private:
 	*/
 	PostProccessBoxBlur* boxBlur;
 
+	/*
+	Adds a chromatic Aberration over the screen
+	*/
+	PostProcessingChromaticAberration* chromaticAberration;
 
-	
 	/*
 	Orthomesh created after the image has been downscaled. Used for each post processsing effect
 	*/
@@ -101,6 +102,12 @@ private:
 	How much the image will be upscade back after the post proccesssing effects
 	*/
 	float upScaleAmmount;
+
+
+	/*
+	Time for the window
+	*/
+	Timer* timer;
 	
 };
 

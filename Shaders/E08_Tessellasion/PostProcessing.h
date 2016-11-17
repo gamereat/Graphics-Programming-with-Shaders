@@ -67,7 +67,7 @@ private:
 	/*
 	Horizontal blur effect (used to create gaussain blur)
 	*/
-	PostProcessingHorizontalBlur* horizontalBlur;
+	PostProcessingGaussianBlur* horizontalBlur;
 
 	/////////////////////////////////////////////
 	

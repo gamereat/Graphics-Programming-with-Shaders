@@ -63,7 +63,7 @@ void PostProcessing::Init(D3D* directX3D, HWND hwnd)
 
 	boxBlur = new PostProccessBoxBlur(directX3D, hwnd, downScaleAmmount);
 
-	horizontalBlur = new PostProcessingHorizontalBlur(directX3D, hwnd, downScaleAmmount);
+	horizontalBlur = new PostProcessingGaussianBlur(directX3D, hwnd, downScaleAmmount);
 
 	verticalBlur = new PostProcessingVerticalBlur(directX3D, hwnd, downScaleAmmount);
 

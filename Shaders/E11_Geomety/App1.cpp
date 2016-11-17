@@ -63,7 +63,7 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 
 	m_Render_VextexMinulation = new RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
 
-	postPro.Init(m_Direct3D, hwnd);
+	postPro.Init(m_Direct3D, hwnd, m_Timer);
  
 
 	m_Tessellation_Shader = new TessellationShader(m_Direct3D->GetDevice(), hwnd);
@@ -189,12 +189,13 @@ bool App1::Render()
 	//RenderTessellation();
 
 	// Render world with minulation
-	//RenderVertexMinulation();
+	RenderVertexMinulation();
 
  // RenderDepth();
 
 
-	RenderGeometry();
+//
+  //RenderGeometry();
 
 
 

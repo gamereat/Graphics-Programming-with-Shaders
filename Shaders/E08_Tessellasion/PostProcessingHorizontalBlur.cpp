@@ -1,7 +1,7 @@
 #include "PostProcessingHorizontalBlur.h"
 
  
-PostProcessingHorizontalBlur::PostProcessingHorizontalBlur(D3D * directX3D, HWND hwnd, float downscaleValue)
+PostProcessingGaussianBlur::PostProcessingGaussianBlur(D3D * directX3D, HWND hwnd, float downscaleValue)
 	: PostProcessingBase(directX3D, hwnd, downscaleValue)
 
 {
@@ -12,11 +12,11 @@ PostProcessingHorizontalBlur::PostProcessingHorizontalBlur(D3D * directX3D, HWND
 }
 
 
-PostProcessingHorizontalBlur::~PostProcessingHorizontalBlur()
+PostProcessingGaussianBlur::~PostProcessingGaussianBlur()
 {
 }
 
-RenderTexture* PostProcessingHorizontalBlur::Render(D3D* directX3D, Camera* camera, OrthoMesh* orthoMesh, RenderTexture* currentRenderTextureh)
+RenderTexture* PostProcessingGaussianBlur::Render(D3D* directX3D, Camera* camera, OrthoMesh* orthoMesh, RenderTexture* currentRenderTextureh)
 {
 	if (isEnabled)
 	{
@@ -46,7 +46,7 @@ RenderTexture* PostProcessingHorizontalBlur::Render(D3D* directX3D, Camera* came
 
 }
 
-void PostProcessingHorizontalBlur::MenuOptions(bool * isOpen)
+void PostProcessingGaussianBlur::MenuOptions(bool * isOpen)
 {
 	if (*isOpen == true)
 	{

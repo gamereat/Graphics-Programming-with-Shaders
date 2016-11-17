@@ -36,12 +36,12 @@ protected:
 	RenderTexture* renderTexture;
 
 
-	bool isEnabled;
-private:
-	/*
+	bool isEnabled;	/*
 
 	*/
 	bool isMenuOpen;
+private:
+
 
 };
 
