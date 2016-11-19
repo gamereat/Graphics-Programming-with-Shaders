@@ -4,6 +4,29 @@
 #include "light.h"
 #include "../imgui/imgui.h"
 #include <string>
+
+Light::Light()
+{
+
+	m_ambientColour = XMFLOAT4();
+	m_diffuseColour = XMFLOAT4();;
+	m_direction = XMFLOAT3();;
+	m_specularColour = XMFLOAT4();
+	m_specularPower = 0.0f;
+
+	m_position = XMVECTOR();
+	m_viewMatrix = XMMATRIX();
+	m_projectionMatrix = XMMATRIX();
+	m_lookAt = XMVECTOR();;
+
+
+	m_range = 0 ;
+	m_attenuationConstantFactor = 0;
+	m_attenuationLinearFactor = 0;
+	m_attenuationQuadraticFactor = 0;
+	m_makeSpecular = false;
+	m_lightType = lightType::directional;
+}
 void Light::GenerateViewMatrix()
 {
 	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);

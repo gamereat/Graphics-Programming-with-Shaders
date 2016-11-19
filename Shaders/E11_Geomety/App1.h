@@ -16,6 +16,8 @@
 #include "../DXFramework/TessellationMesh.h"
 #include "../DXFramework/PointMesh.h"
 #include "../DXFramework/QuadMesh.h"
+#include "../DXFramework/Model.h"
+
 #include "VerticalBlurShader.h"
 #include "PostProcessing.h"
 #include "DepthShader.h"
@@ -49,7 +51,7 @@ private:
 	void RenderToScreen();
   
 
-
+	void RenderShadow();
 
 	void RenderVertexMinulation();
  
@@ -59,6 +61,7 @@ private:
 	void GeomentryMenu(bool * is_open);
 
 	void vertexChangesMenu(bool * is_open);
+	Model* teaTop;
 
 
 	DepthShader* m_DepthShader;
@@ -74,6 +77,7 @@ private:
 	GeomentryShader* m_Geomentry_Shader;
 
  	RenderTexture* m_Render_Texture;
+	RenderTexture* m_Shadow_Texture;
 
 	RenderTexture* m_Render_VextexMinulation;
 	RenderTexture* m_UpScaleTexture;

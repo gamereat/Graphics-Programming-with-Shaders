@@ -1,1 +1,39 @@
-﻿
+﻿Build started 19/11/2016 13:32:05.
+     1>Project "C:\Users\amg\Source\Repos\Graphics-Programming-with-Shaders\Shaders\DXFramework\DXFramework.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Light.cpp
+         Light.cpp
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\amg\Source\Repos\Graphics-Programming-with-Shaders\Shaders\Debug\DXFramework.lib" DirectXTK.lib /LIBPATH:"\\vmwfil01\homedrives23$\p513692\Visual Studio 2013\Projects\Shaders\DirectXTK\Bin\Desktop_2013\Win32\Debug\DirectXT.E0B52AE7.tlog" /NOLOGO Debug\imgui_impl_dx11.obj
+         Debug\imgui.obj
+         Debug\imgui_demo.obj
+         Debug\imgui_draw.obj
+         Debug\BaseApplication.obj
+         Debug\BaseMesh.obj
+         Debug\BaseShader.obj
+         Debug\Camera.obj
+         Debug\CubeMesh.obj
+         Debug\D3D.obj
+         Debug\DoubleTriangle.obj
+         Debug\Input.obj
+         Debug\Light.obj
+         Debug\Mesh.obj
+         Debug\Model.obj
+         Debug\OrthoMesh.obj
+         Debug\PlaneMesh.obj
+         Debug\PointMesh.obj
+         Debug\QuadMesh.obj
+         Debug\RenderTexture.obj
+         Debug\SphereMesh.obj
+         Debug\System.obj
+         Debug\TessellationMesh.obj
+         Debug\Texture.obj
+         Debug\Timer.obj
+         Debug\TokenStream.obj
+         Debug\TriangleMesh.obj
+         DXFramework.vcxproj -> C:\Users\amg\Source\Repos\Graphics-Programming-with-Shaders\Shaders\Debug\DXFramework.lib
+     1>Done Building Project "C:\Users\amg\Source\Repos\Graphics-Programming-with-Shaders\Shaders\DXFramework\DXFramework.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:03.41

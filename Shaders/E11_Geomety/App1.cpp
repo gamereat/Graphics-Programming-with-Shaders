@@ -61,6 +61,7 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 
 
 
+	m_Shadow_Texture = new  RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
 	m_Render_VextexMinulation = new RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
 
 	postPro.Init(m_Direct3D, hwnd, m_Timer);
@@ -79,6 +80,7 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	m_ShadowShader = new ShadowShader(m_Direct3D->GetDevice(), hwnd);
 
 	m_Geomentry_Shader = new GeomentryShader(m_Direct3D->GetDevice(), hwnd);
+	teaTop = new Model(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/bunny.png", L"../res/teapot.obj");
 
 }
 
@@ -189,10 +191,11 @@ bool App1::Render()
 	//RenderTessellation();
 
 	// Render world with minulation
-	RenderVertexMinulation();
+	//RenderVertexMinulation();
+//
+  RenderDepth();
 
- // RenderDepth();
-
+  RenderShadow();
 
 //
   //RenderGeometry();
@@ -206,7 +209,7 @@ bool App1::Render()
 	}
 
 	// Apply any post processing effecst 
-	m_UpScaleTexture = postPro.ApplyPostProccessing(m_Ortho_Mesh_normalScaled,m_Render_Texture, m_Direct3D, m_Camera);
+	m_UpScaleTexture = postPro.ApplyPostProccessing(m_Ortho_Mesh_normalScaled, m_Shadow_Texture, m_Direct3D, m_Camera);
 
 	//// Render the second pass
 
@@ -274,21 +277,22 @@ void App1::RenderDepth()
 
 
 	//// Send geometry data (from mesh)
- 
+
 	m_Lights[0]->GenerateViewMatrix();
 	lightViewMartix = m_Lights[0]->GetViewMatrix();
 
-	m_Lights[0]->GenerateProjectionMatrix(SCREEN_NEAR, SCREEN_DEPTH );
+	m_Lights[0]->GenerateProjectionMatrix(SCREEN_NEAR, SCREEN_DEPTH);
 	lightProjectionMatrix = m_Lights[0]->GetProjectionMatrix();
+	worldMatrix = XMMatrixScaling(0.1, 0.1, 0.1);
 
-	//// Send geometry data (from mesh)
-	m_Sphere_Mesh->SendData(m_Direct3D->GetDeviceContext());
+	////// Send geometry data (from mesh)
+	teaTop->SendData(m_Direct3D->GetDeviceContext());
 
 	m_DepthShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, lightViewMartix, lightProjectionMatrix);
 
-	m_DepthShader->Render(m_Direct3D->GetDeviceContext(), m_Sphere_Mesh->GetIndexCount());
+	m_DepthShader->Render(m_Direct3D->GetDeviceContext(), teaTop->GetIndexCount());
 
-	worldMatrix = XMMatrixTranslation(-50, -10, -50);
+	worldMatrix = XMMatrixTranslation(-50, -1, -50);
 
 	////// Send geometry data (from mesh)
 	m_Quad_Mesh->SendData(m_Direct3D->GetDeviceContext());
@@ -300,7 +304,53 @@ void App1::RenderDepth()
 
 	// Reset the render target back to the original back buffer and not the render to texture anymore.
 	m_Direct3D->SetBackBufferRenderTarget();
-	m_Direct3D->ResetViewport(); 
+	m_Direct3D->ResetViewport();
+}
+
+void App1::RenderShadow()
+{
+	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, baseViewMatrix, orthoMartix;
+
+	//m_Direct3D->BeginScene(0.39f, 0.58f, 0.92f, 1.0f);
+	m_Shadow_Texture->SetRenderTarget(m_Direct3D->GetDeviceContext());
+
+
+	m_Shadow_Texture->ClearRenderTarget(m_Direct3D->GetDeviceContext(), 0.0f, 0.0f, 1.0f, 1.0f);
+
+	//// Generate the view matrix based on the camera's position.
+	m_Camera->Update();
+
+	//// Get the world, view, projection, and ortho matrices from the camera and Direct3D objects.
+	m_Direct3D->GetWorldMatrix(worldMatrix);
+	m_Camera->GetViewMatrix(viewMatrix);
+	m_Direct3D->GetProjectionMatrix(projectionMatrix);
+
+	worldMatrix = XMMatrixScaling(0.1, 0.1, 0.1);
+
+	//// Send geometry data (from mesh)
+	teaTop->SendData(m_Direct3D->GetDeviceContext());
+
+	m_ShadowShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, teaTop->GetTexture(), m_Render_Texture->GetShaderResourceView(), m_Lights[0]);
+
+	m_ShadowShader->Render(m_Direct3D->GetDeviceContext(), teaTop->GetIndexCount());
+
+
+	worldMatrix = XMMatrixTranslation(-50, -1, -50);
+
+
+	//// Send geometry data (from mesh)
+	m_Quad_Mesh->SendData(m_Direct3D->GetDeviceContext());
+
+	m_ShadowShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Quad_Mesh->GetTexture(), m_Render_Texture->GetShaderResourceView(), m_Lights[0]);
+
+	m_ShadowShader->Render(m_Direct3D->GetDeviceContext(), m_Quad_Mesh->GetIndexCount());
+
+
+
+	//// Present the rendered scene to the screen.
+	//m_Direct3D->EndScene();
+	m_Direct3D->SetBackBufferRenderTarget();
+
 }
 
 void App1::RenderGeometry()

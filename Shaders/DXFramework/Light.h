@@ -10,6 +10,7 @@ class Light
 
 
 public:
+	Light();
 	enum class lightType
 	{
 		directional,
