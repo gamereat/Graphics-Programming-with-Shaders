@@ -49,6 +49,18 @@
     <Filter Include="Header Files\Post Proccessing\GaussianBlur">
       <UniqueIdentifier>{ad880ea9-2f48-406b-a80f-7cead6c45043}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders\PostProcessing\Dithering">
+      <UniqueIdentifier>{fec9ce54-3085-4a8d-a8d7-ee8445bf26cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\PostProcessing\Blur">
+      <UniqueIdentifier>{0e2de4e7-9925-44ab-b7eb-9fcb756093c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\PostProcessing\Blur\Gaussain Blur">
+      <UniqueIdentifier>{adca3f31-ba6c-4527-93b5-eb43c42f2b97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\PostProcessing\Blur\BoxBlur">
+      <UniqueIdentifier>{ad2c838e-91f3-4fbb-9098-bbbd44a98eef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Object Include="M:\Third Year\Shaders\Shaders\res\drone.obj">
@@ -227,24 +239,6 @@
     <FxCompile Include="shaders\tessellation_vs.hlsl">
       <Filter>shaders\Tessellation</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\boxBlur_ps.hlsl">
-      <Filter>shaders\PostProcessing</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\boxBlur_vs.hlsl">
-      <Filter>shaders\PostProcessing</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\horizontalBlur_ps.hlsl">
-      <Filter>shaders\PostProcessing</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\horizontalBlur_vs.hlsl">
-      <Filter>shaders\PostProcessing</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\verticalBlur_vs.hlsl">
-      <Filter>shaders\PostProcessing</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\verticalBlur_ps.hlsl">
-      <Filter>shaders\PostProcessing</Filter>
-    </FxCompile>
     <FxCompile Include="shaders\depth_ps.hlsl">
       <Filter>shaders\Depth</Filter>
     </FxCompile>
@@ -271,6 +265,24 @@
     </FxCompile>
     <FxCompile Include="shaders\ChromaticAberration_vs.hlsl">
       <Filter>shaders\PostProcessing</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\horizontalBlur_ps.hlsl">
+      <Filter>shaders\PostProcessing\Blur\Gaussain Blur</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\horizontalBlur_vs.hlsl">
+      <Filter>shaders\PostProcessing\Blur\Gaussain Blur</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\verticalBlur_ps.hlsl">
+      <Filter>shaders\PostProcessing\Blur\Gaussain Blur</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\verticalBlur_vs.hlsl">
+      <Filter>shaders\PostProcessing\Blur\Gaussain Blur</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\boxBlur_ps.hlsl">
+      <Filter>shaders\PostProcessing\Blur\BoxBlur</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\boxBlur_vs.hlsl">
+      <Filter>shaders\PostProcessing\Blur\BoxBlur</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

@@ -26,12 +26,13 @@ struct InputType
 
 struct OutputType
 {
-    float4 position : SV_POSITION;
-    float2 tex : TEXCOORD0;
+	float4 position : SV_POSITION;
+	float2 tex : TEXCOORD0;
 	float3 normal : NORMAL;
-    float4 lightViewPosition[4] : TEXCOORD1;
-	float3 lightPos[4] : TEXCOORD2;
-	float3 position3D : TEXCOORD3;
+	float4 lightViewPosition[4] : TEXCOORD1;
+	float3 lightPos[4] : TEXCOORD5;
+	float3 position3D : TEXCOORD10;
+	float3 viewDirection : TEXCOORD11;
 
 };
 
@@ -54,8 +55,8 @@ OutputType main(InputType input)
 	{
 		// Calculate the position of the vertice as viewed by the light source.
 		output.lightViewPosition[i] = mul(input.position, worldMatrix);
-		output.lightViewPosition[i] = mul(output.lightViewPosition, lightViewMatrix[i]);
-		output.lightViewPosition[i] = mul(output.lightViewPosition, lightProjectionMatrix[i]);
+		output.lightViewPosition[i] = mul(output.lightViewPosition[i], lightViewMatrix[i]);
+		output.lightViewPosition[i] = mul(output.lightViewPosition[i], lightProjectionMatrix[i]);
 	}
 	// Store the texture coordinates for the pixel shader.
     output.tex = input.tex;
@@ -82,9 +83,10 @@ OutputType main(InputType input)
 	{
 		// Determine the light position based on the position of the light and the position of the vertex in the world.
 		output.lightPos[i] = lightPosition[i].xyz - worldPosition.xyz;
+
+		// Normalize the light position vector.
+		output.lightPos[i] = normalize(output.lightPos[i]);
 	}
-    // Normalize the light position vector.
-    output.lightPos = normalize(output.lightPos);
 
 	return output;
 }

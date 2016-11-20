@@ -193,12 +193,13 @@ bool App1::Render()
 	// Render world with minulation
 	//RenderVertexMinulation();
 //
-  RenderDepth();
+//  RenderDepth();
 
-  RenderShadow();
+ // RenderShadow();
 
 //
-  //RenderGeometry();
+  
+	RenderGeometry();
 
 
 
@@ -209,7 +210,7 @@ bool App1::Render()
 	}
 
 	// Apply any post processing effecst 
-	m_UpScaleTexture = postPro.ApplyPostProccessing(m_Ortho_Mesh_normalScaled, m_Shadow_Texture, m_Direct3D, m_Camera);
+	m_UpScaleTexture = postPro.ApplyPostProccessing(m_Ortho_Mesh_normalScaled, m_Render_Texture, m_Direct3D, m_Camera);
 
 	//// Render the second pass
 
@@ -330,7 +331,7 @@ void App1::RenderShadow()
 	//// Send geometry data (from mesh)
 	teaTop->SendData(m_Direct3D->GetDeviceContext());
 
-	m_ShadowShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, teaTop->GetTexture(), m_Render_Texture->GetShaderResourceView(), m_Lights[0]);
+	m_ShadowShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, teaTop->GetTexture(), m_Render_Texture->GetShaderResourceView(), m_Lights);
 
 	m_ShadowShader->Render(m_Direct3D->GetDeviceContext(), teaTop->GetIndexCount());
 
@@ -341,7 +342,7 @@ void App1::RenderShadow()
 	//// Send geometry data (from mesh)
 	m_Quad_Mesh->SendData(m_Direct3D->GetDeviceContext());
 
-	m_ShadowShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Quad_Mesh->GetTexture(), m_Render_Texture->GetShaderResourceView(), m_Lights[0]);
+	m_ShadowShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Quad_Mesh->GetTexture(), m_Render_Texture->GetShaderResourceView(), m_Lights);
 
 	m_ShadowShader->Render(m_Direct3D->GetDeviceContext(), m_Quad_Mesh->GetIndexCount());
 

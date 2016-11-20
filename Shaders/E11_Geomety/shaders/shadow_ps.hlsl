@@ -8,7 +8,7 @@ SamplerState SampleTypeClamp : register(s1);
 cbuffer LightBuffer : register(cb0)
 {
 //	float4 ambientColor;
-//	float4 diffuseColor;
+//	float4 diffuseColour;
 
 	float4 diffuseColour[4];
 	float4 lightDirection[4];
@@ -38,9 +38,9 @@ struct InputType
     float2 tex : TEXCOORD0;
 	float3 normal : NORMAL;
     float4 lightViewPosition[4] : TEXCOORD1;
-	float3 lightPos[4] : TEXCOORD2;
-	float3 position3D : TEXCOORD2;
-	float3 viewDirection : TEXCOORD1;
+	float3 lightPos[4] : TEXCOORD5;
+	float3 position3D : TEXCOORD10;
+	float3 viewDirection : TEXCOORD11;
 
 
 };
@@ -57,6 +57,10 @@ float4 main(InputType input) : SV_TARGET
 	float4 textureColor;
 	float attenuation;
 	float distance;
+	float3 lightDir;
+	float4 specular;
+	float3 reflection;
+	float4 finalSpec;
 
 	// Set the bias value for fixing the floating point precision issues.
 	bias = 0.0001f;
@@ -99,7 +103,7 @@ float4 main(InputType input) : SV_TARGET
 				if (lightIntensity > 0.0f)
 				{
 					// Determine the final diffuse color based on the diffuse color and the amount of light intensity.
-					color += (diffuseColor[0] * lightIntensity);
+					color += (diffuseColour[0] * lightIntensity);
 
 					// Saturate the final light color.
 					color = saturate(color);
@@ -143,13 +147,13 @@ float4 main(InputType input) : SV_TARGET
 					}
 
 
-					colour += (diffuseColour[i] * lightIntensity);
+					color += (diffuseColour[i] * lightIntensity);
 
 					if (lightType[i].y)
 					{
-						colour = colour * attenuation;
+						color = color * attenuation;
 					}
-					colour = saturate(colour);
+					color = saturate(color);
 
 					if (isSpecular[i])
 					{
@@ -163,7 +167,7 @@ float4 main(InputType input) : SV_TARGET
 						finalSpec = specularColour[i] * specular;
 
 						// Add the specular component last to the output colour.
-						colour = saturate(colour + finalSpec);
+						color = saturate(color + finalSpec);
 					}
 				}
 			}

@@ -3,14 +3,14 @@
 
 #include "../DXFramework/BaseShader.h"
 #include "../DXFramework/Light.h"
-
+#include "VertexShader.h"
 using namespace std;
 using namespace DirectX;
 
-const int NUM_LIGHTS = 4;
 class ShadowShader : public BaseShader
 {
 private:
+
 	struct MatrixBufferType
 	{
 		XMMATRIX world;
