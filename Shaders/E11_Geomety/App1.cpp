@@ -47,12 +47,13 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	for (int i = 0; i < 4; i++)
 	{
 		m_Lights[i] = new Light();
+
+		m_Lights[i]->SetDirection(0, 0,0);
+		m_Lights[i]->SetDiffuseColour(0, 0, 0,0);
+		m_Lights[i]->SetLookAt(0, 0, 0);
+		m_Lights[i]->SetPosition(0, 0, -4);
 	}
 
-	m_Lights[0]->SetDirection(0, 0, -4);
-	m_Lights[0]->SetDiffuseColour(1, 1, 1, 1);
-	m_Lights[0]->SetLookAt(0, 0, 0);
-	m_Lights[0]->SetPosition(0, 0, -4);
 
 
 	m_Ortho_Mesh_normalScaled = new OrthoMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0);
@@ -193,13 +194,13 @@ bool App1::Render()
 	// Render world with minulation
 	//RenderVertexMinulation();
 //
-//  RenderDepth();
+  RenderDepth();
 
- // RenderShadow();
+  RenderShadow();
 
 //
   
-	RenderGeometry();
+	//RenderGeometry();
 
 
 
@@ -210,7 +211,7 @@ bool App1::Render()
 	}
 
 	// Apply any post processing effecst 
-	m_UpScaleTexture = postPro.ApplyPostProccessing(m_Ortho_Mesh_normalScaled, m_Render_Texture, m_Direct3D, m_Camera);
+	m_UpScaleTexture = postPro.ApplyPostProccessing(m_Ortho_Mesh_normalScaled, m_Shadow_Texture, m_Direct3D, m_Camera);
 
 	//// Render the second pass
 
@@ -258,9 +259,9 @@ void App1::RenderTessellation()
 
 void App1::RenderDepth()
 {
-	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
+	XMMATRIX worldMatrix ;
 
-	XMMATRIX lightViewMartix, lightProjectionMatrix;
+	XMMATRIX lightViewMartix[NUM_LIGHTS], lightProjectionMatrix[NUM_LIGHTS];
 
 	// Set the render target to be the render to texture.
 	m_Render_Texture->SetRenderTarget(m_Direct3D->GetDeviceContext());
@@ -272,18 +273,20 @@ void App1::RenderDepth()
 	m_Camera->Update();
 
 	// Get the world, view, and projection matrices from the camera and d3d objects.
-	m_Direct3D->GetWorldMatrix(worldMatrix);
-	m_Camera->GetViewMatrix(viewMatrix);
-	m_Direct3D->GetProjectionMatrix(projectionMatrix);
-
+	m_Direct3D->GetWorldMatrix(worldMatrix); 
+	
 
 	//// Send geometry data (from mesh)
+	for (int i = 0; i < NUM_LIGHTS; i++)
+	{
 
-	m_Lights[0]->GenerateViewMatrix();
-	lightViewMartix = m_Lights[0]->GetViewMatrix();
+		m_Lights[i]->GenerateViewMatrix();
+		m_Lights[i]->GenerateProjectionMatrix(SCREEN_NEAR, SCREEN_DEPTH);
 
-	m_Lights[0]->GenerateProjectionMatrix(SCREEN_NEAR, SCREEN_DEPTH);
-	lightProjectionMatrix = m_Lights[0]->GetProjectionMatrix();
+		lightViewMartix[i] = m_Lights[i]->GetViewMatrix();
+
+		lightProjectionMatrix[i] = m_Lights[i]->GetProjectionMatrix();
+	}		
 	worldMatrix = XMMatrixScaling(0.1, 0.1, 0.1);
 
 	////// Send geometry data (from mesh)

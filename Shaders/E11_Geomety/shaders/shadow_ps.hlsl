@@ -6,10 +6,7 @@ SamplerState SampleTypeWrap  : register(s0);
 SamplerState SampleTypeClamp : register(s1);
 
 cbuffer LightBuffer : register(cb0)
-{
-//	float4 ambientColor;
-//	float4 diffuseColour;
-
+{ 
 	float4 diffuseColour[4];
 	float4 lightDirection[4];
 	float4 ambientColour[4];
@@ -103,7 +100,7 @@ float4 main(InputType input) : SV_TARGET
 				if (lightIntensity > 0.0f)
 				{
 					// Determine the final diffuse color based on the diffuse color and the amount of light intensity.
-					color += (diffuseColour[0] * lightIntensity);
+					color += (diffuseColour[i] * lightIntensity);
 
 					// Saturate the final light color.
 					color = saturate(color);
@@ -114,9 +111,9 @@ float4 main(InputType input) : SV_TARGET
 		{
 			distance = length(input.position3D - position[i].xyz);
 
-			if (distance < attenuationValues[i].w || lightType[i].x)
+			if (distance < attenuationValues[i].w || lightType[i].x == 1)
 			{
-				if (lightType[i].y)
+				if (lightType[i].y == 1)
 				{
 					// Invert the light direction for calculations.
 					lightDir = normalize(input.position3D - position[i].xyz);
@@ -125,7 +122,7 @@ float4 main(InputType input) : SV_TARGET
 					lightIntensity = saturate(dot(input.normal, -lightDir));
 
 				}
-				else if (lightType[i].x)
+				else if (lightType[i].x == 1)
 				{
 
 					// Invert the light direction for calculations.
@@ -139,7 +136,7 @@ float4 main(InputType input) : SV_TARGET
 
 				if (lightIntensity > 0.0f)
 				{
-					if (lightType[i].y)
+					if (lightType[i].y == 1)
 					{
 						// Work out the attenation value
 						attenuation = 1 / (attenuationValues[i].x +
@@ -149,13 +146,13 @@ float4 main(InputType input) : SV_TARGET
 
 					color += (diffuseColour[i] * lightIntensity);
 
-					if (lightType[i].y)
+					if (lightType[i].y == 1)
 					{
 						color = color * attenuation;
 					}
 					color = saturate(color);
 
-					if (isSpecular[i])
+					if (isSpecular[i] == 1)
 					{
 						// Calculate reflection vector based on the light intensity, normal vector and light direction
 						reflection = reflect(lightDir, input.normal);
