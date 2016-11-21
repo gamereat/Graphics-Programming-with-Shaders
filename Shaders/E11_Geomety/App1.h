@@ -79,6 +79,12 @@ private:
  	RenderTexture* m_Render_Texture;
 	RenderTexture* m_Shadow_Texture;
 
+	/*
+	holds all the depth textures from each light 
+	*/
+	RenderTexture* m_depth_Texture[NUM_LIGHTS];
+
+
 	RenderTexture* m_Render_VextexMinulation;
 	RenderTexture* m_UpScaleTexture;
 	QuadMesh* quad;
@@ -89,7 +95,7 @@ private:
 	
 	PointMesh* m_Point_Mesh;
 
-
+ 
 	XMFLOAT3 lightPos;
 	XMFLOAT3 lightAttenation;
 	float lightRange;

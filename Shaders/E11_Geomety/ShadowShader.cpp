@@ -124,7 +124,7 @@ void ShadowShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 }
 
 
-void ShadowShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, ID3D11ShaderResourceView*depthMap, Light* light[])
+void ShadowShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, ID3D11ShaderResourceView*depthMap[], Light* light[])
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -236,8 +236,12 @@ void ShadowShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const
 
 	// Set shader texture resource in the pixel shader.
 	deviceContext->PSSetShaderResources(0, 1, &texture);
+
+	// send all the depth maps for each light 
+
 	// Set shader depth map texture resource.
-	deviceContext->PSSetShaderResources(1, 1, &depthMap);
+	deviceContext->PSSetShaderResources(1, 1, *(&depthMap));
+	
 }
 
 void ShadowShader::Render(ID3D11DeviceContext* deviceContext, int indexCount)

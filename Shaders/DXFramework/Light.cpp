@@ -14,10 +14,10 @@ Light::Light()
 	m_specularColour = XMFLOAT4(0, 0, 0, 0);
 	m_specularPower = 0.0f;
 
-	m_position = XMVECTOR();
-	m_viewMatrix = XMMATRIX();
-	m_projectionMatrix = XMMATRIX();
-	m_lookAt = XMVECTOR();;
+	m_position = XMVECTOR(XMVectorSet(0, 0, 0, 0));
+	m_viewMatrix = XMMATRIX(DirectX::XMMatrixSet(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,0.0f ));
+	m_projectionMatrix = XMMATRIX(DirectX::XMMatrixSet(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f));
+	m_lookAt = XMVECTOR(XMVectorSet(0, 0, 0, 0));
 
 
 	m_range = 0 ;
@@ -56,9 +56,12 @@ void Light::DisplayGUIEditor(std::string  lightNum,bool* is_open)
 	name += "Settings ";
 	name+= lightNum;
 	XMFLOAT3 lightPos(0, 0, 0);
-
+	XMFLOAT3 LookAtPos(0, 0, 0);
  	if (*is_open == true)
 	{
+
+		lightPos = XMFLOAT3(XMVectorGetX(m_position), XMVectorGetY(m_position), XMVectorGetZ(m_position));
+		LookAtPos = XMFLOAT3(XMVectorGetX(m_lookAt), XMVectorGetY(m_lookAt), XMVectorGetZ(m_lookAt));
 
 		// Create the window
 		if (!ImGui::Begin(name.data(), is_open, ImGuiWindowFlags_AlwaysAutoResize))
@@ -79,9 +82,19 @@ void Light::DisplayGUIEditor(std::string  lightNum,bool* is_open)
 		ImGui::ColorEdit4("Diffuse Colour", &m_diffuseColour.x, true);
 		ImGui::ColorEdit4("Ambient Colour", &m_ambientColour.x, true);
 
- 
-	//	ImGui::SliderFloat3("Set Pos", m_position., -10, 10);
+		
 
+		ImGui::DragFloat3("Set look at Pos", &LookAtPos.x);
+		if (lightPos.x == LookAtPos.x && lightPos.y == LookAtPos.y && lightPos.z == LookAtPos.z)
+		{
+			ImGui::Text("Look at and light pos can't be the same");
+		}
+		else
+		{
+			m_lookAt = XMVectorSet(LookAtPos.x, LookAtPos.y, LookAtPos.z, 1.0f);
+		}
+
+ 
 
 		ImGui::Text("Specular Settings");
 
@@ -109,10 +122,18 @@ void Light::DisplayGUIEditor(std::string  lightNum,bool* is_open)
 			// Allow the position of the light be changed
 			ImGui::Text("Point light settings");
 
-			lightPos = XMFLOAT3(XMVectorGetX(m_position), XMVectorGetY(m_position), XMVectorGetZ(m_position));
 			ImGui::DragFloat3("Set Light Pos", &lightPos.x);
-			m_position = XMVectorSet(lightPos.x, lightPos.y, lightPos.z, 1.0f);
 
+			if (lightPos.x == LookAtPos.x && lightPos.y == LookAtPos.y && lightPos.z == LookAtPos.z)
+			{
+				ImGui::Text("Look at and light pos can't be the same");
+			}
+			else
+			{
+				m_position = XMVectorSet(lightPos.x, lightPos.y, lightPos.z, 1.0f);
+			}
+
+ 
 			ImGui::Text("Attenuation settings");
 
 			ImGui::DragFloat("Range", &m_range, 0.5f, 0.0f, 100.0f);

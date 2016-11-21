@@ -44,7 +44,9 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	m_Texture_Shader =  new TextureShader(m_Direct3D->GetDevice(), hwnd);
 
  
-	for (int i = 0; i < 4; i++)
+
+
+	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
 		m_Lights[i] = new Light();
 
@@ -52,7 +54,10 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 		m_Lights[i]->SetDiffuseColour(0, 0, 0,0);
 		m_Lights[i]->SetLookAt(0, 0, 0);
 		m_Lights[i]->SetPosition(0, 0, -4);
+
+		m_depth_Texture[i] = new RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
 	}
+
 
 
 
@@ -84,7 +89,6 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	teaTop = new Model(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/bunny.png", L"../res/teapot.obj");
 
 }
-
 
 App1::~App1()
 {
@@ -166,7 +170,6 @@ App1::~App1()
 		}
 	}
 }
-
 
 bool App1::Frame()
 {
@@ -259,57 +262,57 @@ void App1::RenderTessellation()
 
 void App1::RenderDepth()
 {
-	XMMATRIX worldMatrix ;
-
-	XMMATRIX lightViewMartix[NUM_LIGHTS], lightProjectionMatrix[NUM_LIGHTS];
-
-	// Set the render target to be the render to texture.
-	m_Render_Texture->SetRenderTarget(m_Direct3D->GetDeviceContext());
-
-	// Clear the render to texture.
-	m_Render_Texture->ClearRenderTarget(m_Direct3D->GetDeviceContext(), 0.0f, 0.0f, 1.0f, 1.0f);
-
-	// Generate the view matrix based on the camera's position.
-	m_Camera->Update();
-
-	// Get the world, view, and projection matrices from the camera and d3d objects.
-	m_Direct3D->GetWorldMatrix(worldMatrix); 
-	
-
-	//// Send geometry data (from mesh)
+	// Loop though for each light to generate depth map for each
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
+		XMMATRIX worldMatrix;
 
+		XMMATRIX lightViewMartix, lightProjectionMatrix;
+
+		// Set the render target to be the render to texture.
+		m_depth_Texture[i]->SetRenderTarget(m_Direct3D->GetDeviceContext());
+
+		// Clear the render to texture.
+		m_depth_Texture[i]->ClearRenderTarget(m_Direct3D->GetDeviceContext(), 0.0f, 0.0f, 1.0f, 1.0f);
+
+		// Generate the view matrix based on the camera's position.
+		m_Camera->Update();
+
+		// Get the world, view, and projection matrices from the camera and d3d objects.
+		m_Direct3D->GetWorldMatrix(worldMatrix);
+		
 		m_Lights[i]->GenerateViewMatrix();
 		m_Lights[i]->GenerateProjectionMatrix(SCREEN_NEAR, SCREEN_DEPTH);
 
-		lightViewMartix[i] = m_Lights[i]->GetViewMatrix();
+		lightViewMartix = m_Lights[i]->GetViewMatrix();
 
-		lightProjectionMatrix[i] = m_Lights[i]->GetProjectionMatrix();
-	}		
-	worldMatrix = XMMatrixScaling(0.1, 0.1, 0.1);
+		lightProjectionMatrix = m_Lights[i]->GetProjectionMatrix();
 
-	////// Send geometry data (from mesh)
-	teaTop->SendData(m_Direct3D->GetDeviceContext());
+		worldMatrix = XMMatrixScaling(0.1, 0.1, 0.1);
 
-	m_DepthShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, lightViewMartix, lightProjectionMatrix);
+		////// Send geometry data (from mesh)
+		teaTop->SendData(m_Direct3D->GetDeviceContext());
 
-	m_DepthShader->Render(m_Direct3D->GetDeviceContext(), teaTop->GetIndexCount());
+		m_DepthShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, lightViewMartix, lightProjectionMatrix);
 
-	worldMatrix = XMMatrixTranslation(-50, -1, -50);
+		m_DepthShader->Render(m_Direct3D->GetDeviceContext(), teaTop->GetIndexCount());
 
-	////// Send geometry data (from mesh)
-	m_Quad_Mesh->SendData(m_Direct3D->GetDeviceContext());
+		worldMatrix = XMMatrixTranslation(-50, -1, -50);
 
-	m_DepthShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, lightViewMartix, lightProjectionMatrix);
+		////// Send geometry data (from mesh)
+		m_Quad_Mesh->SendData(m_Direct3D->GetDeviceContext());
 
-	m_DepthShader->Render(m_Direct3D->GetDeviceContext(), m_Quad_Mesh->GetIndexCount());
+		m_DepthShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, lightViewMartix, lightProjectionMatrix);
+
+		m_DepthShader->Render(m_Direct3D->GetDeviceContext(), m_Quad_Mesh->GetIndexCount());
 
 
-	// Reset the render target back to the original back buffer and not the render to texture anymore.
-	m_Direct3D->SetBackBufferRenderTarget();
-	m_Direct3D->ResetViewport();
+		// Reset the render target back to the original back buffer and not the render to texture anymore.
+		m_Direct3D->SetBackBufferRenderTarget();
+		m_Direct3D->ResetViewport();
+	}
 }
+
 
 void App1::RenderShadow()
 {
@@ -331,10 +334,18 @@ void App1::RenderShadow()
 
 	worldMatrix = XMMatrixScaling(0.1, 0.1, 0.1);
 
+	
+	ID3D11ShaderResourceView* depthMaps[NUM_LIGHTS];
+
+	for (int i = 0; i < NUM_LIGHTS; i++)
+	{
+		depthMaps[i] = m_depth_Texture[i]->GetShaderResourceView();
+	}
+
 	//// Send geometry data (from mesh)
 	teaTop->SendData(m_Direct3D->GetDeviceContext());
 
-	m_ShadowShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, teaTop->GetTexture(), m_Render_Texture->GetShaderResourceView(), m_Lights);
+	m_ShadowShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, teaTop->GetTexture(), depthMaps, m_Lights);
 
 	m_ShadowShader->Render(m_Direct3D->GetDeviceContext(), teaTop->GetIndexCount());
 
@@ -345,7 +356,7 @@ void App1::RenderShadow()
 	//// Send geometry data (from mesh)
 	m_Quad_Mesh->SendData(m_Direct3D->GetDeviceContext());
 
-	m_ShadowShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Quad_Mesh->GetTexture(), m_Render_Texture->GetShaderResourceView(), m_Lights);
+	m_ShadowShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Quad_Mesh->GetTexture(), depthMaps, m_Lights);
 
 	m_ShadowShader->Render(m_Direct3D->GetDeviceContext(), m_Quad_Mesh->GetIndexCount());
 

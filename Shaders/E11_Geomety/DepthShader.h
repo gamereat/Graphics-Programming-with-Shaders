@@ -12,18 +12,12 @@ using namespace DirectX;
 class DepthShader : public BaseShader
 {
 
-public:
-	struct MatrixDepthBufferType
-	{
-		XMMATRIX world;
-		XMMATRIX view[4];
-		XMMATRIX projection[4];
-	};
+public: 
 
 	DepthShader(ID3D11Device* device, HWND hwnd);
 	~DepthShader();
 
-	void SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &world, const XMMATRIX (&view)[4], const XMMATRIX (&projection)[4]);
+	void SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &world, const XMMATRIX &view, const XMMATRIX &projection);
 
 private:
 	void InitShader(WCHAR*, WCHAR*);
