@@ -9,6 +9,9 @@ Camera::Camera()
 	m_rotationX = 0.0f;
 	m_rotationY = 0.0f;
 	m_rotationZ = 0.0f;
+
+	m_lookSpeed = 4.0f;
+
 }
 
 Camera::~Camera()
@@ -35,9 +38,7 @@ void Camera::SetRotation(float x, float y, float z)
 }
 
 XMFLOAT3 Camera::GetPosition()
-{
-	//XMVECTOR pos;
-	//pos = XMVectorSet(m_positionX, m_positionY, m_positionZ, 1.0f);
+{ 
 	XMFLOAT3 pos(m_positionX, m_positionY, m_positionZ);
 	return pos;
 }
@@ -227,32 +228,11 @@ void Camera::TurnDown()
 
 void Camera::Turn(int x, int y)
 {
-	// Update the right turn movement based on the frame time
-	m_speed = m_frameTime * 25.0f;
 
 	// Update the rotation.
-	m_rotationY += m_speed * x;
+	m_rotationY += (float)x / m_lookSpeed;// m_speed * x;
 
-	// Keep the rotation in the 0 to 360 range.
-	if (m_rotationY > 360.0f)
-	{
-		m_rotationY -= 360.0f;
-	}
-	else if (m_rotationY < 0.f)
-	{
-		m_rotationY += 360.0f;
-	}
-
-	m_rotationX += m_speed * y;
-	// Keep the rotation in the 0 to 360 range.
-	if (m_rotationX > 360.0f)
-	{
-		m_rotationX -= 360.0f;
-	}
-	else if (m_rotationX < 0.f)
-	{
-		m_rotationX += 360.0f;
-	}
+	m_rotationX += (float)y / m_lookSpeed;// m_speed * y;
 }
 
 void Camera::StrafeRight()

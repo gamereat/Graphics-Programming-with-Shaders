@@ -39,6 +39,7 @@ protected:
 protected:
 	HWND wnd;
 	int sWidth, sHeight;
+	int deltax, deltay;	// for mouse movement
 	POINT cursor;
 	Input* m_Input;
 	D3D* m_Direct3D;

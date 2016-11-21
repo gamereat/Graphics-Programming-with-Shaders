@@ -30,6 +30,7 @@ public:
  
 	void GenerateViewMatrix();
 	void GenerateProjectionMatrix(float, float);
+	void generateOrthoMatrix(float screenWidth, float screenHeight, float near, float far);
 
 	void DisplayGUIEditor(std::string lightNum, bool* is_open);
 
@@ -56,6 +57,8 @@ public:
 	XMFLOAT3 GetPosition();
 	XMMATRIX GetViewMatrix();
 	XMMATRIX GetProjectionMatrix();
+	XMMATRIX GetOrthoMatrix();
+
 	float GetRange();
 	float GetAttenuationContantFactor();
 	float GetAttenuationLinearFactor();
@@ -71,6 +74,7 @@ protected:
 	XMVECTOR m_position;
 	XMMATRIX m_viewMatrix;
 	XMMATRIX m_projectionMatrix;
+	XMMATRIX m_orthoMatrix;
 	XMVECTOR m_lookAt; 
 	float m_range;
 	float m_attenuationConstantFactor;

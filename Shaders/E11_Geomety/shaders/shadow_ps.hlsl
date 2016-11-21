@@ -106,9 +106,9 @@ float4 main(InputType input) : SV_TARGET
 					color = saturate(color);
 				}
 			}
-		}
-		else
-		{
+		//}
+		//else
+		//{
 			distance = length(input.position3D - position[i].xyz);
 
 			if (distance < attenuationValues[i].w || lightType[i].x == 1)

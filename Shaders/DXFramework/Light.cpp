@@ -8,10 +8,10 @@
 Light::Light()
 {
 
-	m_ambientColour = XMFLOAT4();
-	m_diffuseColour = XMFLOAT4();;
-	m_direction = XMFLOAT3();;
-	m_specularColour = XMFLOAT4();
+	m_ambientColour = XMFLOAT4(0,0,0,0);
+	m_diffuseColour = XMFLOAT4(0, 0, 0, 0);;
+	m_direction = XMFLOAT3(0, 0, 0);;
+	m_specularColour = XMFLOAT4(0, 0, 0, 0);
 	m_specularPower = 0.0f;
 
 	m_position = XMVECTOR();
@@ -31,9 +31,8 @@ void Light::GenerateViewMatrix()
 {
 	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
 
-	//up = XMVectorSetX(up, 0.0f);
-	//up = XMVectorSetY(up, 1.0f);
-	//up = XMVectorSetZ(up, 0.0f);
+	//XMVECTOR right = XMVector3Cross(m_lookAt, up);
+	//up = XMVector3Cross(m_lookAt, right);
 
 	// Create the view matrix from the three vectors.
 	m_viewMatrix = XMMatrixLookAtLH(m_position, m_lookAt, up);
@@ -56,6 +55,8 @@ void Light::DisplayGUIEditor(std::string  lightNum,bool* is_open)
 	std::string name = "Lights " ;
 	name += "Settings ";
 	name+= lightNum;
+	XMFLOAT3 lightPos(0, 0, 0);
+
  	if (*is_open == true)
 	{
 
@@ -78,6 +79,10 @@ void Light::DisplayGUIEditor(std::string  lightNum,bool* is_open)
 		ImGui::ColorEdit4("Diffuse Colour", &m_diffuseColour.x, true);
 		ImGui::ColorEdit4("Ambient Colour", &m_ambientColour.x, true);
 
+ 
+	//	ImGui::SliderFloat3("Set Pos", m_position., -10, 10);
+
+
 		ImGui::Text("Specular Settings");
 
 
@@ -90,7 +95,6 @@ void Light::DisplayGUIEditor(std::string  lightNum,bool* is_open)
 			ImGui::DragFloat("Specular Power", &m_specularPower, 0.5f, 1.0f, 75.0f);
 		}
 
-		XMFLOAT3 lightPos(0, 0, 0);
 		// Give the correct setting depending on the diffrent light type
 		switch (m_lightType)
 		{
@@ -126,6 +130,11 @@ void Light::DisplayGUIEditor(std::string  lightNum,bool* is_open)
 
 		ImGui::End();
 	}
+}
+
+void Light::generateOrthoMatrix(float screenWidth, float screenHeight, float near, float far)
+{
+	m_orthoMatrix = XMMatrixOrthographicLH(screenWidth, screenHeight, near, far);
 }
 
 void Light::SetAmbientColour(float red, float green, float blue, float alpha)
@@ -193,6 +202,11 @@ XMFLOAT3 Light::GetPosition()
 	return temp;
 }
 
+XMMATRIX Light::GetViewMatrix()
+{
+	return m_viewMatrix;
+}
+
 void Light::SetLookAt(float x, float y, float z)
 {
 	m_lookAt = XMVectorSet(x, y, z, 1.0f);
@@ -220,11 +234,7 @@ void Light::SetAttenuationQuadraticFactor(float newValue)
 	m_attenuationQuadraticFactor = newValue;
 }
 
-XMMATRIX Light::GetViewMatrix()
-{
-	return m_viewMatrix;
-}
-
+ 
 XMMATRIX Light::GetProjectionMatrix()
 {
 	return m_projectionMatrix;
@@ -257,4 +267,9 @@ Light::lightType Light::GetLightType()
 bool Light::GetMakesSpecular()
 {
 	return m_makeSpecular;
+}
+
+XMMATRIX Light::GetOrthoMatrix()
+{
+	return m_orthoMatrix;
 }

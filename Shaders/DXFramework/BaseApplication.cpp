@@ -41,9 +41,7 @@ BaseApplication::~BaseApplication()
 }
 
 void BaseApplication::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight, Input *in)
-{
-
-	
+{	
 	m_Input = in;
 	wnd = hwnd;
 	sWidth = screenWidth;

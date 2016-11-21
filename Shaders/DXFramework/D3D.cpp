@@ -27,7 +27,7 @@ D3D::D3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscre
 
 	// Store the vsync setting.
 	m_vsync_enabled = vsync;
-
+ 
 	// Create a DirectX graphics interface factory.
 	CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory);
 
