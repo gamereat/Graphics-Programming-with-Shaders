@@ -51,9 +51,8 @@ void DepthShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 }
 
 
-void DepthShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const XMMATRIX & world, const XMMATRIX  &view, const XMMATRIX  &projection)
+void DepthShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix)
 {
-
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	MatrixBufferType* dataPtr;
@@ -62,23 +61,22 @@ void DepthShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const
 
 
 	// Transpose the matrices to prepare them for the shader.
-	tworld = XMMatrixTranspose(world);
+	tworld = XMMatrixTranspose(worldMatrix);
+	tview = XMMatrixTranspose(viewMatrix);
+	tproj = XMMatrixTranspose(projectionMatrix);
 
-	tview = XMMatrixTranspose(view);
-	tproj = XMMatrixTranspose(projection);
-	
 	// Lock the constant buffer so it can be written to.
 	result = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	// Get a pointer to the data in the constant buffer.
 	dataPtr = (MatrixBufferType*)mappedResource.pData;
 
-
+	// Copy the matrices into the constant buffer.
 	dataPtr->world = tworld;// worldMatrix;
 	dataPtr->view = tview;
 	dataPtr->projection = tproj;
 
- 	// Unlock the constant buffer.
+	// Unlock the constant buffer.
 	deviceContext->Unmap(m_matrixBuffer, 0);
 
 	// Set the position of the constant buffer in the vertex shader.

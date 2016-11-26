@@ -7,12 +7,12 @@ cbuffer MatrixBuffer : register(cb0)
 	matrix lightViewMatrix[4];
 	matrix lightProjectionMatrix[4];
 };
-cbuffer CammeraBuffer : register(b1)
+cbuffer CammeraBuffer : register(cb1)
 {
 	float3 cammeraPostion;
 	float padding;
 }
-cbuffer LightBuffer2 : register(cb1)
+cbuffer LightBuffer2 : register(cb2)
 {
     float4 lightPosition[4];
  };
@@ -49,7 +49,7 @@ OutputType main(InputType input)
     output.position = mul(input.position, worldMatrix);
     output.position = mul(output.position, viewMatrix);
     output.position = mul(output.position, projectionMatrix);
-    
+     
 
 	for (int i = 0; i < 4; i++)
 	{

@@ -14,6 +14,14 @@ class DepthShader : public BaseShader
 
 public: 
 
+	struct DepthBufferType
+	{
+		/*
+		if the shader will generate a shadow map for a given light
+		*/
+		int willGenerateShadowMap;
+		XMFLOAT3 padding;
+	};
 	DepthShader(ID3D11Device* device, HWND hwnd);
 	~DepthShader();
 
@@ -24,6 +32,7 @@ private:
 
 private:
 	ID3D11Buffer* m_matrixBuffer;
+	ID3D11Buffer* m_depthBuffer;
 };
 
 #endif

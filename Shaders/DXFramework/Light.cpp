@@ -85,6 +85,9 @@ void Light::DisplayGUIEditor(std::string  lightNum,bool* is_open)
 		
 
 		ImGui::DragFloat3("Set look at Pos", &LookAtPos.x);
+
+		ImGui::Checkbox("Will create shadows ",&m_willGenereateShadows);
+
 		if (lightPos.x == LookAtPos.x && lightPos.y == LookAtPos.y && lightPos.z == LookAtPos.z)
 		{
 			ImGui::Text("Look at and light pos can't be the same");
@@ -293,4 +296,15 @@ bool Light::GetMakesSpecular()
 XMMATRIX Light::GetOrthoMatrix()
 {
 	return m_orthoMatrix;
+}
+
+
+void Light::SetWillGenerateShadows(bool willGenerate)
+{
+	m_willGenereateShadows = willGenerate;
+}
+
+bool Light::GetWillGenerateShadows()
+{
+	return m_willGenereateShadows;
 }

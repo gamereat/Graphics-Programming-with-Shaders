@@ -1,2 +1,34 @@
-﻿  Light.cpp
-  DXFramework.vcxproj -> \\StuHome\HomeDrive2$\1402402\Shaders\Shaders\Debug\DXFramework.lib
+﻿  TriangleMesh.cpp
+  TokenStream.cpp
+  Timer.cpp
+  Texture.cpp
+  TessellationMesh.cpp
+  System.cpp
+c:\users\alan\source\repos\graphics-programming-with-shaders\shaders\dxframework\system.cpp(161): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+c:\users\alan\source\repos\graphics-programming-with-shaders\shaders\dxframework\system.cpp(162): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+  SphereMesh.cpp
+  RenderTexture.cpp
+  QuadMesh.cpp
+  PointMesh.cpp
+  PlaneMesh.cpp
+  OrthoMesh.cpp
+  Model.cpp
+  Mesh.cpp
+  Light.cpp
+  Input.cpp
+  DoubleTriangle.cpp
+  D3D.cpp
+  CubeMesh.cpp
+  Camera.cpp
+  Generating Code...
+  Compiling...
+  BaseShader.cpp
+  BaseMesh.cpp
+  BaseApplication.cpp
+c:\users\alan\source\repos\graphics-programming-with-shaders\shaders\dxframework\baseapplication.cpp(142): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  imgui_draw.cpp
+  imgui_demo.cpp
+  imgui.cpp
+  imgui_impl_dx11.cpp
+  Generating Code...
+  DXFramework.vcxproj -> C:\Users\Alan\Source\Repos\Graphics-Programming-with-Shaders\Shaders\Debug\DXFramework.lib

@@ -1,14 +1,14 @@
 // Light vertex shader
 // Standard issue vertex shader, apply matrices, pass info to pixel shader
 
-cbuffer ScreenSizeBuffer : register(b1)
+cbuffer ScreenSizeBuffer : register(cb1)
 {
 	float screenWidth;
 	float screenHeight;
 	float2 padding;
 }
 
-cbuffer MatrixBuffer : register(b0)
+cbuffer MatrixBuffer : register(cb0)
 {
     matrix worldMatrix;
     matrix viewMatrix;

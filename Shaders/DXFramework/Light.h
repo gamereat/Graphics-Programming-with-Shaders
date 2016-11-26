@@ -34,6 +34,7 @@ public:
 
 	void DisplayGUIEditor(std::string lightNum, bool* is_open);
 
+
 	// Setters
 	void SetAmbientColour(float, float, float, float);
 	void SetDiffuseColour(float, float, float, float);
@@ -47,6 +48,9 @@ public:
 	void SetAttenuationContantFactor(float);
 	void SetAttenuationLinearFactor(float);
 	void SetAttenuationQuadraticFactor(float);
+
+
+	void SetWillGenerateShadows(bool);
 
 	// Getters
 	XMFLOAT4 GetAmbientColour();
@@ -65,6 +69,10 @@ public:
 	float GetAttenuationQuadraticFactor();
 	lightType GetLightType();
 	bool GetMakesSpecular();
+
+	bool GetWillGenerateShadows();
+
+
 protected:
 	XMFLOAT4 m_ambientColour;
 	XMFLOAT4 m_diffuseColour;
@@ -83,7 +91,11 @@ protected:
 
 	bool m_makeSpecular;
 	lightType m_lightType;
-	
+
+	/*
+	if the light will display show shadows
+	*/
+	bool m_willGenereateShadows;
 };
 
 #endif

@@ -54,10 +54,13 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 		m_Lights[i]->SetDiffuseColour(0, 0, 0,0);
 		m_Lights[i]->SetLookAt(0, 0, 0);
 		m_Lights[i]->SetPosition(0, 0, -4);
+		m_Lights[i]->SetWillGenerateShadows(false);
+		m_Lights[i]->SetRange(255);
 
 		m_depth_Texture[i] = new RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
 	}
 
+	m_Lights[0]->SetWillGenerateShadows(true);
 
 
 
@@ -286,14 +289,14 @@ void App1::RenderDepth()
 
 		lightViewMartix = m_Lights[i]->GetViewMatrix();
 
-		lightProjectionMatrix = m_Lights[i]->GetProjectionMatrix();
+		lightProjectionMatrix = m_Lights[i]->GetViewMatrix();
 
 		worldMatrix = XMMatrixScaling(0.1, 0.1, 0.1);
 
 		////// Send geometry data (from mesh)
 		teaTop->SendData(m_Direct3D->GetDeviceContext());
 
-		m_DepthShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, lightViewMartix, lightProjectionMatrix);
+		m_DepthShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, lightViewMartix, lightProjectionMatrix );
 
 		m_DepthShader->Render(m_Direct3D->GetDeviceContext(), teaTop->GetIndexCount());
 
@@ -302,7 +305,7 @@ void App1::RenderDepth()
 		////// Send geometry data (from mesh)
 		m_Quad_Mesh->SendData(m_Direct3D->GetDeviceContext());
 
-		m_DepthShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, lightViewMartix, lightProjectionMatrix);
+		m_DepthShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, lightViewMartix, lightProjectionMatrix );
 
 		m_DepthShader->Render(m_Direct3D->GetDeviceContext(), m_Quad_Mesh->GetIndexCount());
 
@@ -339,8 +342,11 @@ void App1::RenderShadow()
 
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
+		//if(m_Lights[i]->GetWillGenerateShadows())
 		depthMaps[i] = m_depth_Texture[i]->GetShaderResourceView();
+
 	}
+
 
 	//// Send geometry data (from mesh)
 	teaTop->SendData(m_Direct3D->GetDeviceContext());

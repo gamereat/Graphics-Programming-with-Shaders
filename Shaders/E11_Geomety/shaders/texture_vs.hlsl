@@ -1,7 +1,7 @@
 // texture vertex shader
 // Basic shader for rendering textured geometry
 
-cbuffer MatrixBuffer : register(b0)
+cbuffer MatrixBuffer : register(cb0)
 {
     matrix worldMatrix;
     matrix viewMatrix;

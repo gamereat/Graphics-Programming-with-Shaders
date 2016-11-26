@@ -231,7 +231,7 @@ void ShadowShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const
 		lightPtr2->position[i] = XMFLOAT4(light[i]->GetPosition().x, light[i]->GetPosition().y, light[i]->GetPosition().z,0);
 	}
 	deviceContext->Unmap(m_LightBuffer2, 0);
-	bufferNumber = 1;
+	bufferNumber = 2;
 	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_LightBuffer2);
 
 	// Set shader texture resource in the pixel shader.
@@ -240,7 +240,8 @@ void ShadowShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const
 	// send all the depth maps for each light 
 
 	// Set shader depth map texture resource.
-	deviceContext->PSSetShaderResources(1, 1, *(&depthMap));
+ 
+	deviceContext->PSSetShaderResources(1, 1, *(& depthMap));
 	
 }
 

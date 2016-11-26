@@ -1,20 +1,20 @@
 // Light vertex shader
 // Standard issue vertex shader, apply matrices, pass info to pixel shader
 
-cbuffer CammeraBuffer : register(b1)
+cbuffer CammeraBuffer : register(cb1)
 {
 	float3 cammeraPostion;
 	float padding;
 }
 
-cbuffer MatrixBuffer : register(b0)
+cbuffer MatrixBuffer : register(cb0)
 {
     matrix worldMatrix;
     matrix viewMatrix;
     matrix projectionMatrix;
 
 };
-cbuffer TimeBufferType : register(b2)
+cbuffer TimeBufferType : register(cb2)
 {
 	float delatTime;
 	float height;
