@@ -184,6 +184,7 @@ void ShadowShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const
 		lightPtr->specularPower[i].x = light[i]->GetSpecularPower();
 		lightPtr->specularColour[i] = light[i]->GetSpecularColour();
 		lightPtr->position[i] = XMFLOAT4(light[i]->GetPosition().x, light[i]->GetPosition().y, light[i]->GetPosition().z, 0);
+		lightPtr->willGenerateShadows[i] = (int)light[i]->GetWillGenerateShadows();
 
 		switch (light[i]->GetLightType())
 		{
@@ -240,8 +241,11 @@ void ShadowShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const
 	// send all the depth maps for each light 
 
 	// Set shader depth map texture resource.
- 
-	deviceContext->PSSetShaderResources(1, 1, *(& depthMap));
+
+	deviceContext->PSSetShaderResources(1, 1, (&depthMap[0]));
+	deviceContext->PSSetShaderResources(2, 1, (&depthMap[1]));
+	deviceContext->PSSetShaderResources(3, 1, (&depthMap[2]));
+	deviceContext->PSSetShaderResources(4, 1, (& depthMap[3]));
 	
 }
 

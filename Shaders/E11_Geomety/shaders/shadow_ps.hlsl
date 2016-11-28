@@ -1,6 +1,9 @@
 
 Texture2D shaderTexture : register(t0);
-Texture2D depthMapTexture[4] : register(t1);
+Texture2D depthMapTexture : register(t1);
+Texture2D depthMapTexture1 : register(t2);
+Texture2D depthMapTexture2	: register(t3);
+Texture2D depthMapTexture3 : register(t4);
 
 SamplerState SampleTypeWrap  : register(s0);
 SamplerState SampleTypeClamp : register(s1);
@@ -27,7 +30,10 @@ cbuffer LightBuffer : register(cb0)
 	int4 lightType[4];
 
 	int isSpecular[4];
-};
+
+	//if it will generate a shadow 
+	int willGenerateShadows[4];
+ };
 
 struct InputType
 {
@@ -47,18 +53,16 @@ float4 main(InputType input) : SV_TARGET
 {
 	float bias;
 	float4 shadowColourValue[4];
-    float4 color;
+    float4 color = float4(0,0,0,0);
 	float2 projectTexCoord[4];
-	float depthValue;
-	float lightDepthValue;
-    float lightIntensity;
-	float4 textureColor;
-	float attenuation;
-	float distance;
-	float3 lightDir;
-	float4 specular;
-	float3 reflection;
-	float4 finalSpec;
+	float depthValue = 0.0f;
+	float4 textureColor = float4(0,0,0,0);
+	float attenuation = 0;
+	float distance = 0;
+	float3 lightDir = float3(0,0,0);
+	float4 specular= float4(0,0,0,0);
+	float3 reflection = float3(0,0,0);
+	float4 finalSpec = float4(0,0,0,0);
 
 	// Set the bias value for fixing the floating point precision issues.
 	bias = 0.0001f;
@@ -69,13 +73,17 @@ float4 main(InputType input) : SV_TARGET
 
 	for (int i = 0; i < 4; i++)
 	{
-		shadowColourValue[i] = float4(0, 0, 0, 0);
+		shadowColourValue[i] = float4(0, 0, 0, 1.0f);
 		projectTexCoord[i] = float2( 0, 0);
 	}
 
 	
 	for (int i = 0; i < 4; i++)
 	{
+
+		float lightIntensity = 0.0f;
+		float lightDepthValue = 0.0f;
+		float depthValue = 0.0f;
 
 		// Calculate the projected texture coordinates.
 		
@@ -88,8 +96,31 @@ float4 main(InputType input) : SV_TARGET
 		
 		if ((saturate(projectTexCoord[i].x) == projectTexCoord[i].x) && (saturate(projectTexCoord[i].y) == projectTexCoord[i].y))
 		{
+
+			switch (i)
+			{
+			case 0:
+ 				depthValue = depthMapTexture.Sample(SampleTypeClamp, projectTexCoord[i]).r;
+
+				break;
+			case 1:
+				depthValue = depthMapTexture1.Sample(SampleTypeClamp, projectTexCoord[i]).r;
+
+				break;
+			case 2:
+				depthValue = depthMapTexture2.Sample(SampleTypeClamp, projectTexCoord[i]).r;
+
+				break;
+			case 3:
+				depthValue = depthMapTexture.Sample(SampleTypeClamp, projectTexCoord[i]).r;
+
+				break;
+			default:
+				depthValue = depthMapTexture3.Sample(SampleTypeClamp, projectTexCoord[i]).r;
+
+				break;
+			}
 			// Sample the shadow map depth value from the depth texture using the sampler at the projected texture coordinate location.
-			depthValue = depthMapTexture[i].Sample(SampleTypeClamp, projectTexCoord[i]).r;
 
 			// Calculate the depth of the light.
 			lightDepthValue = input.lightViewPosition[i].z / input.lightViewPosition[i].w;
@@ -106,11 +137,19 @@ float4 main(InputType input) : SV_TARGET
 
 				if (lightIntensity > 0.0f)
 				{
+
 					//Determine the final diffuse color based on the diffuse color and the amount of light intensity.
 					shadowColourValue[i] += (diffuseColour[i] * lightIntensity);
 
 					// Saturate the final light color.
 					shadowColourValue[i] = saturate(shadowColourValue[i]);
+
+ 
+					
+					
+						
+					color += shadowColourValue[0];
+
 				}
 			}
 		}
@@ -177,8 +216,9 @@ float4 main(InputType input) : SV_TARGET
 				
 		 	}
 		}
+
 	}
-		color += shadowColourValue[0];
+
 
 	// Sample the pixel color from the texture using the sampler at this texture coordinate location.
 	textureColor = shaderTexture.Sample(SampleTypeWrap, input.tex);

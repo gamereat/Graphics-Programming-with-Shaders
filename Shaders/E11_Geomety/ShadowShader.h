@@ -49,6 +49,8 @@ private:
 		XMINT4 lightType[NUM_LIGHTS];
 
 		int isSpecular[NUM_LIGHTS];
+
+		int willGenerateShadows[NUM_LIGHTS];
 		 
 	};
 

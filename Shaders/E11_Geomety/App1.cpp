@@ -68,7 +68,7 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 
 	m_Render_Texture = new  RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
 
-
+	m_TerrainTexture = new  RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
 
 	m_Shadow_Texture = new  RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
 	m_Render_VextexMinulation = new RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
@@ -98,6 +98,12 @@ App1::~App1()
 	// Run base application deconstructor
 	BaseApplication::~BaseApplication();
 
+
+	if (m_TerrainTexture)
+	{
+		delete m_TerrainTexture;
+		m_TerrainTexture = nullptr;
+	}
 	if (m_Geomentry_Shader)
 	{
 		delete m_Geomentry_Shader;
@@ -200,14 +206,13 @@ bool App1::Render()
 	// Render world with minulation
 	//RenderVertexMinulation();
 //
-  RenderDepth();
+//  RenderDepth();
 
-  RenderShadow();
+//  RenderShadow();
 
 //
-  
+	RenderTerrain();
 	//RenderGeometry();
-
 
 
 	// disable wireframe mode for the post processing effects
@@ -217,7 +222,7 @@ bool App1::Render()
 	}
 
 	// Apply any post processing effecst 
-	m_UpScaleTexture = postPro.ApplyPostProccessing(m_Ortho_Mesh_normalScaled, m_Shadow_Texture, m_Direct3D, m_Camera);
+	m_UpScaleTexture = postPro.ApplyPostProccessing(m_Ortho_Mesh_normalScaled, m_TerrainTexture, m_Direct3D, m_Camera);
 
 	//// Render the second pass
 
@@ -285,12 +290,10 @@ void App1::RenderDepth()
 		m_Direct3D->GetWorldMatrix(worldMatrix);
 		
 		m_Lights[i]->GenerateViewMatrix();
-		m_Lights[i]->GenerateProjectionMatrix(SCREEN_NEAR, SCREEN_DEPTH);
-
 		lightViewMartix = m_Lights[i]->GetViewMatrix();
 
-		lightProjectionMatrix = m_Lights[i]->GetViewMatrix();
-
+		m_Lights[i]->GenerateProjectionMatrix(SCREEN_NEAR, SCREEN_DEPTH);
+		lightProjectionMatrix = m_Lights[i]->GetProjectionMatrix();
 		worldMatrix = XMMatrixScaling(0.1, 0.1, 0.1);
 
 		////// Send geometry data (from mesh)
@@ -342,7 +345,7 @@ void App1::RenderShadow()
 
 	for (int i = 0; i < NUM_LIGHTS; i++)
 	{
-		//if(m_Lights[i]->GetWillGenerateShadows())
+
 		depthMaps[i] = m_depth_Texture[i]->GetShaderResourceView();
 
 	}
@@ -481,6 +484,19 @@ void App1::RenderToScreen()
 	// Present the rendered scene to the screen.
 	m_Direct3D->EndScene();
 
+
+}
+
+void App1::RenderTerrain()
+{
+	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
+
+	// Set the render target to be the render to texture.
+	m_TerrainTexture->SetRenderTarget(m_Direct3D->GetDeviceContext());
+	
+
+	
+	m_Direct3D->SetBackBufferRenderTarget();
 
 }
 

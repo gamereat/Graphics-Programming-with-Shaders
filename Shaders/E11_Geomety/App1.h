@@ -50,6 +50,7 @@ private:
 	void RenderToTexture();
 	void RenderToScreen();
   
+	void RenderTerrain();
 
 	void RenderShadow();
 
@@ -86,6 +87,7 @@ private:
 
 
 	RenderTexture* m_Render_VextexMinulation;
+	RenderTexture* m_TerrainTexture;
 	RenderTexture* m_UpScaleTexture;
 	QuadMesh* quad;
 	PlaneMesh* m_Quad_Mesh;
