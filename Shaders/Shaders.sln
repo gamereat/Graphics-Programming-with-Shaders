@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DXFramework", "DXFramework\DXFramework.vcxproj", "{E887C38B-1273-433A-9DAC-A153DA5CF145}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -35,6 +35,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E09_ShadowMaps", "E09_ShadowMaps\E09_ShadowMaps.vcxproj", "{F264193D-47AF-4970-BDF3-1B07521637EE}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E11_Geomety", "E11_Geomety\E11_Geomety.vcxproj", "{A6AD67B4-19A4-4385-9035-5D2AC19042C0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CourseWork", "CourseWork\CourseWork.vcxproj", "{A6FC726F-F9D9-4A04-9C29-F1F91584132D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -163,6 +165,14 @@ Global
 		{A6AD67B4-19A4-4385-9035-5D2AC19042C0}.Release|Win32.ActiveCfg = Release|Win32
 		{A6AD67B4-19A4-4385-9035-5D2AC19042C0}.Release|Win32.Build.0 = Release|Win32
 		{A6AD67B4-19A4-4385-9035-5D2AC19042C0}.Release|x64.ActiveCfg = Release|Win32
+		{A6FC726F-F9D9-4A04-9C29-F1F91584132D}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{A6FC726F-F9D9-4A04-9C29-F1F91584132D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A6FC726F-F9D9-4A04-9C29-F1F91584132D}.Debug|Win32.Build.0 = Debug|Win32
+		{A6FC726F-F9D9-4A04-9C29-F1F91584132D}.Debug|x64.ActiveCfg = Debug|Win32
+		{A6FC726F-F9D9-4A04-9C29-F1F91584132D}.Release|Any CPU.ActiveCfg = Release|Win32
+		{A6FC726F-F9D9-4A04-9C29-F1F91584132D}.Release|Win32.ActiveCfg = Release|Win32
+		{A6FC726F-F9D9-4A04-9C29-F1F91584132D}.Release|Win32.Build.0 = Release|Win32
+		{A6FC726F-F9D9-4A04-9C29-F1F91584132D}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
