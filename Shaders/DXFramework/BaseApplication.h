@@ -8,8 +8,8 @@ const bool FULL_SCREEN = false;
 const bool VSYNC_ENABLED = false;
 const float SCREEN_DEPTH = 200.0f;	// 1000.0f
 const float SCREEN_NEAR = 0.1f;		//0.1f
-const float SCREEN_WIDTH = 800;
-const float SCREEN_HEIGHT = 600;
+const float SCREEN_WIDTH = 800*3;
+const float SCREEN_HEIGHT = 600*3;
 // Includes
 #include "input.h"
 #include "d3d.h"

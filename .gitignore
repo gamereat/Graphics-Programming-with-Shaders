@@ -30,3 +30,12 @@
 *.log
 *.idb
 *.sdf
+*.tlog
+*.pdb
+*.cache
+*.1.tlog
+*.tlog
+*.cso
+*.pdb
+*.ilk
+*shader-error.txt

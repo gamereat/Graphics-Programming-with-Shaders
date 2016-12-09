@@ -25,7 +25,7 @@ App1::App1()
 
 	m_ShadowShader = nullptr;
 	terrainShader = nullptr;
-
+	planet = nullptr;
  
 }
 
@@ -34,6 +34,8 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	// Call super init function (required!)
 	BaseApplication::init(hinstance, hwnd, screenWidth, screenHeight, in);
 
+	
+	planet = new Planet();
 	interTess = XMINT4(12, 12, 12, 12);
 	outerTess = XMINT2(2, 2);
 
@@ -96,6 +98,8 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	// load in height map
 	heightMap = new HeightMap(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/cloud.png");
 
+
+	planet->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext());
 }
  
 App1::~App1()
@@ -228,7 +232,9 @@ bool App1::Render()
 
 //	RenderShadow();
 
-	RenderTerrain();
+	//RenderTerrain();
+
+	planet->Render(m_TerrainTexture, m_Direct3D, m_Camera);
 
 	// disable wireframe mode for the post processing effects
 	if (m_Direct3D->getWireFrameMode())

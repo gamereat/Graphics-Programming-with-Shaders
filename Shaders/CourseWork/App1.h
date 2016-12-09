@@ -26,6 +26,7 @@
 #include "GeomentryShader.h"
 #include "TerrainGenerator.h"
 #include "HeightMap.h"
+#include "Planet.h"
 class App1 : public BaseApplication
 {
 public:
@@ -44,6 +45,8 @@ protected:
 
 
 private:
+	Planet* planet;
+
 	PostProcessing postPro;
 	void RenderTessellation();
 	

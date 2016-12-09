@@ -13,7 +13,7 @@ public:
 	~SphereMesh();
 
 protected:
-	void InitBuffers(ID3D11Device* device);
+	virtual void InitBuffers(ID3D11Device* device);
 	int m_resolution;
 };
 

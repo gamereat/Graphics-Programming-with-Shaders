@@ -84,4 +84,4 @@ OutputType triEnty(ConstantOutputTriType input, float3 uvwCoord : SV_DomainLocat
 //
 //	return output;
 //}
-// 
+// 

@@ -1,3 +1,5 @@
+ const  float PI = 3.14159265f;
+
 cbuffer MatrixBuffer : register(cb0)
 {
 	matrix worldMatrix;
@@ -147,6 +149,9 @@ void main(	point InputType input[1] ,inout TriangleStream< OutputType > triStrea
 
 
 	triStream.RestartStrip();*/
+
+
+
 
 }
 

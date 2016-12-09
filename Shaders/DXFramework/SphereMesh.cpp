@@ -58,11 +58,25 @@ void SphereMesh::InitBuffers(ID3D11Device* device)
 
 	//front face
 
-	for (int y = 0; y<m_resolution; y++)	// for each quad in the y direction
+	for (int y = 0; y < m_resolution; y++)	// for each quad in the y direction
 	{
 		for (int x = 0; x < m_resolution; x++)	// for each quad in the x direction
 		{
-			// Load the vertex array with data.
+ 
+				//2
+			vertices[v].position = XMFLOAT3(xstart, ystart, -1.0f);  // Top left.	-1.0, 1.0
+			vertices[v].texture = XMFLOAT2(txu, txv);
+			vertices[v].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
+
+			indices[i] = i;
+			v++;
+			i++;		
+
+
+
+
+	
+
 			//0
 			vertices[v].position = XMFLOAT3(xstart, ystart - yincrement, -1.0f);  // Bottom left. -1. -1. 0
 			vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
@@ -72,51 +86,24 @@ void SphereMesh::InitBuffers(ID3D11Device* device)
 			v++;
 			i++;
 
-			//1
-			vertices[v].position = XMFLOAT3(xstart + xincrement, ystart, -1.0f);  // Top right.	1.0, 1.0 0.0
-			vertices[v].texture = XMFLOAT2(txu+txuinc, txv);
-			vertices[v].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-
-			//2
-			vertices[v].position = XMFLOAT3(xstart, ystart, -1.0f);  // Top left.	-1.0, 1.0
-			vertices[v].texture = XMFLOAT2(txu, txv);
-			vertices[v].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-			
-			//0
-			vertices[v].position = XMFLOAT3(xstart, ystart - yincrement, -1.0f);  // Bottom left. -1. -1. 0
-			vertices[v].texture = XMFLOAT2(txu, txv+txvinc);
-			vertices[v].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-			
-			//3
+	
 			vertices[v].position = XMFLOAT3(xstart + xincrement, ystart - yincrement, -1.0f);  // Bottom right.	1.0, -1.0, 0.0
-			vertices[v].texture = XMFLOAT2(txu+txuinc, txv+txvinc);
-			vertices[v].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-
-			//1
-			vertices[v].position = XMFLOAT3(xstart + xincrement, ystart, -1.0f);  // Top right.	1.0, 1.0 0.0
-			vertices[v].texture = XMFLOAT2(txu+txuinc, txv);
+			vertices[v].texture = XMFLOAT2(txu + txuinc, txv + txvinc);
 			vertices[v].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
 
 			indices[i] = i;
 			v++;
 			i++;
 			
+			////1
+			vertices[v].position = XMFLOAT3(xstart + xincrement, ystart, -1.0f);  // Top right.	1.0, 1.0 0.0
+			vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
+			vertices[v].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
+
+			indices[i] = i;
+			v++;
+			i++;
+ 
 			// increment
 			xstart += xincrement;
 			txu += txuinc;
@@ -141,25 +128,8 @@ void SphereMesh::InitBuffers(ID3D11Device* device)
 	{
 		for (int x = 0; x < m_resolution; x++)	// for each quad in the x direction
 		{
-			// Load the vertex array with data.
-			//0
-			vertices[v].position = XMFLOAT3(xstart, ystart - yincrement, 1.0f);  // Bottom left. -1. -1. 0
-			vertices[v].texture = XMFLOAT2(txu, txv+txvinc);
-			vertices[v].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-
-			//2
-			vertices[v].position = XMFLOAT3(xstart - xincrement, ystart, 1.0f);  // Top right.	1.0, 1.0 0.0
-			vertices[v].texture = XMFLOAT2(txu+txuinc, txv);
-			vertices[v].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-
+			// Load the vertex array with data.	
+			
 			//1
 			vertices[v].position = XMFLOAT3(xstart, ystart, 1.0f);  // Top left.	-1.0, 1.0
 			vertices[v].texture = XMFLOAT2(txu, txv);
@@ -168,34 +138,35 @@ void SphereMesh::InitBuffers(ID3D11Device* device)
 			indices[i] = i;
 			v++;
 			i++;
-			
+
 			//0
 			vertices[v].position = XMFLOAT3(xstart, ystart - yincrement, 1.0f);  // Bottom left. -1. -1. 0
-			vertices[v].texture = XMFLOAT2(txu, txv+txvinc);
+			vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
 			vertices[v].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
 			indices[i] = i;
 			v++;
 			i++;
+
+	;
 
 			//3
 			vertices[v].position = XMFLOAT3(xstart - xincrement, ystart - yincrement, 1.0f);  // Bottom right.	1.0, -1.0, 0.0
-			vertices[v].texture = XMFLOAT2(txu+txuinc, txv+txvinc);
+			vertices[v].texture = XMFLOAT2(txu + txuinc, txv + txvinc);
 			vertices[v].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
 			indices[i] = i;
 			v++;
-			i++;
-
+			i++;	
 			//2
 			vertices[v].position = XMFLOAT3(xstart - xincrement, ystart, 1.0f);  // Top right.	1.0, 1.0 0.0
-			vertices[v].texture = XMFLOAT2(txu+txuinc, txv);
+			vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
 			vertices[v].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
 			indices[i] = i;
 			v++;
 			i++;
-
+	 
 			// increment
 			xstart -= xincrement;
 			//ystart -= yincrement;
@@ -221,23 +192,7 @@ void SphereMesh::InitBuffers(ID3D11Device* device)
 		for (int x = 0; x < m_resolution; x++)	// for each quad in the x direction
 		{
 			// Load the vertex array with data.
-			//0
-			vertices[v].position = XMFLOAT3(1.0f, ystart - yincrement, xstart);  // Bottom left. -1. -1. 0
-			vertices[v].texture = XMFLOAT2(txu, txv+txvinc);
-			vertices[v].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-
-			//2
-			vertices[v].position = XMFLOAT3(1.0f, ystart, xstart + xincrement);  // Top right.	1.0, 1.0 0.0
-			vertices[v].texture = XMFLOAT2(txu+txuinc, txv);
-			vertices[v].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
+	
 
 			//1
 			vertices[v].position = XMFLOAT3(1.0f, ystart, xstart);  // Top left.	-1.0, 1.0
@@ -247,34 +202,32 @@ void SphereMesh::InitBuffers(ID3D11Device* device)
 			indices[i] = i;
 			v++;
 			i++;
-			
-			//0
+		//0
 			vertices[v].position = XMFLOAT3(1.0f, ystart - yincrement, xstart);  // Bottom left. -1. -1. 0
-			vertices[v].texture = XMFLOAT2(txu, txv+txvinc);
+			vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
 			vertices[v].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
 
 			indices[i] = i;
 			v++;
 			i++;
-			
+
+
 			//3
 			vertices[v].position = XMFLOAT3(1.0f, ystart - yincrement, xstart + xincrement);  // Bottom right.	1.0, -1.0, 0.0
-			vertices[v].texture = XMFLOAT2(txu+txuinc, txv+txvinc);
+			vertices[v].texture = XMFLOAT2(txu + txuinc, txv + txvinc);
 			vertices[v].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
 
 			indices[i] = i;
 			v++;
 			i++;
-
-			//2
 			vertices[v].position = XMFLOAT3(1.0f, ystart, xstart + xincrement);  // Top right.	1.0, 1.0 0.0
-			vertices[v].texture = XMFLOAT2(txu+txuinc, txv);
+			vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
 			vertices[v].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
 
 			indices[i] = i;
 			v++;
 			i++;
-			
+ 
 			// increment
 			xstart += xincrement;
 			//ystart -= yincrement;
@@ -297,25 +250,7 @@ void SphereMesh::InitBuffers(ID3D11Device* device)
 	{
 		for (int x = 0; x < m_resolution; x++)	// for each quad in the x direction
 		{
-			// Load the vertex array with data.
-			//0
-			vertices[v].position = XMFLOAT3(-1.0f, ystart - yincrement, xstart);  // Bottom left. -1. -1. 0
-			vertices[v].texture = XMFLOAT2(txu, txv+txvinc);
-			vertices[v].normal = XMFLOAT3(-1.0f, 0.0f, 0.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-
-			//2
-			vertices[v].position = XMFLOAT3(-1.0f, ystart, xstart - xincrement);  // Top right.	1.0, 1.0 0.0
-			vertices[v].texture = XMFLOAT2(txu+txuinc, txv);
-			vertices[v].normal = XMFLOAT3(-1.0f, 0.0f, 0.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-
+			// Load the vertex array with data.		
 			//1
 			vertices[v].position = XMFLOAT3(-1.0f, ystart, xstart);  // Top left.	-1.0, 1.0
 			vertices[v].texture = XMFLOAT2(txu, txv);
@@ -324,10 +259,9 @@ void SphereMesh::InitBuffers(ID3D11Device* device)
 			indices[i] = i;
 			v++;
 			i++;
-			
 			//0
 			vertices[v].position = XMFLOAT3(-1.0f, ystart - yincrement, xstart);  // Bottom left. -1. -1. 0
-			vertices[v].texture = XMFLOAT2(txu, txv+txvinc);
+			vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
 			vertices[v].normal = XMFLOAT3(-1.0f, 0.0f, 0.0f);
 
 			indices[i] = i;
@@ -336,21 +270,21 @@ void SphereMesh::InitBuffers(ID3D11Device* device)
 
 			//3
 			vertices[v].position = XMFLOAT3(-1.0f, ystart - yincrement, xstart - xincrement);  // Bottom right.	1.0, -1.0, 0.0
-			vertices[v].texture = XMFLOAT2(txu+txuinc, txv+txvinc);
+			vertices[v].texture = XMFLOAT2(txu + txuinc, txv + txvinc);
 			vertices[v].normal = XMFLOAT3(-1.0f, 0.0f, 0.0f);
 
 			indices[i] = i;
 			v++;
 			i++;
-
 			//2
 			vertices[v].position = XMFLOAT3(-1.0f, ystart, xstart - xincrement);  // Top right.	1.0, 1.0 0.0
-			vertices[v].texture = XMFLOAT2(txu+txuinc, txv);
+			vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
 			vertices[v].normal = XMFLOAT3(-1.0f, 0.0f, 0.0f);
 
 			indices[i] = i;
 			v++;
 			i++;
+ 
 
 			// increment
 			xstart -= xincrement;
@@ -363,8 +297,7 @@ void SphereMesh::InitBuffers(ID3D11Device* device)
 		txu = 0;
 		txv += txvinc;
 	}
-	
-	txv = 0;
+
 
 	//top face
 	ystart = 1;
@@ -373,27 +306,7 @@ void SphereMesh::InitBuffers(ID3D11Device* device)
 	for (int y = 0; y<m_resolution; y++)	// for each quad in the y direction
 	{
 		for (int x = 0; x < m_resolution; x++)	// for each quad in the x direction
-		{
-			// Load the vertex array with data.
-			//0
-			vertices[v].position = XMFLOAT3(xstart, 1.0f, ystart - yincrement);  // Bottom left. -1. -1. 0
-			vertices[v].texture = XMFLOAT2(txu, txv+txvinc);
-			vertices[v].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-
-			//2
-			vertices[v].position = XMFLOAT3(xstart + xincrement, 1.0f, ystart);  // Top right.	1.0, 1.0 0.0
-			vertices[v].texture = XMFLOAT2(txu+txuinc, txv);
-			vertices[v].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-
-			//1
+		{		//1
 			vertices[v].position = XMFLOAT3(xstart, 1.0f, ystart);  // Top left.	-1.0, 1.0
 			vertices[v].texture = XMFLOAT2(txu, txv);
 			vertices[v].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
@@ -401,19 +314,19 @@ void SphereMesh::InitBuffers(ID3D11Device* device)
 			indices[i] = i;
 			v++;
 			i++;
-			
+			// Load the vertex array with data.
 			//0
 			vertices[v].position = XMFLOAT3(xstart, 1.0f, ystart - yincrement);  // Bottom left. -1. -1. 0
-			vertices[v].texture = XMFLOAT2(txu, txv+txvinc);
+			vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
 			vertices[v].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
 
 			indices[i] = i;
 			v++;
 			i++;
-
+	
 			//3
 			vertices[v].position = XMFLOAT3(xstart + xincrement, 1.0f, ystart - yincrement);  // Bottom right.	1.0, -1.0, 0.0
-			vertices[v].texture = XMFLOAT2(txu+txuinc, txv+txvinc);
+			vertices[v].texture = XMFLOAT2(txu + txuinc, txv + txvinc);
 			vertices[v].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
 
 			indices[i] = i;
@@ -422,13 +335,17 @@ void SphereMesh::InitBuffers(ID3D11Device* device)
 
 			//2
 			vertices[v].position = XMFLOAT3(xstart + xincrement, 1.0f, ystart);  // Top right.	1.0, 1.0 0.0
-			vertices[v].texture = XMFLOAT2(txu+txuinc, txv);
+			vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
 			vertices[v].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
 
 			indices[i] = i;
 			v++;
 			i++;
-			
+
+	
+
+ 
+
 			// increment
 			xstart += xincrement;
 			//ystart -= yincrement;
@@ -442,7 +359,7 @@ void SphereMesh::InitBuffers(ID3D11Device* device)
 	}
 
 	txv = 0;
-	
+
 	//bottom face
 	ystart = -1;
 	xstart = -1;
@@ -452,24 +369,7 @@ void SphereMesh::InitBuffers(ID3D11Device* device)
 		for (int x = 0; x < m_resolution; x++)	// for each quad in the x direction
 		{
 			// Load the vertex array with data.
-			//0
-			vertices[v].position = XMFLOAT3(xstart, -1.0f, ystart + yincrement);  // Bottom left. -1. -1. 0
-			vertices[v].texture = XMFLOAT2(txu, txv+txvinc);
-			vertices[v].normal = XMFLOAT3(0.0f, -1.0f, 0.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-
-			//2
-			vertices[v].position = XMFLOAT3(xstart + xincrement, -1.0f, ystart);  // Top right.	1.0, 1.0 0.0
-			vertices[v].texture = XMFLOAT2(txu+txuinc, txv);
-			vertices[v].normal = XMFLOAT3(0.0f, -1.0f, 0.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-
+			
 			//1
 			vertices[v].position = XMFLOAT3(xstart, -1.0f, ystart);  // Top left.	-1.0, 1.0
 			vertices[v].texture = XMFLOAT2(txu, txv);
@@ -478,33 +378,37 @@ void SphereMesh::InitBuffers(ID3D11Device* device)
 			indices[i] = i;
 			v++;
 			i++;
-			
 			//0
 			vertices[v].position = XMFLOAT3(xstart, -1.0f, ystart + yincrement);  // Bottom left. -1. -1. 0
-			vertices[v].texture = XMFLOAT2(txu, txv+txvinc);
+			vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
 			vertices[v].normal = XMFLOAT3(0.0f, -1.0f, 0.0f);
 
 			indices[i] = i;
 			v++;
 			i++;
-
-			//3
+		//3
 			vertices[v].position = XMFLOAT3(xstart + xincrement, -1.0f, ystart + yincrement);  // Bottom right.	1.0, -1.0, 0.0
-			vertices[v].texture = XMFLOAT2(txu+txuinc, txv+txvinc);
+			vertices[v].texture = XMFLOAT2(txu + txuinc, txv + txvinc);
 			vertices[v].normal = XMFLOAT3(0.0f, -1.0f, 0.0f);
 
 			indices[i] = i;
 			v++;
 			i++;
+
+		
+
+
 
 			//2
 			vertices[v].position = XMFLOAT3(xstart + xincrement, -1.0f, ystart);  // Top right.	1.0, 1.0 0.0
-			vertices[v].texture = XMFLOAT2(txu+txuinc, txv);
+			vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
 			vertices[v].normal = XMFLOAT3(0.0f, -1.0f, 0.0f);
 
 			indices[i] = i;
 			v++;
 			i++;
+	
+ 
 
 			// increment
 			xstart += xincrement;
@@ -517,7 +421,6 @@ void SphereMesh::InitBuffers(ID3D11Device* device)
 		txu = 0;
 		txv += txvinc;
 	}
-
 	// now loop over every vertex and bend into a sphere (normalise the vertices)
 	float x = 0;
 	float y = 0;
