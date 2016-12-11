@@ -169,6 +169,9 @@
     <ClCompile Include="PlanetShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TesselatedQuadMess.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App1.h">
@@ -241,6 +244,9 @@
       <Filter>Header Files\Gemotary</Filter>
     </ClInclude>
     <ClInclude Include="PlanetShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TesselatedQuadMess.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

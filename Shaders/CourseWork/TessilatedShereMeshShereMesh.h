@@ -1,7 +1,7 @@
 #pragma once
 #include "..\DXFramework\SphereMesh.h"
 class TessilatedShereMesh :
-	public SphereMesh
+	public BaseMesh
 {
 public:
 	TessilatedShereMesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, int resolution);
@@ -12,8 +12,11 @@ public:
 
 	void MenuOptions(bool* is_open);
 protected:
-	virtual void InitBuffers(ID3D11Device * device);
+	void InitBuffers(ID3D11Device* device);
+
+	int resolution;
 
 };
 
 
+ 

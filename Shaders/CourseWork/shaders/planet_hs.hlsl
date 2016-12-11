@@ -1,20 +1,33 @@
-// Tessellation Hull Shader
-// Prepares control points for tessellation
-
-
 cbuffer TesselationBuffer : register(cb0)
 {
-    int4 outerTesselationValue;
-    int2 innerTesselationValue;
-    int2 padding;
-};
+  //  int4 outerTesselationValue;
+   // int2 innerTesselationValue;
 
+    float maxDistance;
+
+    float minDistance;
+   float minTesselationAmmount;
+    float maxTesselationAmmount;
+
+    float4 camPos;
+};
+cbuffer MatrixBuffer : register(cb1)
+{
+    matrix worldMatrix;
+    matrix viewMatrix;
+    matrix projectionMatrix;
+
+};
 struct InputType
 {
     float3 position : POSITION;
 
     float2 tex : TEXCOORD0;
     float3 normal : NORMAL;
+    float4 lightViewPosition[4] : TEXCOORD1;
+    float3 lightPos[4] : TEXCOORD5;
+    float3 position3D : TEXCOORD10;
+    float3 viewDirection : TEXCOORD11;
 };
 
 struct ConstantOutputQuadType
@@ -41,20 +54,27 @@ struct OutputType
 
     float3 normal : NORMAL;
     float2 tex : TEXCOORD;
+    float4 lightViewPosition[4] : TEXCOORD1;
+    float3 lightPos[4] : TEXCOORD5;
+    float3 position3D : TEXCOORD10;
+    float3 viewDirection : TEXCOORD11;
 };
 
+
+
+float getTessenationAmount(float3 pos);
 ConstantOutputTriType PatchConstantTriFunction(InputPatch<InputType, 3> inputPatch, uint patchId : SV_PrimitiveID)
 {
     ConstantOutputTriType output;
 
-    // Set the tessellation factors for the three edges of the triangle.
-    output.edges[0] = outerTesselationValue[0];
-    output.edges[1] = outerTesselationValue[1];
-    output.edges[2] = outerTesselationValue[2];
+    //// Set the tessellation factors for the three edges of the triangle.
+    //output.edges[0] = outerTesselationValue[0];
+    //output.edges[1] = outerTesselationValue[1];
+    //output.edges[2] = outerTesselationValue[2];
 
 
-    // Set the tessellation factor for tessallating inside the triangle.
-    output.inside = innerTesselationValue[0];
+    //// Set the tessellation factor for tessallating inside the triangle.
+    //output.inside = innerTesselationValue[0];
 
 
     return output;
@@ -64,18 +84,26 @@ ConstantOutputQuadType PatchConstantQuadFunction(InputPatch<InputType, 4> inputP
 {
     ConstantOutputQuadType output;
 
-	// Set the tessellation factors for the three edges of the triangle.
-    output.edges[0] = outerTesselationValue[0];
-    output.edges[1] = outerTesselationValue[1];
-    output.edges[2] = outerTesselationValue[2];
-    output.edges[3] = outerTesselationValue[3];
+ 
+    /// Get the center parts of the patch then find out tess amount from distnace from the cam
+    output.edges[0] = getTessenationAmount( (inputPatch[0].position + inputPatch[2].position) / 2);
+    output.edges[1] = getTessenationAmount( (inputPatch[0].position + inputPatch[1].position)/ 2);
+    output.edges[2] = getTessenationAmount( (inputPatch[1].position + inputPatch[3].position) /2);
+    output.edges[3] = getTessenationAmount( (inputPatch[2].position + inputPatch[3].position)/ 2);
+	
+    output.inside[0] = getTessenationAmount(  (inputPatch[0].position + inputPatch[1].position + inputPatch[2].position + inputPatch[3].position) / 4 );
+    output.inside[1] = getTessenationAmount( (inputPatch[0].position + inputPatch[1].position + inputPatch[2].position + inputPatch[3].position) / 4);
 
-
-	// Set the tessellation factor for tessallating inside the triangle.
-    output.inside[0] = innerTesselationValue[0];
-    output.inside[1] = innerTesselationValue[1];
-
-
+  //  output.edges[0] = outerTesselationValue[0];
+//  output.edges[1] = outerTesselationValue[1];
+ //   output.edges[2] = outerTesselationValue[2];
+ // output.edges[3] = outerTesselationValue[3];
+    
+    
+    /// Set the tessellation factor for tessallatin
+  //  output.inside[0] = innerTesselationValue[0];
+  //  output.inside[1] = innerTesselationValue[1];
+    
     return output;
 }
 
@@ -98,7 +126,26 @@ OutputType main(InputPatch<InputType, 4> patch, uint pointId : SV_OutputControlP
     output.normal = patch[pointId].normal;
     output.tex = patch[pointId].tex;
 	 
+
+
+    output.lightPos = patch[pointId].lightPos;
+    output.lightViewPosition = patch[pointId].lightViewPosition;
+    
+    output.position3D = patch[pointId].position3D;
+    output.viewDirection = patch[pointId].viewDirection;
     return output;
 }
 
- 
+
+float getTessenationAmount(float3 pos)
+{
+    // Get rid of padding value added ;
+    float3 realCamPos = camPos.xyz;
+    // find distance between current pos and the cam pos
+    float distanc = distance(pos, realCamPos);
+
+    // 
+    float clampedVal = saturate((distanc - minDistance) / (maxDistance - minDistance));
+     return lerp(maxTesselationAmmount, minTesselationAmmount, clampedVal) * lerp(maxTesselationAmmount, minTesselationAmmount, clampedVal);
+
+}

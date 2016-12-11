@@ -23,7 +23,7 @@ private:
  
 		XMFLOAT4 specularPower[NUM_LIGHTS];
 
-		XMFLOAT4 constantAttenuationFactor[NUM_LIGHTS];
+	XMFLOAT4 constantAttenuationFactor[NUM_LIGHTS];
 		XMFLOAT4 linearAttenuationFactor[NUM_LIGHTS];
 		XMFLOAT4 quadraticAttenuationFactor[NUM_LIGHTS];
 		XMFLOAT4 range[NUM_LIGHTS];

@@ -68,7 +68,7 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 
 
 	m_Ortho_Mesh_normalScaled = new OrthoMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0);
-
+	m_UpScaleTexture =new  RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
 	m_Render_Texture = new  RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
 
 	m_TerrainTexture = new  RenderTexture(m_Direct3D->GetDevice(), SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_NEAR, SCREEN_DEPTH);
@@ -211,6 +211,7 @@ bool App1::Frame()
 	{
 		return false;
 	}
+	planet->Update(m_Timer->GetTotalTimePast());
 	// Render the graphics.
 	result = Render();
 	if (!result)
@@ -228,13 +229,21 @@ bool App1::Render()
 	// Render world with minulation
 	// RenderVertexMinulation();
 
+
 //	RenderDepth();
 
 //	RenderShadow();
 
 	//RenderTerrain();
+	ID3D11ShaderResourceView* depthMaps[NUM_LIGHTS];
 
-	planet->Render(m_TerrainTexture, m_Direct3D, m_Camera);
+	for (int i = 0; i < NUM_LIGHTS; i++)
+	{
+
+		depthMaps[i] = m_depth_Texture[i]->GetShaderResourceView();
+
+	}
+	planet->Render(m_TerrainTexture, m_Direct3D, m_Camera , m_depth_Texture,m_Lights);
 
 	// disable wireframe mode for the post processing effects
 	if (m_Direct3D->getWireFrameMode())
@@ -271,7 +280,7 @@ void App1::RenderTessellation()
 
 	// Clear the render to texture.
 	m_Render_Texture->ClearRenderTarget(m_Direct3D->GetDeviceContext(), 0.0f, 0.0f, 1.0f, 1.0f);
-
+	
 
 	m_Camera->Update();
 
@@ -593,6 +602,8 @@ void App1::CreateMainMenuBar()
 	}
 
 	postPro.PostProccessingMenu();
+
+	planet->MenuOptions();
 
 	GeomentryMenu(&gemeotryMenu);
 	vertexChangesMenu(&showVertex);

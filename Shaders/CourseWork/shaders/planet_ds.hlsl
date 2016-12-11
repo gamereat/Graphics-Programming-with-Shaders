@@ -6,7 +6,10 @@ cbuffer MatrixBuffer : register(cb0)
     matrix worldMatrix;
     matrix viewMatrix;
     matrix projectionMatrix;
+    matrix lightViewMatrix[4];
+    matrix lightProjectionMatrix[4];
 };
+
 
 struct ConstantOutputQuadType
 {
@@ -25,6 +28,10 @@ struct InputType
 
     float3 normal : NORMAL;
     float2 tex : TEXCOORD;
+    float4 lightViewPosition[4] : TEXCOORD1;
+    float3 lightPos[4] : TEXCOORD5;
+    float3 position3D : TEXCOORD10;
+    float3 viewDirection : TEXCOORD11;
 };
 
 struct OutputType
@@ -33,29 +40,70 @@ struct OutputType
 
     float2 tex : TEXCOORD0;
     float3 normal : NORMAL;
+    float4 lightViewPosition[4] : TEXCOORD1;
+    float3 lightPos[4] : TEXCOORD5;
+    float3 position3D : TEXCOORD10;
+    float3 viewDirection : TEXCOORD11;
 };
  
+float2 tesselationLept(float2 cords1, float2 cords2, float2 cords3, float2 cords4 , float2 uvCord);
+float3 tesselationLept(float3 cords1, float3 cords2, float3 cords3, float3 cords4, float2 uvCord);
+
 
 [domain("quad")]
 OutputType main(ConstantOutputQuadType input, float2 uvwCoord : SV_DomainLocation, const OutputPatch<InputType, 4> patch)
 {
-	float3 vertexPosition;
+    float3 vertexPosition;
+	float3 vertexTexture;
 	OutputType output;
 	 
 	// Determine the position of the new vertex.
-	float3 v1 = lerp(patch[0].position, patch[1].position, uvwCoord.x);
-	float3 v2 = lerp(patch[3].position, patch[2].position, uvwCoord.x);
-	vertexPosition = lerp(v1, v2, uvwCoord.y);
+ 
 
-
+    vertexPosition = tesselationLept(patch[0].position, patch[1].position, patch[2].position, patch[3].position, uvwCoord);
 	// Calculate the position of the new vertex against the world, view, and projection matrices.
 	output.position = mul(float4(vertexPosition, 1.0f), worldMatrix);
 	output.position = mul(output.position, viewMatrix);
 	output.position = mul(output.position, projectionMatrix);
 
-	output.tex = patch[0].tex;
 
+ 
+     output.tex = tesselationLept(patch[0].tex, patch[1].tex, patch[2].tex, patch[3].tex, uvwCoord);
+
+ 
+
+    output.normal = tesselationLept(patch[0].normal, patch[1].normal, patch[2].normal, patch[3].normal, uvwCoord);
+
+
+    output.position3D = tesselationLept(patch[0].position3D, patch[1].position3D, patch[2].position3D, patch[3].position3D, uvwCoord);
+    output.viewDirection = tesselationLept(patch[0].viewDirection, patch[1].viewDirection, patch[2].viewDirection, patch[3].viewDirection, uvwCoord);
+    output.lightPos = patch[0].lightPos;
+    output.lightViewPosition = patch[0].lightViewPosition;
+  
 
 	return output;
+
 }
  
+
+  
+float2 tesselationLept(float2 cords1, float2 cords2, float2 cords3, float2 cords4, float2 uvCord)
+{
+
+	// Determine the tex coords of shape
+    float2 n1 = lerp(cords1, cords2, uvCord.x);
+    float2 n2 = lerp(cords4, cords3, uvCord.x);
+    return lerp(n1, n2, uvCord.y);
+
+}
+
+float3 tesselationLept(float3 cords1, float3 cords2, float3 cords3, float3 cords4, float2 uvCord)
+{
+
+	// Determine the tex coords of shape
+    float3 n1 = lerp(cords1, cords2, uvCord.x);
+    float3 n2 = lerp(cords4, cords3, uvCord.x);
+
+
+    return lerp(n1, n2, uvCord.y);
+}
