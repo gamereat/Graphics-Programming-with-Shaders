@@ -24,7 +24,7 @@ void Terrain::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * devic
 	//quadMesh = new TesselatedQuadMess(device, deviceContext, L"../res/cloud.png", 10);
 
 	floor = new PlaneMesh(device, deviceContext, L"../res/cloud.png");
-	teaTop = new Model(device, deviceContext, L"../res/bunny.png", L"../res/teapot.obj");
+	//teaTop = new Model(device, deviceContext, L"../res/bunny.png", L"../res/teapot.obj");
 
 
 	shadowShader = new ShadowShader(device, hwnd);
@@ -32,6 +32,8 @@ void Terrain::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * devic
 	tesselationInfo.maxTesselationAmmount = 6;
 	tesselationInfo.minDistance = 10;
 	tesselationInfo.minTesselationAmmount = 1;
+
+	terrainInfo.scaler = 1.75;
 
 }
 
@@ -48,7 +50,6 @@ void Terrain::Render(RenderTexture * renderTexture, D3D * device, Camera * camer
 
 	//m_Direct3D->BeginScene(0.39f, 0.58f, 0.92f, 1.0f);
 	renderTexture->SetRenderTarget(device->GetDeviceContext());
-
 
 	renderTexture->ClearRenderTarget(device->GetDeviceContext(), 0.0f, 0.0f, 1.0f, 1.0f);
 
@@ -74,14 +75,14 @@ void Terrain::Render(RenderTexture * renderTexture, D3D * device, Camera * camer
 
 
 	//// Send geometry data (from mesh)
-	teaTop->SendData(device->GetDeviceContext());
+//	teaTop->SendData(device->GetDeviceContext());
 
-	shadowShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, teaTop->GetTexture(), depthMaps, light);
+//	shadowShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, teaTop->GetTexture(), depthMaps, light);
 
-	shadowShader->Render(device->GetDeviceContext(), teaTop->GetIndexCount());
+	//shadowShader->Render(device->GetDeviceContext(), teaTop->GetIndexCount());
 
 
-	worldMatrix = XMMatrixTranslation(-50, -35, -50);
+	worldMatrix = XMMatrixTranslation(-50, -10, -50);
 
 
 	//// Send geometry data (from mesh)
@@ -100,9 +101,15 @@ void Terrain::Render(RenderTexture * renderTexture, D3D * device, Camera * camer
 
  }
 
-void Terrain::ResetLights(Light lights[])
+void Terrain::ResetLights(Light* lights[])
 {
-}
+
+	//Setting light 1 
+	lights[0]->SetDiffuseColour(1, 1, 1, 1);
+	lights[0]->SetPosition(0, 60, -25);
+	lights[0]->SetRange(100);
+	lights[0]->SetAttenuationContantFactor(1);
+ }
 
 void Terrain::MenuOptions()
 {
@@ -165,14 +172,15 @@ void Terrain::GenerateDepthPass(D3D * device, Camera * camera, RenderTexture * d
 		lightProjectionMatrix = lights[i]->GetProjectionMatrix();
 		worldMatrix = XMMatrixScaling(0.1, 0.1, 0.1);
 
+
 		////// Send geometry data (from mesh)
-		teaTop->SendData(device->GetDeviceContext());
+	//	teaTop->SendData(device->GetDeviceContext());
 
-		depthShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, lightViewMartix, lightProjectionMatrix);
+//		depthShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, lightViewMartix, lightProjectionMatrix);
 
-		depthShader->Render(device->GetDeviceContext(), teaTop->GetIndexCount());
+	//	depthShader->Render(device->GetDeviceContext(), teaTop->GetIndexCount());
 
-		worldMatrix = XMMatrixTranslation(-50, -1, -50);
+		worldMatrix = XMMatrixTranslation(-50, -10, -50);
 
 		////// Send geometry data (from mesh)
 		floor->SendData(device->GetDeviceContext());
@@ -190,6 +198,7 @@ void Terrain::GenerateDepthPass(D3D * device, Camera * camera, RenderTexture * d
 
 void Terrain::SceneInformationPopUp(bool * is_open)
 {
+	
 }
 void Terrain::tesselationOptions(bool * is_open)
 {
@@ -222,10 +231,7 @@ void Terrain::TerrainOptions(bool * is_open)
 		{
 			ImGui::End();
 			return;
-		}
-
-		//ImGui::SliderInt4("InnerTess", &tesselationInfo.innerTesselastionValue.x, 1.0f, 64);
-		//	ImGui::SliderInt2("OiterTess", &tesselationInfo.outerTessellationValue.x, 1.0f, 64);
+		} 
 
 		ImGui::DragFloat("Hight", &terrainInfo.scaler); 
 

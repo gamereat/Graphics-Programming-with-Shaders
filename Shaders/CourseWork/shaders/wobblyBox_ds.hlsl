@@ -24,7 +24,7 @@ struct ConstantOutputTriType
 
 struct InputType
 {
-    float3 position : POSITION;
+    float4 position : POSITION;
 
     float3 normal : NORMAL;
     float2 tex : TEXCOORD;
@@ -46,14 +46,15 @@ struct OutputType
     float3 viewDirection : TEXCOORD11;
 };
  
-float2 tesselationLept(float2 cords1, float2 cords2, float2 cords3, float2 cords4 , float2 uvCord);
+float2 tesselationLept(float2 cords1, float2 cords2, float2 cords3, float2 cords4, float2 uvCord);
+float4 tesselationLept(float4 cords1, float4 cords2, float4 cords3, float4 cords4 , float2 uvCord);
 float3 tesselationLept(float3 cords1, float3 cords2, float3 cords3, float3 cords4, float2 uvCord);
 
 
 [domain("quad")]
 OutputType main(ConstantOutputQuadType input, float2 uvwCoord : SV_DomainLocation, const OutputPatch<InputType, 4> patch)
 {
-    float3 vertexPosition;
+    float4 vertexPosition;
 	float3 vertexTexture;
 	OutputType output;
 	 
@@ -62,7 +63,7 @@ OutputType main(ConstantOutputQuadType input, float2 uvwCoord : SV_DomainLocatio
 
     vertexPosition = tesselationLept(patch[0].position, patch[1].position, patch[2].position, patch[3].position, uvwCoord);
 	// Calculate the position of the new vertex against the world, view, and projection matrices.
-	output.position = mul(float4(vertexPosition, 1.0f), worldMatrix);
+	output.position = mul(vertexPosition, worldMatrix);
 	output.position = mul(output.position, viewMatrix);
 	output.position = mul(output.position, projectionMatrix);
 
@@ -106,4 +107,13 @@ float3 tesselationLept(float3 cords1, float3 cords2, float3 cords3, float3 cords
 
 
     return lerp(n1, n2, uvCord.y);
+}
+float4 tesselationLept(float4 cords1, float4 cords2, float4 cords3, float4 cords4, float2 uvCord)
+{
+
+	// Determine the tex coords of shape
+    float4 n1 = lerp(cords1, cords2, uvCord.x);
+    float4 n2 = lerp(cords4, cords3, uvCord.x);
+    return lerp(n1, n2, uvCord.y);
+
 }

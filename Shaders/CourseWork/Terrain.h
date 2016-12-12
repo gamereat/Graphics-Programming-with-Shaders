@@ -50,7 +50,7 @@ public:
 
 	@param lights The lights from within the world
 	*/
-	void ResetLights(Light lights[]);
+	void ResetLights(Light* lights[]);
 
 	/*
 	The given menu options for the scene

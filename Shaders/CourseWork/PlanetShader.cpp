@@ -121,27 +121,9 @@ void PlanetShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 	m_device->CreateBuffer(&planetDesc, NULL, &planetBuffer);
 
 
-	// Create the texture sampler state.
+	// Create the texture sampler state. 
 
-
-	tesselationDesc.Usage = D3D11_USAGE_DYNAMIC;
-	tesselationDesc.ByteWidth = sizeof(TessellationBufferType);
-	tesselationDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	tesselationDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	tesselationDesc.MiscFlags = 0;
-	tesselationDesc.StructureByteStride = 0;
-
-	m_device->CreateBuffer(&tesselationDesc, NULL, &m_tessellationBuffer);
-
-
-	planetDesc.Usage = D3D11_USAGE_DYNAMIC;
-	planetDesc.ByteWidth = sizeof(PlanetBufferType);
-	planetDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	planetDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	planetDesc.MiscFlags = 0;
-	planetDesc.StructureByteStride = 0;
-
-	m_device->CreateBuffer(&planetDesc, NULL, &planetBuffer);
+	 
 
 
 	// Required a CLAMPED sampler for sampling the depth map
@@ -240,9 +222,7 @@ void PlanetShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, cons
 	bufferNumber = 0;
 
 	// Now set the constant buffer in the vertex shader with the updated values.
-	deviceContext->DSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
-
-
+	deviceContext->DSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer); 
 	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
 
 
@@ -258,9 +238,9 @@ void PlanetShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, cons
 	tessPtr->camPos = tesselationInfo.camPos;
 
 	//	tessPtr->innerTesselastionValue = tesselationInfo.innerTesselastionValue;
-		//tessPtr->outerTessellationValue = tesselationInfo.outerTessellationValue;
-		//tessPtr->padding = XMINT2(0, 0);
-			// Unlock the constant buffer.
+	//tessPtr->outerTessellationValue = tesselationInfo.outerTessellationValue;
+	//tessPtr->padding = XMINT2(0, 0);
+	// Unlock the constant buffer.
 	deviceContext->Unmap(m_tessellationBuffer, 0);
 
 	// Set the position of the constant buffer in the vertex shader.

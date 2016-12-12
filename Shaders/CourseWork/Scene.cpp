@@ -21,7 +21,7 @@ void Scene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * deviceC
 
 }
 
-void Scene::ResetLights(Light lights[])
+void Scene::ResetLights(Light* lights[])
 {
 }
 

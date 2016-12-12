@@ -10,9 +10,7 @@ class PlanetShader :public BaseShader
 public:
 struct TessellationBufferType
 	{
-	//	XMINT4 outerTessellationValue;
-	///	XMINT2 innerTesselastionValue;
-	//	XMINT2 padding;
+ 
 
 		float maxDistance;
 

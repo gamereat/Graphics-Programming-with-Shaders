@@ -104,8 +104,6 @@ private:
  	Light* lights[4];
 	
 
-
-
 	/*
 	holds all the depth textures from each light
 	*/

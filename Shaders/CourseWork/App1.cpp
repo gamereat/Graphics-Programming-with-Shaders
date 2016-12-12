@@ -27,8 +27,7 @@ App1::App1()
 
 	upScaleTexture = nullptr;
 
-	terrainMesh = nullptr;
-
+ 
  
 	textureShader = nullptr;
 }
@@ -88,11 +87,7 @@ App1::~App1()
 		upScaleTexture = nullptr;
 	}
 
-	if (terrainMesh)
-	{
-		delete terrainMesh;
-		terrainMesh = nullptr;
-	}
+ 
 	if (textureShader)
 	{
 		delete textureShader;
@@ -143,6 +138,9 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 
 	// set starting scene to be terrain scene
 	currentScene = terrainScence;
+
+	// set my lights up correcntly for current scene
+	currentScene->ResetLights(lights);
 }
  
 
@@ -250,6 +248,8 @@ void App1::CreateMainMenuBar()
 		{
 			currentScene = wobblyBoxScene;
 			terrainScence->isEnbaled = false;
+			currentScene->ResetLights(lights);
+
 
  		}
 
@@ -257,6 +257,8 @@ void App1::CreateMainMenuBar()
 		{
 			currentScene = terrainScence;
 			wobblyBoxScene->isEnbaled = false;
+			currentScene->ResetLights(lights);
+
  		}
 
 		ImGui::EndMenu();

@@ -11,10 +11,7 @@ class TerrainGenerator :	public BaseShader
 public:
 	struct TessellationBufferType
 	{
-		//	XMINT4 outerTessellationValue;
-		///	XMINT2 innerTesselastionValue;
-		//	XMINT2 padding;
-
+ 
 		float maxDistance;
 
 		float minDistance;
@@ -94,7 +91,8 @@ public:
  
 private:
 	void InitShader(WCHAR* vsFilename, WCHAR* psFilename);
- 
+	void InitShader(WCHAR* vsFilename, WCHAR* hsFilename, WCHAR* dsFilename, WCHAR* psFilename);
+
 
 
 private:

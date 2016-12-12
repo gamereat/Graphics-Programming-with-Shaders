@@ -48,6 +48,12 @@
     <Filter Include="Source">
       <UniqueIdentifier>{4f2da21d-01fc-4cdc-a203-01d271468aa1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Shaders">
+      <UniqueIdentifier>{023f450d-d799-41a1-8572-9353f450d192}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shaders\PostProccessing">
+      <UniqueIdentifier>{bd49da23-5a33-4baa-b256-166d5fa7fc71}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Object Include="M:\Third Year\Shaders\Shaders\res\drone.obj">
@@ -268,83 +274,83 @@
     <ClCompile Include="App1.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="BoxBlurShader.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="ChromaticAberrationsShader.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="DepthShader.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="GeomentryShader.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="HeightMap.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="HorizontalBlurShader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="PlanetShader.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="PostProccessBoxBlur.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="PostProccessingDownScale.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="PostProccessingUpScale.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="PostProcessing.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="PostProcessingBase.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="PostProcessingChromaticAberration.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="PostProcessingGaussianBlur.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="ShadowShader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Terrain.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="TerrainGenerator.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="TesselatedQuadMess.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="TessellationShader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="TessilatedShereMeshShereMesh.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="TextureShader.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="VertexShader.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="VerticalBlurShader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="WobblyBox.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessingGaussianBlur.cpp">
+      <Filter>Source\Shaders\PostProccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProccessBoxBlur.cpp">
+      <Filter>Source\Shaders\PostProccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProccessingDownScale.cpp">
+      <Filter>Source\Shaders\PostProccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProccessingUpScale.cpp">
+      <Filter>Source\Shaders\PostProccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessing.cpp">
+      <Filter>Source\Shaders\PostProccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessingBase.cpp">
+      <Filter>Source\Shaders\PostProccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessingChromaticAberration.cpp">
+      <Filter>Source\Shaders\PostProccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="ChromaticAberrationsShader.cpp">
+      <Filter>Source\Shaders\PostProccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxBlurShader.cpp">
+      <Filter>Source\Shaders\PostProccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="GeomentryShader.cpp">
+      <Filter>Source\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="HorizontalBlurShader.cpp">
+      <Filter>Source\Shaders\PostProccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainGenerator.cpp">
+      <Filter>Source\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="VerticalBlurShader.cpp">
+      <Filter>Source\Shaders\PostProccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowShader.cpp">
+      <Filter>Source\Shaders\PostProccessing</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthShader.cpp">
+      <Filter>Source\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="PlanetShader.cpp">
+      <Filter>Source\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="TessellationShader.cpp">
+      <Filter>Source\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureShader.cpp">
+      <Filter>Source\Shaders</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

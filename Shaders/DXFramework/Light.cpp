@@ -73,20 +73,21 @@ void Light::DisplayGUIEditor(std::string  lightNum,bool* is_open)
 		int lightType = (int)m_lightType;
 		ImGui::Text("Light Type"); ImGui::SameLine();
 		ImGui::RadioButton("Directional", &lightType, 0); ImGui::SameLine();
-		ImGui::RadioButton("Point", &lightType, 1); ImGui::SameLine();
-		ImGui::RadioButton("Spot", &lightType, 2);
-		m_lightType = (Light::lightType)lightType;
+		ImGui::RadioButton("Point", &lightType, 1); //ImGui::SameLine();
+	//	ImGui::RadioButton("Spot", &lightType, 2);
 
-		ImGui::Text("Colour of light");
+		m_lightType = (Light::lightType)lightType;
+ 		ImGui::Text("Colour of light");
 		// Allow the colours of the light be changed
 		ImGui::ColorEdit4("Diffuse Colour", &m_diffuseColour.x, true);
 		ImGui::ColorEdit4("Ambient Colour", &m_ambientColour.x, true);
 
-		
+		ImGui::Separator();
+
 
 		ImGui::DragFloat3("Set look at Pos", &LookAtPos.x);
 
-		ImGui::Checkbox("Will create shadows ",&m_willGenereateShadows);
+	//	ImGui::Checkbox("Will create shadows ",&m_willGenereateShadows);
 
 		if (lightPos.x == LookAtPos.x && lightPos.y == LookAtPos.y && lightPos.z == LookAtPos.z)
 		{
@@ -96,14 +97,15 @@ void Light::DisplayGUIEditor(std::string  lightNum,bool* is_open)
 		{
 			m_lookAt = XMVectorSet(LookAtPos.x, LookAtPos.y, LookAtPos.z, 1.0f);
 		}
+		ImGui::Separator();
 
  
 
-		ImGui::Text("Specular Settings");
+	//	ImGui::Text("Specular Settings");
 
 
 		// Change based off the specular colour
-		ImGui::Checkbox("Make specular ", &m_makeSpecular);
+	//	ImGui::Checkbox("Make specular ", &m_makeSpecular);
 
 		if (m_makeSpecular)
 		{
@@ -116,14 +118,17 @@ void Light::DisplayGUIEditor(std::string  lightNum,bool* is_open)
 		{
 		case Light::lightType::directional:
 			ImGui::Text("Directional light settings");
+			ImGui::Separator();
 
 			ImGui::DragFloat3("Direction", &m_direction.x, 0.005f, 0.0f, 1.0);
+			ImGui::Separator();
 
 			break;
 		case Light::lightType::point:
 
 			// Allow the position of the light be changed
 			ImGui::Text("Point light settings");
+			ImGui::Separator();
 
 			ImGui::DragFloat3("Set Light Pos", &lightPos.x);
 
@@ -136,13 +141,16 @@ void Light::DisplayGUIEditor(std::string  lightNum,bool* is_open)
 				m_position = XMVectorSet(lightPos.x, lightPos.y, lightPos.z, 1.0f);
 			}
 
- 
+			ImGui::Separator();
+
 			ImGui::Text("Attenuation settings");
 
 			ImGui::DragFloat("Range", &m_range, 0.5f, 0.0f, 100.0f);
 			ImGui::DragFloat("Attenuation Constant Factor", &m_attenuationConstantFactor, 0.1f, 0.1f, 10.0f);
 			ImGui::DragFloat("Attenuation Linear Factor", &m_attenuationLinearFactor, 0.1f, 0.0f, 10.0f);
 			ImGui::DragFloat("Attenuation Quadratic Factor", &m_attenuationQuadraticFactor, 0.1f, 0.0f, 10.0f);
+		
+			ImGui::Separator();
 			break;
 		case Light::lightType::spot:
 			ImGui::Text("SPOT LIGHT NOT IMPLMENTED YET");
