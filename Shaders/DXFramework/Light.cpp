@@ -9,7 +9,7 @@ Light::Light()
 {
 
 	m_ambientColour = XMFLOAT4(0,0,0,0);
-	m_diffuseColour = XMFLOAT4(0, 0, 0, 0);;
+	m_diffuseColour = XMFLOAT4(255, 0, 0, 0);;
 	m_direction = XMFLOAT3(0, 0, 0);;
 	m_specularColour = XMFLOAT4(0, 0, 0, 0);
 	m_specularPower = 0.0f;
@@ -20,12 +20,12 @@ Light::Light()
 	m_lookAt = XMVECTOR(XMVectorSet(0, 0, 0, 0));
 
 
-	m_range = 0 ;
-	m_attenuationConstantFactor = 0;
+	m_range = 256 ;
+	m_attenuationConstantFactor = 1;
 	m_attenuationLinearFactor = 0;
 	m_attenuationQuadraticFactor = 0;
 	m_makeSpecular = false;
-	m_lightType = lightType::directional;
+	m_lightType = lightType::point;
 }
 void Light::GenerateViewMatrix()
 {

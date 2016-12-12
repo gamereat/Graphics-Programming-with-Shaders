@@ -134,8 +134,10 @@
     <ClCompile Include="HeightMap.cpp" />
     <ClCompile Include="HorizontalBlurShader.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Planet.cpp" />
+    <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="WobblyBox.cpp" />
     <ClCompile Include="PlanetShader.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="TesselatedQuadMess.cpp" />
     <ClCompile Include="TessilatedShereMeshShereMesh.cpp" />
     <ClCompile Include="PostProccessBoxBlur.cpp" />
@@ -160,8 +162,10 @@
     <ClInclude Include="GeomentryShader.h" />
     <ClInclude Include="HeightMap.h" />
     <ClInclude Include="HorizontalBlurShader.h" />
-    <ClInclude Include="Planet.h" />
+    <ClInclude Include="Terrain.h" />
+    <ClInclude Include="WobblyBox.h" />
     <ClInclude Include="PlanetShader.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="TesselatedQuadMess.h" />
     <ClInclude Include="TessilatedShereMeshShereMesh.h" />
     <ClInclude Include="PostProccessBoxBlur.h" />
@@ -244,19 +248,19 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="shaders\planet_ds.hlsl">
+    <FxCompile Include="shaders\wobblyBox_ds.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Domain</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Domain</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="shaders\planet_hs.hlsl">
+    <FxCompile Include="shaders\wobblyBox_hs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Hull</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Hull</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="shaders\planet_ps.hlsl">
+    <FxCompile Include="shaders\wobblyBox_ps.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
@@ -373,7 +377,7 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="shaders\planet_vs.hlsl">
+    <FxCompile Include="shaders\wobblyBox_vs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>

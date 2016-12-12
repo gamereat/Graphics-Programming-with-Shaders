@@ -26,13 +26,21 @@
 #include "GeomentryShader.h"
 #include "TerrainGenerator.h"
 #include "HeightMap.h"
-#include "Planet.h"
+#include "wobblyBox.h"
+#include "Scene.h"
+#include "Terrain.h"
+const int SHADOWMAP_WIDTH = 1024;
+const int SHADOWMAP_HEIGHT = 1024;
 class App1 : public BaseApplication
 {
 public:
-	const int SHADOWMAP_WIDTH = 1024;
-	const int SHADOWMAP_HEIGHT = 1024;
 
+	enum class SceneViewed
+	{
+		WobblySquare = 1,
+
+	};
+ 
 	App1();
 	~App1();
 	void init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight, Input*);
@@ -45,8 +53,16 @@ protected:
 
 
 private:
-	Planet* planet;
 
+	/*
+	The current Scene that is viewed the world 
+	*/
+	Scene* currentScene;
+	
+	WobblyBox* wobblyBox;
+
+
+	Terrain* terrain;
 	PostProcessing postPro;
 	void RenderTessellation();
 	
@@ -65,6 +81,7 @@ private:
 	void RenderShadow();
 
  
+	
 
 	void tessellationMenu(bool * is_open);
 

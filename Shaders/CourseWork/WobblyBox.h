@@ -3,21 +3,17 @@
 #include "../DXFramework/CubeMesh.h"
 #include "../DXFramework/QuadMesh.h"
 #include "TessilatedShereMeshShereMesh.h"
-#include "../DXFramework/RenderTexture.h"
-#include "../DXFramework/Camera.h"
-#include "../DXFramework/D3D.h"
 #include "PlanetShader.h"
 #include "../DXFramework/CubeMesh.h"
 #include "HeightMap.h"
 #include "TesselatedQuadMess.h"
-#include "../DXFramework/Light.h"
 #include "VertexShader.h"
-#include "DepthShader.h"
- class Planet
+#include "Scene.h"
+ class WobblyBox : public Scene
 {
 public:
-	Planet();
-	~Planet();
+	WobblyBox(std::string sceneName);
+	~WobblyBox();
 
 
 
@@ -30,8 +26,11 @@ private:
 
 	void GenerateDepthPass(D3D* device, Camera* camera, RenderTexture*depthMap[], Light* light[]);
 
-	bool isWaterMenuOpen;
-	bool isTessMenuOpen;
+	virtual void SceneInformationPopUp(bool* is_open);
+
+
+	static bool isWaterMenuOpen;
+	static bool isTessMenuOpen;
 	void waterOptions(bool* is_open);
 	void tesselationOptions(bool* is_open);
 	CubeMesh* PlanetShpere;
@@ -44,10 +43,7 @@ private:
 	PlanetShader::PlanetBufferType plantinfo;
 	PlanetShader::TessellationBufferType tesselationInfo;
 
+	 
 
-	DepthShader* depthShader;
-	RenderTexture* m_depth_Textur;
-
-	float t = 0;
-};
+ };
 

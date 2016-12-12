@@ -1,10 +1,3 @@
-//Texture2D hightMap : register(t0);
-// SamplerState Sampl
-//{
-//    Filter = MIN_MAG_LINEAR_MIP_POINT;
-//    addressU = clamp;
-//    addressV = clamp;
-//};
 
 
 
@@ -17,6 +10,18 @@ cbuffer MatrixBuffer : register(cb0)
     matrix lightProjectionMatrix[4];
 };
 
+cbuffer WaterBuffer : register(cb1)
+{
+
+    float amplutude;
+    float time;
+    float speed;
+    float steepnesss;
+
+
+    float3 freqancy;
+    float padding;
+};
 
 cbuffer CammeraBuffer : register(cb2)
 {
@@ -49,6 +54,7 @@ struct OutputType
 };
  
 
+
 OutputType main(InputType input)
 {
     OutputType output;
@@ -70,9 +76,15 @@ OutputType main(InputType input)
 
   
 
+     float3 direction = float3(1, 1, 1) * freqancy ;
+ 
+    if (freqancy.x > 0 && freqancy.y > 0 && freqancy.z >0 )
+    {
+        input.position += (float) (((steepnesss / direction * amplutude * 4) * amplutude) * direction * cos(float3(1, input.id + 1, 0) * (dot(direction, input.position.xyz)) + speed * time));
+        input.normal += (float) (((steepnesss / direction * amplutude * 4) * amplutude) * direction * cos(float3(1, input.id + 1, 0) * (dot(direction, input.position.xyz)) + speed * time));
 
-
-    output.position = mul(input.position, worldMatrix);
+    } 
+     output.position = mul(input.position , worldMatrix);
     output.position = mul(output.position, viewMatrix);
     output.position = mul(output.position, projectionMatrix);
 
@@ -116,4 +128,7 @@ OutputType main(InputType input)
 
     return output;
 
+ 
+
 }
+ 

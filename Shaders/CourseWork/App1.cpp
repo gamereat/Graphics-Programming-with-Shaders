@@ -25,7 +25,7 @@ App1::App1()
 
 	m_ShadowShader = nullptr;
 	terrainShader = nullptr;
-	planet = nullptr;
+	wobblyBox = nullptr;
  
 }
 
@@ -35,7 +35,7 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	BaseApplication::init(hinstance, hwnd, screenWidth, screenHeight, in);
 
 	
-	planet = new Planet();
+	wobblyBox = new WobblyBox("Wobbaly Box");
 	interTess = XMINT4(12, 12, 12, 12);
 	outerTess = XMINT2(2, 2);
 
@@ -99,7 +99,10 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	heightMap = new HeightMap(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/cloud.png");
 
 
-	planet->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext());
+	wobblyBox->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext());
+	terrain = new Terrain("Terrain World");
+	terrain->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext());
+	currentScene = terrain;
 }
  
 App1::~App1()
@@ -211,7 +214,7 @@ bool App1::Frame()
 	{
 		return false;
 	}
-	planet->Update(m_Timer->GetTotalTimePast());
+	currentScene->Update(m_Timer->GetTotalTimePast());
 	// Render the graphics.
 	result = Render();
 	if (!result)
@@ -230,20 +233,12 @@ bool App1::Render()
 	// RenderVertexMinulation();
 
 
-//	RenderDepth();
-
-//	RenderShadow();
+	//RenderDepth();
+	//RenderShadow();
 
 	//RenderTerrain();
-	ID3D11ShaderResourceView* depthMaps[NUM_LIGHTS];
-
-	for (int i = 0; i < NUM_LIGHTS; i++)
-	{
-
-		depthMaps[i] = m_depth_Texture[i]->GetShaderResourceView();
-
-	}
-	planet->Render(m_TerrainTexture, m_Direct3D, m_Camera , m_depth_Texture,m_Lights);
+ 
+	currentScene->Render(m_TerrainTexture, m_Direct3D, m_Camera , m_depth_Texture,m_Lights);
 
 	// disable wireframe mode for the post processing effects
 	if (m_Direct3D->getWireFrameMode())
@@ -385,9 +380,9 @@ void App1::RenderShadow()
 	//// Send geometry data (from mesh)
 	teaTop->SendData(m_Direct3D->GetDeviceContext());
 
-//	m_ShadowShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, teaTop->GetTexture(), depthMaps, m_Lights);
+	m_ShadowShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, teaTop->GetTexture(), depthMaps, m_Lights);
 
-	//m_ShadowShader->Render(m_Direct3D->GetDeviceContext(), teaTop->GetIndexCount());
+	m_ShadowShader->Render(m_Direct3D->GetDeviceContext(), teaTop->GetIndexCount());
 
 
 	worldMatrix = XMMatrixTranslation(-50, -1, -50);
@@ -396,9 +391,9 @@ void App1::RenderShadow()
 	//// Send geometry data (from mesh)
 	m_Quad_Mesh->SendData(m_Direct3D->GetDeviceContext());
 
-//	m_ShadowShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Quad_Mesh->GetTexture(), depthMaps, m_Lights);
+	m_ShadowShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, m_Quad_Mesh->GetTexture(), depthMaps, m_Lights);
 
-	//m_ShadowShader->Render(m_Direct3D->GetDeviceContext(), m_Quad_Mesh->GetIndexCount());
+	m_ShadowShader->Render(m_Direct3D->GetDeviceContext(), m_Quad_Mesh->GetIndexCount());
 
 
 
@@ -504,7 +499,7 @@ void App1::RenderTerrain()
 	////// Send geometry data (from mesh)
 	terrainMesh->SendData(m_Direct3D->GetDeviceContext());
 
-	terrainShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrainMesh->GetTexture() );
+	//terrainShader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, terrainMesh->GetTexture() );
 
 	terrainShader->Render(m_Direct3D->GetDeviceContext(), terrainMesh->GetIndexCount());
 
@@ -561,49 +556,40 @@ void App1::CreateMainMenuBar()
 	static bool tessellationMenuOption;
 	static bool gemeotryMenu;
 
-	if (ImGui::BeginMenu("Application Settings"))
+	if (ImGui::BeginMenu("Scene selection menu")) 
 	{
-		if (ImGui::MenuItem("Vertex Changes"))
+		if (ImGui::MenuItem(wobblyBox->getSceneName().c_str(), NULL, &wobblyBox->isEnbaled))
 		{
-			showVertex = showVertex ? false : true;
-
-		}
-		if (ImGui::BeginMenu("Lights"))
-		{
-			for (int i = 0; i < 4; i++)
-			{
-				std::string name = "Light " + std::to_string(i + 1);
-				if (ImGui::MenuItem(name.data()))
-				{
-					show_light_option[i] = show_light_option[i] ? false : true;
-				}
-			}
-			ImGui::EndMenu();
-
-		}
-
-
-		if (ImGui::MenuItem("Tessellation"))
-		{
-
-			tessellationMenuOption = tessellationMenuOption ? false : true;
-
-		}
-		if (ImGui::MenuItem("Geo"))
-		{
-
-			gemeotryMenu = gemeotryMenu ? false : true;
-
+			currentScene = wobblyBox;
+			// turn off other scenes 
 		}
 
 
 		ImGui::EndMenu();
 
 	}
+ 		
+		if(ImGui::BeginMenu("Lights"))
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				std::string lightName;
+				lightName.append("Light ");
+				lightName.append(std::to_string(i + 1));
+				if (ImGui::MenuItem(lightName.c_str(), NULL, show_light_option[i]))
+				{
+					show_light_option[i] = show_light_option[i] ? false : true;
+				}
+				//m_Lights[i]->DisplayGUIEditor(std::to_string(i), &show_light_option[i]);
+			}
 
+			ImGui::EndMenu();
+
+		}
+		 
 	postPro.PostProccessingMenu();
 
-	planet->MenuOptions();
+	currentScene->MenuOptions();
 
 	GeomentryMenu(&gemeotryMenu);
 	vertexChangesMenu(&showVertex);

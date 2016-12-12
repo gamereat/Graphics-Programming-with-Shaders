@@ -3,7 +3,7 @@
 
 PlanetShader::PlanetShader(ID3D11Device* device, HWND hwnd) : BaseShader(device, hwnd)
 {
-	InitShader(L"shaders/planet_vs.hlsl", L"shaders/planet_hs.hlsl", L"shaders/planet_ds.hlsl", L"shaders/planet_ps.hlsl");
+	InitShader(L"shaders/wobblyBox_vs.hlsl", L"shaders/wobblyBox_hs.hlsl", L"shaders/wobblyBox_ds.hlsl", L"shaders/wobblyBox_ps.hlsl");
 	//InitShader(L"shaders/planet_vs.hlsl", L"shaders/planet_ps.hlsl");
 }
 

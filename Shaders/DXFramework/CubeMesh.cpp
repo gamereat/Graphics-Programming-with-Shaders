@@ -56,30 +56,14 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 	int v = 0;	// vertex counter
 	int i = 0;	// index counter
 
-	//front face
+	////front face
 
 	for (int y = 0; y<m_resolution; y++)	// for each quad in the y direction
 	{
 		for (int x = 0; x < m_resolution; x++)	// for each quad in the x direction
 		{
 			// Load the vertex array with data.
-			//0
-			vertices[v].position = XMFLOAT3(xstart, ystart - yincrement, -1.0f);  // Bottom left. -1. -1. 0
-			vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
-			vertices[v].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
 
-			indices[i] = i;
-			v++;
-			i++;
-
-			//1
-			vertices[v].position = XMFLOAT3(xstart + xincrement, ystart, -1.0f);  // Top right.	1.0, 1.0 0.0
-			vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
-			vertices[v].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
 
 			//2
 			vertices[v].position = XMFLOAT3(xstart, ystart, -1.0f);  // Top left.	-1.0, 1.0
@@ -98,8 +82,7 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 			indices[i] = i;
 			v++;
 			i++;
-
-			//3
+		//3
 			vertices[v].position = XMFLOAT3(xstart + xincrement, ystart - yincrement, -1.0f);  // Bottom right.	1.0, -1.0, 0.0
 			vertices[v].texture = XMFLOAT2(txu + txuinc, txv + txvinc);
 			vertices[v].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
@@ -107,7 +90,6 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 			indices[i] = i;
 			v++;
 			i++;
-
 			//1
 			vertices[v].position = XMFLOAT3(xstart + xincrement, ystart, -1.0f);  // Top right.	1.0, 1.0 0.0
 			vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
@@ -116,6 +98,8 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 			indices[i] = i;
 			v++;
 			i++;
+	
+ 
 
 			// increment
 			xstart += xincrement;
@@ -141,25 +125,7 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 	{
 		for (int x = 0; x < m_resolution; x++)	// for each quad in the x direction
 		{
-			// Load the vertex array with data.
-			//0
-			vertices[v].position = XMFLOAT3(xstart, ystart - yincrement, 1.0f);  // Bottom left. -1. -1. 0
-			vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
-			vertices[v].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-
-			//2
-			vertices[v].position = XMFLOAT3(xstart - xincrement, ystart, 1.0f);  // Top right.	1.0, 1.0 0.0
-			vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
-			vertices[v].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-
+		// Load the vertex array with data.
 			//1
 			vertices[v].position = XMFLOAT3(xstart, ystart, 1.0f);  // Top left.	-1.0, 1.0
 			vertices[v].texture = XMFLOAT2(txu, txv);
@@ -167,8 +133,7 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 
 			indices[i] = i;
 			v++;
-			i++;
-
+			i++;	
 			//0
 			vertices[v].position = XMFLOAT3(xstart, ystart - yincrement, 1.0f);  // Bottom left. -1. -1. 0
 			vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
@@ -177,7 +142,6 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 			indices[i] = i;
 			v++;
 			i++;
-
 			//3
 			vertices[v].position = XMFLOAT3(xstart - xincrement, ystart - yincrement, 1.0f);  // Bottom right.	1.0, -1.0, 0.0
 			vertices[v].texture = XMFLOAT2(txu + txuinc, txv + txvinc);
@@ -186,7 +150,6 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 			indices[i] = i;
 			v++;
 			i++;
-
 			//2
 			vertices[v].position = XMFLOAT3(xstart - xincrement, ystart, 1.0f);  // Top right.	1.0, 1.0 0.0
 			vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
@@ -195,6 +158,27 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 			indices[i] = i;
 			v++;
 			i++;
+
+
+
+			////0
+			//vertices[v].position = XMFLOAT3(xstart, ystart - yincrement, 1.0f);  // Bottom left. -1. -1. 0
+			//vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
+			//vertices[v].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
+
+			//indices[i] = i;
+			//v++;
+			//i++;
+
+
+			////2
+			//vertices[v].position = XMFLOAT3(xstart - xincrement, ystart, 1.0f);  // Top right.	1.0, 1.0 0.0
+			//vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
+			//vertices[v].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
+
+			//indices[i] = i;
+			//v++;
+			//i++;
 
 			// increment
 			xstart -= xincrement;
@@ -221,23 +205,6 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 		for (int x = 0; x < m_resolution; x++)	// for each quad in the x direction
 		{
 			// Load the vertex array with data.
-			//0
-			vertices[v].position = XMFLOAT3(1.0f, ystart - yincrement, xstart);  // Bottom left. -1. -1. 0
-			vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
-			vertices[v].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-
-			//2
-			vertices[v].position = XMFLOAT3(1.0f, ystart, xstart + xincrement);  // Top right.	1.0, 1.0 0.0
-			vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
-			vertices[v].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
 
 			//1
 			vertices[v].position = XMFLOAT3(1.0f, ystart, xstart);  // Top left.	-1.0, 1.0
@@ -246,8 +213,7 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 
 			indices[i] = i;
 			v++;
-			i++;
-
+			i++;		
 			//0
 			vertices[v].position = XMFLOAT3(1.0f, ystart - yincrement, xstart);  // Bottom left. -1. -1. 0
 			vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
@@ -257,16 +223,14 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 			v++;
 			i++;
 
-			//3
+		//3
 			vertices[v].position = XMFLOAT3(1.0f, ystart - yincrement, xstart + xincrement);  // Bottom right.	1.0, -1.0, 0.0
 			vertices[v].texture = XMFLOAT2(txu + txuinc, txv + txvinc);
 			vertices[v].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
 
 			indices[i] = i;
 			v++;
-			i++;
-
-			//2
+			i++;			//2
 			vertices[v].position = XMFLOAT3(1.0f, ystart, xstart + xincrement);  // Top right.	1.0, 1.0 0.0
 			vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
 			vertices[v].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
@@ -274,6 +238,27 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 			indices[i] = i;
 			v++;
 			i++;
+
+
+			////0
+			//vertices[v].position = XMFLOAT3(1.0f, ystart - yincrement, xstart);  // Bottom left. -1. -1. 0
+			//vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
+			//vertices[v].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
+
+			//indices[i] = i;
+			//v++;
+			//i++;
+
+	
+
+			////2
+			//vertices[v].position = XMFLOAT3(1.0f, ystart, xstart + xincrement);  // Top right.	1.0, 1.0 0.0
+			//vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
+			//vertices[v].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
+
+			//indices[i] = i;
+			//v++;
+			//i++;
 
 			// increment
 			xstart += xincrement;
@@ -298,24 +283,7 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 		for (int x = 0; x < m_resolution; x++)	// for each quad in the x direction
 		{
 			// Load the vertex array with data.
-			//0
-			vertices[v].position = XMFLOAT3(-1.0f, ystart - yincrement, xstart);  // Bottom left. -1. -1. 0
-			vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
-			vertices[v].normal = XMFLOAT3(-1.0f, 0.0f, 0.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-
-			//2
-			vertices[v].position = XMFLOAT3(-1.0f, ystart, xstart - xincrement);  // Top right.	1.0, 1.0 0.0
-			vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
-			vertices[v].normal = XMFLOAT3(-1.0f, 0.0f, 0.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-
+	
 			//1
 			vertices[v].position = XMFLOAT3(-1.0f, ystart, xstart);  // Top left.	-1.0, 1.0
 			vertices[v].texture = XMFLOAT2(txu, txv);
@@ -323,8 +291,7 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 
 			indices[i] = i;
 			v++;
-			i++;
-
+			i++;		
 			//0
 			vertices[v].position = XMFLOAT3(-1.0f, ystart - yincrement, xstart);  // Bottom left. -1. -1. 0
 			vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
@@ -333,8 +300,7 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 			indices[i] = i;
 			v++;
 			i++;
-
-			//3
+		//3
 			vertices[v].position = XMFLOAT3(-1.0f, ystart - yincrement, xstart - xincrement);  // Bottom right.	1.0, -1.0, 0.0
 			vertices[v].texture = XMFLOAT2(txu + txuinc, txv + txvinc);
 			vertices[v].normal = XMFLOAT3(-1.0f, 0.0f, 0.0f);
@@ -342,7 +308,6 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 			indices[i] = i;
 			v++;
 			i++;
-
 			//2
 			vertices[v].position = XMFLOAT3(-1.0f, ystart, xstart - xincrement);  // Top right.	1.0, 1.0 0.0
 			vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
@@ -351,6 +316,27 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 			indices[i] = i;
 			v++;
 			i++;
+
+
+			////0
+			//vertices[v].position = XMFLOAT3(-1.0f, ystart - yincrement, xstart);  // Bottom left. -1. -1. 0
+			//vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
+			//vertices[v].normal = XMFLOAT3(-1.0f, 0.0f, 0.0f);
+
+			//indices[i] = i;
+			//v++;
+			//i++;
+
+	
+
+			////2
+			//vertices[v].position = XMFLOAT3(-1.0f, ystart, xstart - xincrement);  // Top right.	1.0, 1.0 0.0
+			//vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
+			//vertices[v].normal = XMFLOAT3(-1.0f, 0.0f, 0.0f);
+
+			//indices[i] = i;
+			//v++;
+			//i++;
 
 			// increment
 			xstart -= xincrement;
@@ -375,24 +361,6 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 		for (int x = 0; x < m_resolution; x++)	// for each quad in the x direction
 		{
 			// Load the vertex array with data.
-			//0
-			vertices[v].position = XMFLOAT3(xstart, 1.0f, ystart - yincrement);  // Bottom left. -1. -1. 0
-			vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
-			vertices[v].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-
-			//2
-			vertices[v].position = XMFLOAT3(xstart + xincrement, 1.0f, ystart);  // Top right.	1.0, 1.0 0.0
-			vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
-			vertices[v].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-
 			//1
 			vertices[v].position = XMFLOAT3(xstart, 1.0f, ystart);  // Top left.	-1.0, 1.0
 			vertices[v].texture = XMFLOAT2(txu, txv);
@@ -401,7 +369,6 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 			indices[i] = i;
 			v++;
 			i++;
-
 			//0
 			vertices[v].position = XMFLOAT3(xstart, 1.0f, ystart - yincrement);  // Bottom left. -1. -1. 0
 			vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
@@ -419,7 +386,6 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 			indices[i] = i;
 			v++;
 			i++;
-
 			//2
 			vertices[v].position = XMFLOAT3(xstart + xincrement, 1.0f, ystart);  // Top right.	1.0, 1.0 0.0
 			vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
@@ -428,6 +394,27 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 			indices[i] = i;
 			v++;
 			i++;
+
+
+
+			////0
+			//vertices[v].position = XMFLOAT3(xstart, 1.0f, ystart - yincrement);  // Bottom left. -1. -1. 0
+			//vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
+			//vertices[v].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
+
+			//indices[i] = i;
+			//v++;
+			//i++;
+
+
+			////2
+			//vertices[v].position = XMFLOAT3(xstart + xincrement, 1.0f, ystart);  // Top right.	1.0, 1.0 0.0
+			//vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
+			//vertices[v].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
+
+			//indices[i] = i;
+			//v++;
+			//i++;
 
 			// increment
 			xstart += xincrement;
@@ -452,33 +439,16 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 		for (int x = 0; x < m_resolution; x++)	// for each quad in the x direction
 		{
 			// Load the vertex array with data.
-			//0
-			vertices[v].position = XMFLOAT3(xstart, -1.0f, ystart + yincrement);  // Bottom left. -1. -1. 0
-			vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
-			vertices[v].normal = XMFLOAT3(0.0f, -1.0f, 0.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-
-			//2
-			vertices[v].position = XMFLOAT3(xstart + xincrement, -1.0f, ystart);  // Top right.	1.0, 1.0 0.0
-			vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
-			vertices[v].normal = XMFLOAT3(0.0f, -1.0f, 0.0f);
-
-			indices[i] = i;
-			v++;
-			i++;
-
-			//1
+				//1
 			vertices[v].position = XMFLOAT3(xstart, -1.0f, ystart);  // Top left.	-1.0, 1.0
 			vertices[v].texture = XMFLOAT2(txu, txv);
 			vertices[v].normal = XMFLOAT3(0.0f, -1.0f, 0.0f);
 
 			indices[i] = i;
 			v++;
-			i++;
-
+			i++;		
+			
+			
 			//0
 			vertices[v].position = XMFLOAT3(xstart, -1.0f, ystart + yincrement);  // Bottom left. -1. -1. 0
 			vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
@@ -496,7 +466,6 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 			indices[i] = i;
 			v++;
 			i++;
-
 			//2
 			vertices[v].position = XMFLOAT3(xstart + xincrement, -1.0f, ystart);  // Top right.	1.0, 1.0 0.0
 			vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
@@ -505,6 +474,27 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 			indices[i] = i;
 			v++;
 			i++;
+
+
+
+			////0
+			//vertices[v].position = XMFLOAT3(xstart, -1.0f, ystart + yincrement);  // Bottom left. -1. -1. 0
+			//vertices[v].texture = XMFLOAT2(txu, txv + txvinc);
+			//vertices[v].normal = XMFLOAT3(0.0f, -1.0f, 0.0f);
+
+			//indices[i] = i;
+			//v++;
+			//i++;
+
+
+			////2
+			//vertices[v].position = XMFLOAT3(xstart + xincrement, -1.0f, ystart);  // Top right.	1.0, 1.0 0.0
+			//vertices[v].texture = XMFLOAT2(txu + txuinc, txv);
+			//vertices[v].normal = XMFLOAT3(0.0f, -1.0f, 0.0f);
+
+			//indices[i] = i;
+			//v++;
+			//i++;
 
 			// increment
 			xstart += xincrement;
@@ -559,3 +549,21 @@ void CubeMesh::InitBuffers(ID3D11Device* device)
 	indices = 0;
 }
 
+void CubeMesh::SendData(ID3D11DeviceContext* deviceContext)
+{
+	unsigned int stride;
+	unsigned int offset;
+
+	// Set vertex buffer stride and offset.
+	stride = sizeof(VertexType);
+	offset = 0;
+
+	// Set the vertex buffer to active in the input assembler so it can be rendered.
+	deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
+
+	// Set the index buffer to active in the input assembler so it can be rendered.
+	deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+	// Set the type of primitive that should be rendered from this vertex buffer, in this case control patch for tessellation.
+	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST);
+}

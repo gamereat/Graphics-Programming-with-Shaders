@@ -20,7 +20,7 @@ cbuffer MatrixBuffer : register(cb1)
 };
 struct InputType
 {
-    float3 position : POSITION;
+    float4 position : POSITION;
 
     float2 tex : TEXCOORD0;
     float3 normal : NORMAL;
@@ -49,7 +49,7 @@ struct ConstantOutputTriType
 
 struct OutputType
 {
-    float3 position : POSITION;
+    float4 position : POSITION;
 
 
     float3 normal : NORMAL;

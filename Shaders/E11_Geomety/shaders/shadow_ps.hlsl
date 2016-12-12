@@ -145,8 +145,7 @@ float4 main(InputType input) : SV_TARGET
 					shadowColourValue[i] = saturate(shadowColourValue[i]);
 
  
-					
-					
+
 						
 					color += shadowColourValue[0];
 

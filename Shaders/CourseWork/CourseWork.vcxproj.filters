@@ -145,9 +145,6 @@
     <ClCompile Include="VerticalBlurShader.cpp">
       <Filter>Source Files\Shaders\Post Proccessing</Filter>
     </ClCompile>
-    <ClCompile Include="GeomentryShader.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
     <ClCompile Include="TessellationShader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
@@ -160,9 +157,6 @@
     <ClCompile Include="VertexShader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="Planet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TessilatedShereMeshShereMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -170,6 +164,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TesselatedQuadMess.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WobblyBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeomentryShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -237,9 +243,6 @@
     <ClInclude Include="TerrainGenerator.h">
       <Filter>Header Files\Shaders</Filter>
     </ClInclude>
-    <ClInclude Include="Planet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TessilatedShereMeshShereMesh.h">
       <Filter>Header Files\Gemotary</Filter>
     </ClInclude>
@@ -247,6 +250,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TesselatedQuadMess.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WobblyBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -332,20 +344,20 @@
     <FxCompile Include="shaders\TerrainGenerator_ds.hlsl">
       <Filter>shaders\Terrain</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\wobblyBox_ds.hlsl">
+      <Filter>shaders\Sphere</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\wobblyBox_hs.hlsl">
+      <Filter>shaders\Sphere</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\wobblyBox_ps.hlsl">
+      <Filter>shaders\Sphere</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\wobblyBox_vs.hlsl">
+      <Filter>shaders\Sphere</Filter>
+    </FxCompile>
     <FxCompile Include="shaders\TerrainGenerator_hs.hlsl">
-      <Filter>shaders\Tessellation</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\planet_hs.hlsl">
-      <Filter>shaders\Sphere</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\planet_ps.hlsl">
-      <Filter>shaders\Sphere</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\planet_ds.hlsl">
-      <Filter>shaders\Sphere</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\planet_vs.hlsl">
-      <Filter>shaders\Sphere</Filter>
+      <Filter>shaders\Terrain</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
