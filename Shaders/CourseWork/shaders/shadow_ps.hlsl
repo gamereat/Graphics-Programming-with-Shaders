@@ -197,7 +197,6 @@ float4 main(InputType input) : SV_TARGET
                       
                   
                   
-                      color = saturate(color + shadowColourValue[ i]);
 
               
                 }
@@ -248,13 +247,13 @@ float4 main(InputType input) : SV_TARGET
                     }
 
 
-                    color += (diffuseColour[i] * lightIntensity);
+                    shadowColourValue[i] += (diffuseColour[i] * lightIntensity);
 
                   if (lightType[i].y == 1)
                    {
      
-                        color = color * attenuation;
-                   }
+                        shadowColourValue[i] = shadowColourValue[i] * attenuation;
+                    }
                     
 
                     if (isSpecular[i] == 1)
@@ -269,7 +268,7 @@ float4 main(InputType input) : SV_TARGET
                         finalSpec = specularColour[i] * specular;
 
 						// Add the specular component last to the output colour.
-                        color = saturate(color + finalSpec);
+                        shadowColourValue[i] = saturate(shadowColourValue[i] + finalSpec);
                     }
                 }
 				
@@ -278,6 +277,7 @@ float4 main(InputType input) : SV_TARGET
 
         }
        // color = saturate(color);
+        color = saturate(color + shadowColourValue[i]);
 
     }
         color = saturate(color);

@@ -126,35 +126,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="App1.cpp" />
-    <ClCompile Include="BoxBlurShader.cpp" />
-    <ClCompile Include="ChromaticAberrationsShader.cpp" />
-    <ClCompile Include="DepthShader.cpp" />
-    <ClCompile Include="GeomentryShader.cpp" />
-    <ClCompile Include="HeightMap.cpp" />
-    <ClCompile Include="HorizontalBlurShader.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Terrain.cpp" />
-    <ClCompile Include="WobblyBox.cpp" />
-    <ClCompile Include="PlanetShader.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="TesselatedQuadMess.cpp" />
-    <ClCompile Include="TessilatedShereMeshShereMesh.cpp" />
-    <ClCompile Include="PostProccessBoxBlur.cpp" />
-    <ClCompile Include="PostProccessingDownScale.cpp" />
-    <ClCompile Include="PostProccessingUpScale.cpp" />
-    <ClCompile Include="PostProcessing.cpp" />
-    <ClCompile Include="PostProcessingBase.cpp" />
-    <ClCompile Include="PostProcessingChromaticAberration.cpp" />
-    <ClCompile Include="PostProcessingGaussianBlur.cpp" />
-    <ClCompile Include="ShadowShader.cpp" />
-    <ClCompile Include="TerrainGenerator.cpp" />
-    <ClCompile Include="TessellationShader.cpp" />
-    <ClCompile Include="TextureShader.cpp" />
-    <ClCompile Include="VertexShader.cpp" />
-    <ClCompile Include="VerticalBlurShader.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="App1.h" />
     <ClInclude Include="BoxBlurShader.h" />
     <ClInclude Include="ChromaticAberrationsShader.h" />
@@ -277,19 +248,9 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
     </FxCompile>
-    <FxCompile Include="shaders\TerrainGenerator_ds.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Domain</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Domain</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
-    </FxCompile>
     <FxCompile Include="shaders\TerrainGenerator_gs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="shaders\TerrainGenerator_hs.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Hull</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Hull</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="shaders\TerrainGenerator_ps.hlsl">
@@ -385,6 +346,35 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="App1.cpp" />
+    <ClCompile Include="BoxBlurShader.cpp" />
+    <ClCompile Include="ChromaticAberrationsShader.cpp" />
+    <ClCompile Include="DepthShader.cpp" />
+    <ClCompile Include="GeomentryShader.cpp" />
+    <ClCompile Include="HeightMap.cpp" />
+    <ClCompile Include="HorizontalBlurShader.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="PlanetShader.cpp" />
+    <ClCompile Include="PostProccessBoxBlur.cpp" />
+    <ClCompile Include="PostProccessingDownScale.cpp" />
+    <ClCompile Include="PostProccessingUpScale.cpp" />
+    <ClCompile Include="PostProcessing.cpp" />
+    <ClCompile Include="PostProcessingBase.cpp" />
+    <ClCompile Include="PostProcessingChromaticAberration.cpp" />
+    <ClCompile Include="PostProcessingGaussianBlur.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="ShadowShader.cpp" />
+    <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="TerrainGenerator.cpp" />
+    <ClCompile Include="TesselatedQuadMess.cpp" />
+    <ClCompile Include="TessellationShader.cpp" />
+    <ClCompile Include="TessilatedShereMeshShereMesh.cpp" />
+    <ClCompile Include="TextureShader.cpp" />
+    <ClCompile Include="VertexShader.cpp" />
+    <ClCompile Include="VerticalBlurShader.cpp" />
+    <ClCompile Include="WobblyBox.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

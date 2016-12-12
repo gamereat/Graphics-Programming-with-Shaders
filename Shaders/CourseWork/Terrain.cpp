@@ -81,15 +81,16 @@ void Terrain::Render(RenderTexture * renderTexture, D3D * device, Camera * camer
 	shadowShader->Render(device->GetDeviceContext(), teaTop->GetIndexCount());
 
 
-	worldMatrix = XMMatrixTranslation(-50, -1, -50);
+	worldMatrix = XMMatrixTranslation(-50, -35, -50);
 
 
 	//// Send geometry data (from mesh)
 	floor->SendData(device->GetDeviceContext());
 
-	shadowShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, floor->GetTexture(), depthMaps, light);
+	terrainGenerator->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, floor->GetTexture(),heightMap->GetTexture(),tesselationInfo, depthMaps, light, terrainInfo);
 
-	shadowShader->Render(device->GetDeviceContext(), floor->GetIndexCount());
+	terrainGenerator->Render(device->GetDeviceContext(), floor->GetIndexCount());
+
 
 
 
@@ -118,7 +119,11 @@ void Terrain::MenuOptions()
 		{
 			isTessMenuOpen = isTessMenuOpen ? false : true;
 		}
-	
+		if (ImGui::MenuItem("Terrain Info"))
+		{
+			isTerrainMeunOpen = isTerrainMeunOpen ? false : true;
+		}
+
 
 
 
@@ -127,6 +132,7 @@ void Terrain::MenuOptions()
 
 
 	SceneInformationPopUp(&isInformationPopupOpen);
+	TerrainOptions(&isTerrainMeunOpen);
 
 	tesselationOptions(&isTessMenuOpen);
 }
@@ -201,7 +207,27 @@ void Terrain::tesselationOptions(bool * is_open)
 		ImGui::DragFloat("Max distance", &tesselationInfo.maxDistance);
 		ImGui::DragFloat("Min Distance", &tesselationInfo.minDistance);
 		ImGui::DragFloat("Max Tesseleation Ammount", &tesselationInfo.maxTesselationAmmount);
-		ImGui::DragFloat("Min Tesselation Ammount", &tesselationInfo.minTesselationAmmount);
+		ImGui::DragFloat("Min Tesselation Amount", &tesselationInfo.minTesselationAmmount);
+
+
+		ImGui::End();
+	}
+}
+
+void Terrain::TerrainOptions(bool * is_open)
+{
+	if (*is_open == true)
+	{
+		if (!ImGui::Begin("Terrain info ", is_open, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ImGui::End();
+			return;
+		}
+
+		//ImGui::SliderInt4("InnerTess", &tesselationInfo.innerTesselastionValue.x, 1.0f, 64);
+		//	ImGui::SliderInt2("OiterTess", &tesselationInfo.outerTessellationValue.x, 1.0f, 64);
+
+		ImGui::DragFloat("Hight", &terrainInfo.scaler); 
 
 
 		ImGui::End();

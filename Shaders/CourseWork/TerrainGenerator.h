@@ -76,7 +76,9 @@ public:
 		//float padding;
 	};
 	struct TerrainBufferType {
-		XMFLOAT3 CammeraPos;
+	
+		float scaler;
+		XMFLOAT3 padding;
 
 	};
 
@@ -86,14 +88,13 @@ public:
 	void SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, 
 		const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, 
 		ID3D11ShaderResourceView* texture, ID3D11ShaderResourceView * highMap, TessellationBufferType tesselationInfo, 
-		ID3D11ShaderResourceView*depthMap[], Light* light[]);
+		ID3D11ShaderResourceView*depthMap[], Light* light[], TerrainBufferType terrainInfo);
 	void Render(ID3D11DeviceContext * deviceContext, int indexCount);
 
  
 private:
 	void InitShader(WCHAR* vsFilename, WCHAR* psFilename);
-	void InitShader(WCHAR* vsFilename, WCHAR* psFilename, WCHAR* gsFilename, WCHAR* hsFilename, WCHAR* dsFilename);
-
+ 
 
 
 private:

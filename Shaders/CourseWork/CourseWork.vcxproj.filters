@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
@@ -21,9 +17,6 @@
     </Filter>
     <Filter Include="shaders\PostProcessing">
       <UniqueIdentifier>{5a3697e6-10e0-4d75-ab1b-3874a2b72fdf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Depth">
-      <UniqueIdentifier>{33949947-e2fe-4ac2-b5cd-435cd99db3a2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Depth">
       <UniqueIdentifier>{60554962-74f7-4a51-b66d-b9f33653255b}</UniqueIdentifier>
@@ -49,14 +42,11 @@
     <Filter Include="Header Files\Shaders\Post Proccessing">
       <UniqueIdentifier>{341d67be-2e24-49cd-ab88-92b896a74923}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Shaders">
-      <UniqueIdentifier>{ae43ba60-74e3-4a22-ad33-82383b86de34}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Shaders\Post Proccessing">
-      <UniqueIdentifier>{715bce90-8081-434e-ab16-01a4f2722f9c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="shaders\Sphere">
       <UniqueIdentifier>{6f53bb6c-20e7-4dcf-9672-d9d722d8a518}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{4f2da21d-01fc-4cdc-a203-01d271468aa1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -95,89 +85,6 @@
     <Image Include="M:\Third Year\Shaders\Shaders\res\DefaultDiffuse.png">
       <Filter>Resource Files</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="App1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PostProcessingBase.cpp">
-      <Filter>Source Files\Shaders\Post Proccessing</Filter>
-    </ClCompile>
-    <ClCompile Include="PostProccessBoxBlur.cpp">
-      <Filter>Source Files\Shaders\Post Proccessing</Filter>
-    </ClCompile>
-    <ClCompile Include="PostProccessingDownScale.cpp">
-      <Filter>Source Files\Shaders\Post Proccessing</Filter>
-    </ClCompile>
-    <ClCompile Include="PostProcessing.cpp">
-      <Filter>Source Files\Shaders\Post Proccessing</Filter>
-    </ClCompile>
-    <ClCompile Include="PostProccessingUpScale.cpp">
-      <Filter>Source Files\Shaders\Post Proccessing</Filter>
-    </ClCompile>
-    <ClCompile Include="DepthShader.cpp">
-      <Filter>Source Files\Depth</Filter>
-    </ClCompile>
-    <ClCompile Include="HeightMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainGenerator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PostProcessingChromaticAberration.cpp">
-      <Filter>Source Files\Shaders\Post Proccessing</Filter>
-    </ClCompile>
-    <ClCompile Include="ChromaticAberrationsShader.cpp">
-      <Filter>Source Files\Shaders\Post Proccessing</Filter>
-    </ClCompile>
-    <ClCompile Include="HorizontalBlurShader.cpp">
-      <Filter>Source Files\Shaders\Post Proccessing</Filter>
-    </ClCompile>
-    <ClCompile Include="BoxBlurShader.cpp">
-      <Filter>Source Files\Shaders\Post Proccessing</Filter>
-    </ClCompile>
-    <ClCompile Include="PostProcessingGaussianBlur.cpp">
-      <Filter>Source Files\Shaders\Post Proccessing</Filter>
-    </ClCompile>
-    <ClCompile Include="VerticalBlurShader.cpp">
-      <Filter>Source Files\Shaders\Post Proccessing</Filter>
-    </ClCompile>
-    <ClCompile Include="TessellationShader.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="ShadowShader.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureShader.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="VertexShader.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="TessilatedShereMeshShereMesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PlanetShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TesselatedQuadMess.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WobblyBox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Terrain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeomentryShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App1.h">
@@ -341,9 +248,6 @@
     <FxCompile Include="shaders\TerrainGenerator_gs.hlsl">
       <Filter>shaders\Terrain</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\TerrainGenerator_ds.hlsl">
-      <Filter>shaders\Terrain</Filter>
-    </FxCompile>
     <FxCompile Include="shaders\wobblyBox_ds.hlsl">
       <Filter>shaders\Sphere</Filter>
     </FxCompile>
@@ -356,11 +260,91 @@
     <FxCompile Include="shaders\wobblyBox_vs.hlsl">
       <Filter>shaders\Sphere</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\TerrainGenerator_hs.hlsl">
-      <Filter>shaders\Terrain</Filter>
-    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="App1.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxBlurShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ChromaticAberrationsShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GeomentryShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightMap.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="HorizontalBlurShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="PlanetShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProccessBoxBlur.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProccessingDownScale.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProccessingUpScale.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessing.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessingBase.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessingChromaticAberration.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessingGaussianBlur.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainGenerator.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="TesselatedQuadMess.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="TessellationShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="TessilatedShereMeshShereMesh.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="VerticalBlurShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="WobblyBox.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

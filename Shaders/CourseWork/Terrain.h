@@ -77,6 +77,7 @@ private:
 	virtual void SceneInformationPopUp(bool* is_open) ;
 
 	void tesselationOptions(bool * is_open);
+	void TerrainOptions(bool * is_open);
 
 	TerrainGenerator* terrainGenerator;
 
@@ -85,11 +86,13 @@ private:
 
 
 	TerrainGenerator::TessellationBufferType tesselationInfo;
+	TerrainGenerator::TerrainBufferType terrainInfo;
 
 	bool isTessMenuOpen;
 
 	PlaneMesh* floor;
 
+	bool isTerrainMeunOpen;
 
 	ShadowShader* shadowShader;
 

@@ -1,4 +1,4 @@
-#include "PostProcessingHorizontalBlur.h"
+#include "PostProcessingGaussianBlur.h"
 
  
 PostProcessingGaussianBlur::PostProcessingGaussianBlur(D3D * directX3D, HWND hwnd, float downscaleValue)

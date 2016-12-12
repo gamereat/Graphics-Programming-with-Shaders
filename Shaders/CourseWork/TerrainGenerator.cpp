@@ -5,7 +5,7 @@
 TerrainGenerator::TerrainGenerator(ID3D11Device * device, HWND hwnd)
 	: BaseShader(device, hwnd)
 {
-	InitShader(L"shaders/TerrainGenerator_vs.hlsl", L"shaders/TerrainGenerator_ps.hlsl", L"shaders/TerrainGenerator_gs.hlsl", L"shaders/TerrainGenerator_hs.hlsl", L"shaders/TerrainGenerator_ds.hlsl");
+	InitShader(L"shaders/TerrainGenerator_vs.hlsl", L"shaders/TerrainGenerator_ps.hlsl" );
 
 
 }
@@ -68,6 +68,7 @@ void TerrainGenerator::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 	D3D11_BUFFER_DESC matrixBufferDesc;
 	D3D11_SAMPLER_DESC samplerDesc;
 	D3D11_BUFFER_DESC tesselationDesc;
+	D3D11_BUFFER_DESC terrainDesc;
 
 
 
@@ -141,6 +142,16 @@ void TerrainGenerator::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 
 
 
+	terrainDesc.Usage = D3D11_USAGE_DYNAMIC;
+	terrainDesc.ByteWidth = sizeof(TerrainBufferType);
+	terrainDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	terrainDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	terrainDesc.MiscFlags = 0;
+	terrainDesc.StructureByteStride = 0;
+
+	m_device->CreateBuffer(&terrainDesc, NULL, &terrainBuffer);
+
+
 	// Required a CLAMPED sampler for sampling the depth map
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
 	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
@@ -177,25 +188,8 @@ void TerrainGenerator::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 
 }
 
-void TerrainGenerator::InitShader(WCHAR * vsFilename, WCHAR * psFilename, WCHAR * gsFilename, WCHAR * hsFilename, WCHAR * dsFilename)
-{
- 
-	// InitShader must be overwritten and it will load both vertex and pixel shaders + setup buffers
-	InitShader(vsFilename, psFilename);
 
-	// Load other required shaders.
-//	loadGeometryShader(gsFilename);
-
-	loadDomainShader(dsFilename);
-
-	loadHullShader(hsFilename);
-
-}
-
-
-
-
-void TerrainGenerator::SetShaderParameters(ID3D11DeviceContext * deviceContext, const XMMATRIX & worldMatrix, const XMMATRIX & viewMatrix, const XMMATRIX & projectionMatrix, ID3D11ShaderResourceView * texture, ID3D11ShaderResourceView * highMap, TessellationBufferType tesselationInfo, ID3D11ShaderResourceView * depthMap[], Light * light[])
+void TerrainGenerator::SetShaderParameters(ID3D11DeviceContext * deviceContext, const XMMATRIX & worldMatrix, const XMMATRIX & viewMatrix, const XMMATRIX & projectionMatrix, ID3D11ShaderResourceView * texture, ID3D11ShaderResourceView * highMap, TessellationBufferType tesselationInfo, ID3D11ShaderResourceView * depthMap[], Light * light[], TerrainBufferType terrainInfo)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -203,6 +197,7 @@ void TerrainGenerator::SetShaderParameters(ID3D11DeviceContext * deviceContext, 
 	unsigned int bufferNumber;
 	XMMATRIX tworld, tview, tproj;
 	TessellationBufferType* tessPtr;
+	TerrainBufferType* terrainPtr;
 
 	LightBufferType2* lightPtr2;
 	LightBufferType* lightPtr;
@@ -243,11 +238,11 @@ void TerrainGenerator::SetShaderParameters(ID3D11DeviceContext * deviceContext, 
 	// Now set the constant buffer in the vertex shader with the updated values.
 	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
 
-	deviceContext->DSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
-
+ 
 	// Set shader texture resource in the pixel shader.
 	deviceContext->PSSetShaderResources(0, 1, &texture);
 	deviceContext->VSSetShaderResources(0, 1, &highMap);
+	deviceContext->PSSetShaderResources(5, 1, &highMap);
 
 
 	deviceContext->Map(m_tessellationBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
@@ -267,11 +262,7 @@ void TerrainGenerator::SetShaderParameters(ID3D11DeviceContext * deviceContext, 
 
 	// Set the position of the constant buffer in the vertex shader.
 	bufferNumber = 0;
-
-	// Now set the constant buffer in the vertex shader with the updated values.
-	deviceContext->HSSetConstantBuffers(0, 1, &m_tessellationBuffer);
-	deviceContext->HSSetConstantBuffers(1, 1, &m_matrixBuffer);
-
+ 
 
 
 	// Send light data to vertex shader
@@ -351,7 +342,21 @@ void TerrainGenerator::SetShaderParameters(ID3D11DeviceContext * deviceContext, 
 	bufferNumber = 0;
 	deviceContext->PSSetConstantBuffers(bufferNumber, 1, &lightBuffer);
 
-	 
+
+
+
+	deviceContext->Map(terrainBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	terrainPtr = (TerrainBufferType*)mappedResource.pData;
+
+	terrainPtr->scaler = terrainInfo.scaler;;
+	terrainPtr->padding = XMFLOAT3(0,0,0);
+
+ 
+	deviceContext->Unmap(terrainBuffer, 0);
+
+	deviceContext->VSSetConstantBuffers(3, 1, &terrainBuffer);
+	deviceContext->PSSetConstantBuffers(1, 1, &terrainBuffer);
+
 }
 
 

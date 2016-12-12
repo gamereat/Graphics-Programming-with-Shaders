@@ -4,10 +4,10 @@ Texture2D depthMapTexture : register(t1);
 Texture2D depthMapTexture1 : register(t2);
 Texture2D depthMapTexture2 : register(t3);
 Texture2D depthMapTexture3 : register(t4);
+Texture2D hightMap : register(t5);
 
 SamplerState SampleTypeWrap : register(s0);
 SamplerState SampleTypeClamp : register(s1);
-
 
 cbuffer LightBuffer : register(cb0)
 {
@@ -35,6 +35,13 @@ cbuffer LightBuffer : register(cb0)
 	//if it will generate a shadow 
     int willGenerateShadows[4];
 };
+cbuffer TerrainBuffer : register(cb1)
+{
+    float scaler;
+  
+    float3 padding;
+
+};
 struct InputType
 {
     float4 position : SV_POSITION;
@@ -44,23 +51,19 @@ struct InputType
     float3 lightPos[4] : TEXCOORD5;
     float3 position3D : TEXCOORD10;
     float3 viewDirection : TEXCOORD11;
+
+
 };
 
 
 float4 main(InputType input) : SV_TARGET
 {
-    float4 textureColor;
-
-
-   // return textureColor;
-
-
     float bias;
     float4 shadowColourValue[4];
     float4 color = float4(0, 0, 0, 0);
     float2 projectTexCoord[4];
     float depthValue = 0.0f;
-    //float4 textureColor = float4(0, 0, 0, 0);
+    float4 textureColor = float4(0, 0, 0, 0);
     float attenuation = 0;
     float distance = 0;
     float3 lightDir = float3(0, 0, 0);
@@ -72,16 +75,31 @@ float4 main(InputType input) : SV_TARGET
     bias = 0.0001f;
 
 	// Set the default output color to the ambient light value for all pixels.
-    color = ambientColour[0];
+    
+    //color = ambientColour[0];
+        float4 hightColour = (0, 0.23, 0, 1);
 
+    if (scaler> 0)
+    {
+        float hight = shaderTexture.SampleLevel(SampleTypeClamp, input.tex, 0).r * scaler;
+  
+    // Star at green colour 
+   
+        hightColour.r = lerp(0, 1, hight / scaler);
+        hightColour.b = lerp(0, 1, hight / scaler);
+        hightColour.g = lerp(0.23, 1, hight / scaler);
 
+        hightColour = saturate(hightColour);
+    }
     for (int i = 0; i < 4; i++)
     {
-        shadowColourValue[i] = float4(0, 0, 0, 1.0f);
+ 
+        shadowColourValue[i] = float4(0, 0, 0, 0.0f);
+  
         projectTexCoord[i] = float2(0, 0);
     }
 
-    
+	
     for (int i = 0; i < 4; i++)
     {
 
@@ -96,67 +114,122 @@ float4 main(InputType input) : SV_TARGET
 
 
 	
-		//// Determine if the projected coordinates are in the 0 to 1 range.  If so then this pixel is in the view of the light.
+		// Determine if the projected coordinates are in the 0 to 1 range.  If so then this pixel is in the view of the light.
 		
-  //      if ((saturate(projectTexCoord[i].x) == projectTexCoord[i].x) && (saturate(projectTexCoord[i].y) == projectTexCoord[i].y))
-  //      {
+   
+        if ((saturate(projectTexCoord[i].x) == projectTexCoord[i].x) && (saturate(projectTexCoord[i].y) == projectTexCoord[i].y))
+        {
 
-  //          switch (i)
-  //          {
-  //              case 0:
-  //                  depthValue = depthMapTexture.Sample(SampleTypeClamp, projectTexCoord[i]).r;
+            switch (i)
+            {
+                case 0:
+                    depthValue = depthMapTexture.Sample(SampleTypeClamp, projectTexCoord[i]).r;
 
-  //                  break;
-  //              case 1:
-  //                  depthValue = depthMapTexture1.Sample(SampleTypeClamp, projectTexCoord[i]).r;
+                    break;
+                case 1:
+                    depthValue = depthMapTexture1.Sample(SampleTypeClamp, projectTexCoord[i]).r;
 
-  //                  break;
-  //              case 2:
-  //                  depthValue = depthMapTexture2.Sample(SampleTypeClamp, projectTexCoord[i]).r;
+                    break;
+                case 2:
+                    depthValue = depthMapTexture2.Sample(SampleTypeClamp, projectTexCoord[i]).r;
 
-  //                  break;
-  //              case 3:
-  //                  depthValue = depthMapTexture.Sample(SampleTypeClamp, projectTexCoord[i]).r;
+                    break;
+                case 3:
+                    depthValue = depthMapTexture.Sample(SampleTypeClamp, projectTexCoord[i]).r;
 
-  //                  break;
-  //              default:
-  //                  depthValue = depthMapTexture3.Sample(SampleTypeClamp, projectTexCoord[i]).r;
+                    break;
+                default:
+                    depthValue = depthMapTexture3.Sample(SampleTypeClamp, projectTexCoord[i]).r;
 
-  //                  break;
-  //          }
-		//	// Sample the shadow map depth value from the depth texture using the sampler at the projected texture coordinate location.
+                    break;
+            }
+			// Sample the shadow map depth value from the depth texture using the sampler at the projected texture coordinate location.
 
-		//	// Calculate the depth of the light.
-  //          lightDepthValue = input.lightViewPosition[i].z / input.lightViewPosition[i].w;
+			// Calculate the depth of the light.
+            lightDepthValue = input.lightViewPosition[i].z / input.lightViewPosition[i].w;
 
-		//	// Subtract the bias from the lightDepthValue.
-  //          lightDepthValue = lightDepthValue - bias;
+			// Subtract the bias from the lightDepthValue.
+            lightDepthValue = lightDepthValue - bias;
 
-		//	// Compare the depth of the shadow map value and the depth of the light to determine whether to shadow or to light this pixel.
-		//	// If the light is in front of the object then light the pixel, if not then shadow this pixel since an object (occluder) is casting a shadow on it.
-  //          if (lightDepthValue < depthValue)
-  //          {
-		//		 //Calculate the amount of light on this pixel.
-  //              lightIntensity = saturate(dot(input.normal, input.lightPos[i]));
+			// Compare the depth of the shadow map value and the depth of the light to determine whether to shadow or to light this pixel.
+			// If the light is in front of the object then light the pixel, if not then shadow this pixel since an object (occluder) is casting a shadow on it.
+            if (lightDepthValue < depthValue)
+            {
+				 //Calculate the amount of light on this pixel.
+            //    lightIntensity = saturate(dot(input.normal, input.lightPos[i]));
+                if (lightType[i].y == 1)
+                {
+					// Invert the light direction for calculations.
+                    lightDir = normalize(input.position3D - position[i].xyz);
 
-  //              if (lightIntensity > 0.0f)
-  //              {
+					// Calculate the amount of light on this pixel.
+                    lightIntensity = saturate(dot(input.normal, -lightDir));
 
-		//			//Determine the final diffuse color based on the diffuse color and the amount of light intensity.
-  //                  shadowColourValue[i] += (diffuseColour[i] * lightIntensity);
+                }
+                else if (lightType[i].x == 1)
+                {
 
-		//			// Saturate the final light color.
-  //                  shadowColourValue[i] = saturate(shadowColourValue[i]);
+					// Invert the light direction for calculations.
+                    lightDir = -lightDirection[i].xyz;
 
- 
+					// Calculate the amount of light on this pixel.
+                    lightIntensity = saturate(dot(input.normal, lightDir));
+                }
+                if (lightIntensity > 0.0f)
+                {
+                    
+                    if (lightType[i].y == 1)
+                    {
+						// Work out the attenation value
+                        attenuation = 1 / (attenuationValues[i].x +
+							attenuationValues[i].y * distance + pow(attenuationValues[i].z, 2));
+                    }
 
-						
-  //                  color += shadowColourValue[0];
 
-  //              }
-  //          }
-  //      }
-        //else
+                   
+                    shadowColourValue[i] = (diffuseColour[i] * lightIntensity);
+
+                    if (lightType[i].y == 1)
+                    {
+                     
+                        shadowColourValue[i] = shadowColourValue[i] * attenuation;
+                    }
+                   // shadowColourValue[i] = saturate(shadowColourValue[i]);
+
+                    if (isSpecular[i] == 1)
+                    {
+						// Calculate reflection vector based on the light intensity, normal vector and light direction
+                        reflection = reflect(lightDir, input.normal);
+
+						// Determine the amount of specular light based on the reflection vector, viewing direction, and specular power.
+                        specular = pow(saturate(dot(reflection, input.viewDirection)), specularPower[i]);
+
+						//sum up specular light
+                        finalSpec = specularColour[i] * specular;
+
+						// Add the specular component last to the output colour.
+                       
+                        shadowColourValue[i] = saturate(shadowColourValue[i] + finalSpec);
+                   
+                      
+                    }
+                      
+                  
+                  
+
+              
+                }
+             
+           
+               
+            }
+
+   
+
+              
+              
+        }
+        else
         {
             distance = length(input.position3D - position[i].xyz);
 
@@ -193,13 +266,14 @@ float4 main(InputType input) : SV_TARGET
                     }
 
 
-                    color += (diffuseColour[i] * lightIntensity);
+                    shadowColourValue[i] += (diffuseColour[i] * lightIntensity);
 
                     if (lightType[i].y == 1)
                     {
-                        color = color * attenuation;
+     
+                        shadowColourValue[i] = shadowColourValue[i] * attenuation;
                     }
-                    color = saturate(color);
+                    
 
                     if (isSpecular[i] == 1)
                     {
@@ -213,29 +287,26 @@ float4 main(InputType input) : SV_TARGET
                         finalSpec = specularColour[i] * specular;
 
 						// Add the specular component last to the output colour.
-                        color = saturate(color + finalSpec);
+                        shadowColourValue[i] = saturate(shadowColourValue[i] + finalSpec);
                     }
                 }
 				
             }
+
+
         }
+       // color = saturate(color);
+        color = saturate(color + shadowColourValue[i]);
 
     }
 
-
+    color = saturate(color);
 	// Sample the pixel color from the texture using the sampler at this texture coordinate location.
     textureColor = shaderTexture.Sample(SampleTypeWrap, input.tex);
 	
 	// Combine the light and texture color.
-    color = color * textureColor;
-
-    color = float4(1, 0, 0, 1);
+    color = color * hightColour;
     return color;
 
 
-     
- 
 }
-
-
-

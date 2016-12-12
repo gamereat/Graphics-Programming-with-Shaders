@@ -31,24 +31,41 @@
 #include "Terrain.h"
 const int SHADOWMAP_WIDTH = 1024;
 const int SHADOWMAP_HEIGHT = 1024;
+
+/*
+Base application used to interact with any of my scenes 
+*/
 class App1 : public BaseApplication
 {
 public:
 
-	enum class SceneViewed
-	{
-		WobblySquare = 1,
-
-	};
  
 	App1();
 	~App1();
+	
+	/*
+	Initializes application 
+
+ 	*/
 	void init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight, Input*);
-	 
+	
+	/*
+	Update function used to update given scene
+
+	@return is it was successful 
+	*/
 	bool Frame();
 
 protected:
+	/*
+	Renders the given scene 
+	@return is it was successful
+	*/
 	bool Render();
+	
+	/*
+	Adds menu bar option to top of application to expose function to the user 
+	*/
 	void CreateMainMenuBar();
 
 
@@ -56,101 +73,64 @@ private:
 
 	/*
 	The current Scene that is viewed the world 
+
 	*/
 	Scene* currentScene;
 	
-	WobblyBox* wobblyBox;
+	/*
+	Wobbly box scene which demonstrates wave functions
+	*/
+	WobblyBox* wobblyBoxScene;
 
+	/*
+	Terrain scene demonstrates terrain generation and hight maps 
+	*/
+	Terrain* terrainScence;
 
-	Terrain* terrain;
+	/*
+	Post processing object which creates and adds in post processing effects to scene
+	*/
 	PostProcessing postPro;
-	void RenderTessellation();
-	
- 
-	void RenderToTexture();
+
+	/*
+	Render 
+	*/
 	void RenderToScreen();
   
-	void RenderDepth();
 
-	void RenderGeometry();
-
-	void RenderVertexMinulation();
-  
-	void RenderTerrain();
-
-	void RenderShadow();
-
- 
+	/*
+	Lights used within the world all usable at any point 
+	*/
+ 	Light* lights[4];
 	
 
-	void tessellationMenu(bool * is_open);
 
-	void GeomentryMenu(bool * is_open);
-
-	void vertexChangesMenu(bool * is_open);
-	Model* teaTop;
-
-	HeightMap* heightMap;
-
-	DepthShader* m_DepthShader;
-	ShadowShader* m_ShadowShader;
-	TerrainGenerator* terrainShader;
-
- 	Light* m_Lights[4];
-	
-	TessellationMesh* m_Tessellation_mesh;
-	TessellationShader* m_Tessellation_Shader;
-	VertexShader* m_Vertex_Manipulation_Shader;
-	TextureShader* m_Texture_Shader;
-
- 	RenderTexture* m_Render_Texture;
-
-	GeomentryShader* m_Geomentry_Shader;
-
-
-	RenderTexture* m_Shadow_Texture;
 
 	/*
 	holds all the depth textures from each light
 	*/
-	RenderTexture* m_depth_Texture[NUM_LIGHTS];
-
-	RenderTexture* m_Render_VextexMinulation;
-	RenderTexture* m_TerrainTexture;
-	RenderTexture* m_UpScaleTexture;
-	PlaneMesh* m_Quad_Mesh;
+	RenderTexture* depthTextures[NUM_LIGHTS];
 
 	/*
-	Mesh used to make terrain
+	Render texture used to send to a scene
 	*/
-	PlaneMesh* terrainMesh;
+ 	RenderTexture* sceneTexture;
+	
+	/*
+	Texture that has been up scaled to correct size after post processing
+	*/
+	RenderTexture* upScaleTexture;
+ 
 
-
-
-	SphereMesh* m_Sphere_Mesh;
-	OrthoMesh* m_Ortho_Mesh_normalScaled;
-
-	PointMesh* m_Point_Mesh;
-
-
-	XMFLOAT3 lightPos;
-	XMFLOAT3 lightAttenation;
-	float lightRange;
-	float planeHeight;
-	float planeFreqnacy;
- 	float sphereHeight;
-	float sphereFreqnacy;
-
-	bool isTri;
-	XMFLOAT4 vertexScale;
-
-	XMINT4 interTess;
-
-	XMINT2 outerTess;
-
-
-	VertexShader::typeOfVertexMinimulation planesManipulation;
-	VertexShader::typeOfVertexMinimulation sphereManipulation;
+	/*
+	OrthorMesh that is scaled to correct size
+	*/
+ 	OrthoMesh* orthoMeshNormalScaled;
+	  
+	/*
+	Texture shader that will add a texture to a object
+	*/
+	TextureShader* textureShader;
 
 
  };
