@@ -131,6 +131,7 @@
     <ClInclude Include="ChromaticAberrationsShader.h" />
     <ClInclude Include="DepthShader.h" />
     <ClInclude Include="GeomentryShader.h" />
+    <ClInclude Include="GeomertyShaderScene.h" />
     <ClInclude Include="HeightMap.h" />
     <ClInclude Include="HorizontalBlurShader.h" />
     <ClInclude Include="Terrain.h" />
@@ -353,6 +354,7 @@
     <ClCompile Include="ChromaticAberrationsShader.cpp" />
     <ClCompile Include="DepthShader.cpp" />
     <ClCompile Include="GeomentryShader.cpp" />
+    <ClCompile Include="GeomertyShaderScene.cpp" />
     <ClCompile Include="HeightMap.cpp" />
     <ClCompile Include="HorizontalBlurShader.cpp" />
     <ClCompile Include="Main.cpp" />

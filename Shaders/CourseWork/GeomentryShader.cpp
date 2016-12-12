@@ -104,7 +104,7 @@ void GeomentryShader::InitShader(WCHAR * vsFilename, WCHAR * psFilename, WCHAR *
 
 }
 
-void GeomentryShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture,bool isTri,XMFLOAT4 vertexScale)
+void GeomentryShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const XMMATRIX & worldMatrix, const XMMATRIX & viewMatrix, const XMMATRIX & projectionMatrix, ID3D11ShaderResourceView * texture, GeomentryBufferType explosiveSettings)
 {
 
 	HRESULT result;
@@ -137,6 +137,7 @@ void GeomentryShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, co
 
 	// Now set the constant buffer in the vertex shader with the updated values.
 	deviceContext->GSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
+	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
 
 
 	// Set shader texture resource in the pixel shader.
@@ -151,10 +152,12 @@ void GeomentryShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, co
 	deviceContext->Map(m_GeomentryBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	geoPtr = (GeomentryBufferType*)mappedResource.pData; 
 
-	geoPtr->isTri = (int)isTri;
-	geoPtr->vertexScale = vertexScale;
-	geoPtr->padding = XMINT3(0.0f, 0.f,0.0f);
-	deviceContext->Unmap(m_GeomentryBuffer, 0);
+	geoPtr->explosiveAmmount = explosiveSettings.explosiveAmmount;
+	geoPtr->gravity = explosiveSettings.gravity;
+	geoPtr->padding = 0;
+	geoPtr->time = explosiveSettings.time;
+	geoPtr->vertexScale = explosiveSettings.vertexScale;
+ 	deviceContext->Unmap(m_GeomentryBuffer, 0);
 	bufferNumber = 1;
 	deviceContext->GSSetConstantBuffers(bufferNumber, 1, &m_GeomentryBuffer);
 

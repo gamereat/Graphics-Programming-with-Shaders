@@ -30,12 +30,20 @@ App1::App1()
  
  
 	textureShader = nullptr;
+
+	geomertyShaderScene = nullptr;
 }
 App1::~App1()
 {
 	// Run base application deconstructor
 	BaseApplication::~BaseApplication();
 
+
+	if (geomertyShaderScene)
+	{
+		delete geomertyShaderScene;
+		geomertyShaderScene = nullptr;
+	}
 	//clean up memory
 	if (currentScene)
 	{
@@ -108,6 +116,8 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	terrainScence = new Terrain("Terrain World");
 	terrainScence->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext());
 
+	geomertyShaderScene = new GeomertyShaderScene("Geomatry shader");
+	geomertyShaderScene->Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext());
 
 	textureShader = new TextureShader(m_Direct3D->GetDevice(), hwnd);
 
@@ -248,6 +258,8 @@ void App1::CreateMainMenuBar()
 		{
 			currentScene = wobblyBoxScene;
 			terrainScence->isEnbaled = false;
+			geomertyShaderScene->isEnbaled = false;
+
 			currentScene->ResetLights(lights);
 
 
@@ -257,10 +269,19 @@ void App1::CreateMainMenuBar()
 		{
 			currentScene = terrainScence;
 			wobblyBoxScene->isEnbaled = false;
+			geomertyShaderScene->isEnbaled = false;
 			currentScene->ResetLights(lights);
 
  		}
+		if (ImGui::MenuItem(geomertyShaderScene->getSceneName().c_str(), NULL, &geomertyShaderScene->isEnbaled))
+		{
+			currentScene = geomertyShaderScene;
+			wobblyBoxScene->isEnbaled = false;
+			terrainScence->isEnbaled = false;
 
+			currentScene->ResetLights(lights);
+
+		}
 		ImGui::EndMenu();
 
 	}

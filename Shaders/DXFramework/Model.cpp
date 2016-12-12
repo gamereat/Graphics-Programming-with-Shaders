@@ -233,3 +233,4 @@ void Model::LoadModel(WCHAR* filename)
 	texC.clear();
 	faces.clear();
 }
+

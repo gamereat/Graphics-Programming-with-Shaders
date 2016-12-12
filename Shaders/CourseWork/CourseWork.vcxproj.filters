@@ -174,6 +174,9 @@
     <ClInclude Include="Terrain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GeomertyShaderScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\vertexManipulationSpec_ps.hlsl">
@@ -352,5 +355,6 @@
     <ClCompile Include="TextureShader.cpp">
       <Filter>Source\Shaders</Filter>
     </ClCompile>
+    <ClCompile Include="GeomertyShaderScene.cpp" />
   </ItemGroup>
 </Project>

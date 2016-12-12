@@ -20,9 +20,11 @@ public:
 	Model(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, WCHAR* filename);
 	~Model();
 
+
 protected:
 	void InitBuffers(ID3D11Device* device);
 	void LoadModel(WCHAR* filename);
+
 	
 	ModelType* m_model;
 };

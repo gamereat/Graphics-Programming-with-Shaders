@@ -13,20 +13,25 @@ public:
 
 	struct GeomentryBufferType
 	{
-		// set if it is a tri or a quad.
-		// 1 is tri 
-		// 0 is quad
-		int isTri;
+		
+		float time;
+		float gravity;
+		float explosiveAmmount;
+		float padding;
 
-		XMINT3 padding;
 		XMFLOAT4 vertexScale;
 
 	};
-
+		struct MatrixBufferType
+	{
+		XMMATRIX world;
+		XMMATRIX view;
+		XMMATRIX projection; 
+	};
 	GeomentryShader(ID3D11Device* device, HWND hwnd);
 	~GeomentryShader();
 
-	void SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, bool isTri, XMFLOAT4 vertexScale);
+	void SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, GeomentryBufferType explosiveSettings);
 	void Render(ID3D11DeviceContext * deviceContext, int indexCount);
 
 

@@ -28,6 +28,7 @@
 #include "HeightMap.h"
 #include "wobblyBox.h"
 #include "Scene.h"
+#include "GeomertyShaderScene.h"
 #include "Terrain.h"
 const int SHADOWMAP_WIDTH = 1024;
 const int SHADOWMAP_HEIGHT = 1024;
@@ -71,6 +72,11 @@ protected:
 
 private:
 
+
+	/*
+	Shows off Geomerty Shader explotion
+	*/
+	GeomertyShaderScene* geomertyShaderScene;
 	/*
 	The current Scene that is viewed the world 
 
