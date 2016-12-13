@@ -19,7 +19,7 @@ public:
 
 
 	void Init(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext);
-	void Update(float deltaTime);
+	void Update(Timer* timer);
 	void Render(RenderTexture* renderTexture, D3D* device, Camera* camera, RenderTexture *depthMap[], Light* light[]);
 	void MenuOptions();
 private:

@@ -36,7 +36,7 @@ public:
 
 	@param deltaTime	 delta time for the current frame
 	*/
-	virtual void Update(float deltaTime) ;
+	virtual void Update(Timer* timer);
 
 	/*
 	Renders the given scene

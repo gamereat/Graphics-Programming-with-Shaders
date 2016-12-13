@@ -52,12 +52,12 @@ void WobblyBox::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * dev
  
 }
 
-void WobblyBox::Update(float deltaTime)
+void WobblyBox::Update(Timer* timer)
 {
 
  
 
-	plantinfo.time = deltaTime;
+	plantinfo.time = timer->GetTotalTimePast();
 }
 
 void WobblyBox::Render(RenderTexture * renderTexture, D3D * device, Camera * camera, RenderTexture * depthMap[], Light * light[])

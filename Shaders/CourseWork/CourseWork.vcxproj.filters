@@ -117,9 +117,6 @@
     <ClInclude Include="PostProccessingUpScale.h">
       <Filter>Header Files\Shaders\Post Proccessing</Filter>
     </ClInclude>
-    <ClInclude Include="ShadowShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DepthShader.h">
       <Filter>Header Files\Depth</Filter>
     </ClInclude>
@@ -159,9 +156,6 @@
     <ClInclude Include="TessilatedShereMeshShereMesh.h">
       <Filter>Header Files\Gemotary</Filter>
     </ClInclude>
-    <ClInclude Include="PlanetShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TesselatedQuadMess.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -176,6 +170,12 @@
     </ClInclude>
     <ClInclude Include="GeomertyShaderScene.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlanetShader.h">
+      <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowShader.h">
+      <Filter>Header Files\Shaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

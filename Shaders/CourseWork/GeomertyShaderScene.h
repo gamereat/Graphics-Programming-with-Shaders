@@ -37,7 +37,7 @@ public:
 
 	@param deltaTime	 delta time for the current frame
 	*/
-	virtual void Update(float deltaTime);
+	virtual void Update(Timer* timer);
 
 	/*
 	Renders the given scene
@@ -76,7 +76,9 @@ private:
 	*/
 	virtual void GenerateDepthPass(D3D* device, Camera* camera, RenderTexture*depthMap[], Light* lights[]);
 
+	bool isExplotionMenuOpen;
 
+	void explotionMenu(bool* is_open);
 
 	/*
 	Scene information pop up will tell the user about the current scene
@@ -90,6 +92,7 @@ private:
 
 	bool isTerrainMeunOpen;
 
+	bool firstTimeExplotion; 
 
 	Model* teaTop;
 };

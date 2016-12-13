@@ -154,9 +154,10 @@ void GeomentryShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, c
 
 	geoPtr->explosiveAmmount = explosiveSettings.explosiveAmmount;
 	geoPtr->gravity = explosiveSettings.gravity;
-	geoPtr->padding = 0;
+	geoPtr->explosiveAcceleration = explosiveSettings.explosiveAcceleration;
 	geoPtr->time = explosiveSettings.time;
-	geoPtr->vertexScale = explosiveSettings.vertexScale;
+	geoPtr->maxTime = explosiveSettings.maxTime;
+	geoPtr->explotionMaximums = explosiveSettings.explotionMaximums;
  	deviceContext->Unmap(m_GeomentryBuffer, 0);
 	bufferNumber = 1;
 	deviceContext->GSSetConstantBuffers(bufferNumber, 1, &m_GeomentryBuffer);

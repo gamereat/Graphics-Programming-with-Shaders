@@ -164,7 +164,7 @@ bool App1::Frame()
 	{
 		return false;
 	}
-	currentScene->Update(m_Timer->GetTotalTimePast());
+	currentScene->Update(m_Timer);
 	// Render the graphics.
 	result = Render();
 	if (!result)

@@ -30,4 +30,3 @@ std::string Scene::getSceneName()
 	return sceneName;
 }
 
- 

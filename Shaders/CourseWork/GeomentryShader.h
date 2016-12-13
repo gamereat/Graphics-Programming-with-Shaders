@@ -17,10 +17,13 @@ public:
 		float time;
 		float gravity;
 		float explosiveAmmount;
-		float padding;
+		float explosiveAcceleration;
 
-		XMFLOAT4 vertexScale;
 
+		float maxTime;
+		//@DEPECATED
+		//just used as padding now 
+		XMFLOAT3 explotionMaximums;
 	};
 		struct MatrixBufferType
 	{

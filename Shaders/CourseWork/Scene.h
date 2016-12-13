@@ -4,7 +4,7 @@
 #include "../DXFramework/D3D.h"
 #include "../DXFramework/Camera.h"
 #include "DepthShader.h"
-
+#include "../DXFramework/Timer.h"
 /*
 A base scene interface to allow for different scene to be loaded
 */
@@ -31,9 +31,9 @@ public:
 	/*
 	Updates the current scene 
 
-	@param deltaTime	 delta time for the current frame
+	@param timer	 application timer that can be used to get total time and delta time for application
 	*/
-	virtual void Update(float deltaTime) = 0;
+	virtual void Update(Timer* timer) = 0;
 
 	/*
 	Renders the given scene

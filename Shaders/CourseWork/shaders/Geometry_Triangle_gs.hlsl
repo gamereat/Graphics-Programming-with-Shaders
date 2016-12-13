@@ -11,9 +11,13 @@ cbuffer GeomentryBuffer : register(cb1)
     float time;
     float gravity;
     float explosiveAmmount;
-    float padding;
+    float explosiveAcceleration;
 
-    float4 vertexScale;
+    float maxTime;
+
+    //@DEPECATED
+    //just used as padding now 
+    float3 explotionMaximums;
 };
 
 cbuffer PositionBuffer
@@ -51,50 +55,36 @@ struct OutputType
 };
 
 
-OutputType generateTriangle(triangle InputType input[3], inout TriangleStream<OutputType> triStream)
-{
-    OutputType output;
-
-    return output;
-}
-OutputType generateQuad(triangle InputType input[3], inout TriangleStream<OutputType> triStream)
-{
-    OutputType output;
-
-    for (int i = 0; i < 4; i++)
-    {
-        float3 vposition = quad_position[i] * vertexScale[i];
-        vposition = mul(vposition, (float3x3) worldMatrix) + input[0].position;
-        output.position = mul(float4(vposition, 1.0), viewMatrix);
-        output.position = mul(output.position, projectionMatrix);
-
-        output.tex = input[0].tex;
-        output.normal = input[0].normal;
-
-        triStream.Append(output);
-    }
-    return output;
-}
+ 
 [maxvertexcount(4)]
 void main(triangle InputType input[3], inout TriangleStream<OutputType> triStream)
 {
     OutputType output;
 
- 
+    float t = time;
+    if (time >= maxTime)
+    {
+        t = maxTime;
+    }
     for (int i = 0; i < 3; i++)
     {
-        float4 normal = float4(((input[0].normal + input[1].normal + input[2].normal) / 3),0);
-
+        input[i].position.w = 0;
+        float4 normal = float4(((input[0].normal + input[1].normal + input[2].normal) / 3), 0);
+ 
         float3 vposition = input[i].position;;
 
-         
-        float length = sqrt(vposition.x * vposition.x + vposition.z * vposition.z + vposition.y * vposition.y);
-   
-        float scalex = 2.0 + 1.0 * cos(time * 2.0 + length);
-         float scaley = 2.0 + 1.0 * sin(time * 2.0 + length);
-  
+        float3 explotionForce = normal.xyz *( (0.5 * explosiveAcceleration * t * t) + (explosiveAmmount * t));
+        float3 gravityForce = float3(0, 1, 0) * 0.5 * gravity * t ;
 
-        input[i].position += normal * explosiveAmmount;
+        float3 explotionEffect = explotionForce + gravityForce;
+
+      //  input[i].position.xyz += explotionEffect;
+
+
+          
+        input[i].position.xyz += explotionEffect;
+      
+ 
         vposition = mul(input[i].position.xyz, (float3x3) worldMatrix);
         output.position = mul(float4(vposition, 1.0), viewMatrix);
         output.position = mul(output.position, projectionMatrix);
@@ -107,8 +97,9 @@ void main(triangle InputType input[3], inout TriangleStream<OutputType> triStrea
      
 
 
-
-
 }
+
+// x = 1/2 *a * (t*t )+ v*t + x
+ 
 
 

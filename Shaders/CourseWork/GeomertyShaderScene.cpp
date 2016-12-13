@@ -9,6 +9,7 @@ GeomertyShaderScene::GeomertyShaderScene(std::string sceneName)
 	: Scene(sceneName)
 
 {
+	firstTimeExplotion = false;
 }
 
 GeomertyShaderScene::~GeomertyShaderScene()
@@ -23,14 +24,17 @@ void GeomertyShaderScene::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceCon
 
  
 	floor = new PlaneMesh(device, deviceContext, L"../res/cloud.png");
-	teaTop = new Model(device, deviceContext, L"../res/bunny.png", L"../res/teapot.obj");
+	teaTop = new Model(device, deviceContext, L"../reasdas/bunny.png", L"../res/teapot.obj");
 
  
 }
 
-void GeomertyShaderScene::Update(float deltaTime)
+void GeomertyShaderScene::Update(Timer* timer)
 {
-	geoSettings.time = deltaTime;
+	if (firstTimeExplotion)
+	{
+		geoSettings.time += timer->GetTime();
+	}
 }
 
 void GeomertyShaderScene::Render(RenderTexture * renderTexture, D3D * device, Camera * camera, RenderTexture * depthMap[], Light * light[])
@@ -102,6 +106,31 @@ void GeomertyShaderScene::ResetLights(Light * lights[])
 
 void GeomertyShaderScene::MenuOptions()
 {
+	std::string menuName;
+	menuName.append(sceneName);
+	menuName.append(" Settings");
+	if (ImGui::BeginMenu(menuName.c_str()))
+	{
+		if (ImGui::MenuItem("Scene Information "))
+		{
+			isInformationPopupOpen = isInformationPopupOpen ? false : true;
+		}
+		if (ImGui::MenuItem("Explosion effects "))
+		{
+			isExplotionMenuOpen = isExplotionMenuOpen ? false : true;
+		}
+ 
+
+
+
+		ImGui::EndMenu();
+	}
+
+
+	SceneInformationPopUp(&isInformationPopupOpen);
+	explotionMenu(&isExplotionMenuOpen);
+
+
 }
 
 void GeomertyShaderScene::GenerateDepthPass(D3D * device, Camera * camera, RenderTexture * depthMap[], Light * lights[])
@@ -153,6 +182,33 @@ void GeomertyShaderScene::GenerateDepthPass(D3D * device, Camera * camera, Rende
 		// Reset the render target back to the original back buffer and not the render to texture anymore.
 		device->SetBackBufferRenderTarget();
 		device->ResetViewport();
+	}
+}
+
+void GeomertyShaderScene::explotionMenu(bool * is_open)
+{
+	if (*is_open == true)
+	{
+		if (!ImGui::Begin("Explosion ", is_open, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ImGui::End();
+			return;
+		}
+
+		//ImGui::SliderInt4("InnerTess", &tesselationInfo.innerTesselastionValue.x, 1.0f, 64);
+		//	ImGui::SliderInt2("OiterTess", &tesselationInfo.outerTessellationValue.x, 1.0f, 64);
+
+		ImGui::DragFloat("Explosion Velocity", &geoSettings.explosiveAmmount);
+		ImGui::DragFloat("Maximum explosion time", &geoSettings.maxTime);
+		ImGui::DragFloat("Gravity scale", &geoSettings.gravity);
+		ImGui::DragFloat("Explosive acceleration", &geoSettings.explosiveAcceleration);
+ 
+		if (ImGui::Button("Explode Teapot"))
+		{
+			firstTimeExplotion = true;
+			geoSettings.time = 0;
+		}
+		ImGui::End();
 	}
 }
 

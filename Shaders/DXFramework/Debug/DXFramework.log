@@ -1,2 +1,7 @@
-﻿  Model.cpp
+﻿  System.cpp
+e:\source\repos\graphics-programming-with-shaders\shaders\dxframework\system.cpp(161): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+e:\source\repos\graphics-programming-with-shaders\shaders\dxframework\system.cpp(162): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+  BaseApplication.cpp
+e:\source\repos\graphics-programming-with-shaders\shaders\dxframework\baseapplication.cpp(142): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Generating Code...
   DXFramework.vcxproj -> E:\Source\Repos\Graphics-Programming-with-Shaders\Shaders\Debug\DXFramework.lib
