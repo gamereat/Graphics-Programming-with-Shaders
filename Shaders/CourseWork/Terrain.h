@@ -73,21 +73,21 @@ private:
 	@param DepthMap	The depth maps to be created on to
 	@param lights   The lights within the scene
 	*/
-	virtual void GenerateDepthPass(D3D* device, Camera* camera, RenderTexture*depthMap[], Light* lights[]) ;
+	virtual void GenerateDepthPass(D3D* device, Camera* camera, RenderTexture*depthMap[], Light* lights[]);
 
 
 
 	/*
 	Scene information pop up will tell the user about the current scene
 	*/
-	virtual void SceneInformationPopUp(bool* is_open) ;
+	virtual void SceneInformationPopUp(bool* is_open);
 
 	void tesselationOptions(bool * is_open);
 	void TerrainOptions(bool * is_open);
 
 	TerrainGenerator* terrainGenerator;
 
- 
+
 	Texture* heightMap;
 
 

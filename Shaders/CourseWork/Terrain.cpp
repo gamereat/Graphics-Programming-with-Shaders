@@ -23,7 +23,7 @@ void Terrain::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * devic
 	heightMap = new Texture(device, deviceContext, L"../res/cloud.png");
 	//quadMesh = new TesselatedQuadMess(device, deviceContext, L"../res/cloud.png", 10);
 
-	floor = new PlaneMesh(device, deviceContext, L"../res/cloud.png");
+	floor = new PlaneMesh(device, deviceContext, L"../res/clou15d.png");
 	//teaTop = new Model(device, deviceContext, L"../res/bunny.png", L"../res/teapot.obj");
 
 
@@ -44,8 +44,7 @@ void Terrain::Update(Timer* timer)
 void Terrain::Render(RenderTexture * renderTexture, D3D * device, Camera * camera, RenderTexture * depthMap[], Light * light[])
 {
 
-	GenerateDepthPass(device, camera, depthMap, light);
-
+ 
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, baseViewMatrix, orthoMartix;
 
 	//m_Direct3D->BeginScene(0.39f, 0.58f, 0.92f, 1.0f);
@@ -72,14 +71,7 @@ void Terrain::Render(RenderTexture * renderTexture, D3D * device, Camera * camer
 		depthMaps[i] = depthMap[i]->GetShaderResourceView();
 
 	}
-
-
-	//// Send geometry data (from mesh)
-//	teaTop->SendData(device->GetDeviceContext());
-
-//	shadowShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, teaTop->GetTexture(), depthMaps, light);
-
-	//shadowShader->Render(device->GetDeviceContext(), teaTop->GetIndexCount());
+	 
 
 
 	worldMatrix = XMMatrixTranslation(-50, -10, -50);
@@ -96,7 +88,7 @@ void Terrain::Render(RenderTexture * renderTexture, D3D * device, Camera * camer
 
 
 	//// Present the rendered scene to the screen.
-	//m_Direct3D->EndScene();
+ 
 	device->SetBackBufferRenderTarget();
 
  }

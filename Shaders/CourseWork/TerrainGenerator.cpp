@@ -111,27 +111,6 @@ void TerrainGenerator::InitShader(WCHAR * vsFilename, WCHAR * psFilename)
 	// Create the texture sampler state.
 	m_device->CreateSamplerState(&samplerDesc, &m_sampleState);
 
-	 
-
-	tesselationDesc.Usage = D3D11_USAGE_DYNAMIC;
-	tesselationDesc.ByteWidth = sizeof(TessellationBufferType);
-	tesselationDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	tesselationDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	tesselationDesc.MiscFlags = 0;
-	tesselationDesc.StructureByteStride = 0;
-
-	m_device->CreateBuffer(&tesselationDesc, NULL, &m_tessellationBuffer);
-
-
-
-
-
-	// Create the texture sampler state.
-
- 
-
-
-
 
 
 	terrainDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -200,7 +179,6 @@ void TerrainGenerator::SetShaderParameters(ID3D11DeviceContext * deviceContext, 
 	MatrixBufferType* dataPtr;
 	unsigned int bufferNumber;
 	XMMATRIX tworld, tview, tproj;
-	TessellationBufferType* tessPtr;
 	TerrainBufferType* terrainPtr;
 
 	LightBufferType2* lightPtr2;
@@ -240,33 +218,8 @@ void TerrainGenerator::SetShaderParameters(ID3D11DeviceContext * deviceContext, 
 	bufferNumber = 0;
 
 	// Now set the constant buffer in the vertex shader with the updated values.
-	deviceContext->DSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
-	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
+	deviceContext->VSSetConstantBuffers(0, 1, &m_matrixBuffer);
 
- 
-
-
-	deviceContext->Map(m_tessellationBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	tessPtr = (TessellationBufferType*)mappedResource.pData;
-
-	tessPtr->maxDistance = tesselationInfo.maxDistance;
-	tessPtr->maxTesselationAmmount = tesselationInfo.maxTesselationAmmount;
-	tessPtr->minDistance = tesselationInfo.minDistance;
-	tessPtr->minTesselationAmmount = tesselationInfo.minTesselationAmmount;
-	tessPtr->camPos = tesselationInfo.camPos;
-
-	//	tessPtr->innerTesselastionValue = tesselationInfo.innerTesselastionValue;
-	//tessPtr->outerTessellationValue = tesselationInfo.outerTessellationValue;
-	//tessPtr->padding = XMINT2(0, 0);
-	// Unlock the constant buffer.
-	deviceContext->Unmap(m_tessellationBuffer, 0);
-
-
-	// Set the position of the constant buffer in the vertex shader.
-	bufferNumber = 0;
- 	deviceContext->HSSetConstantBuffers(0, 1, &m_tessellationBuffer);
-	deviceContext->HSSetConstantBuffers(1, 1, &m_matrixBuffer);
- 
 
 	deviceContext->Map(terrainBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	terrainPtr = (TerrainBufferType*)mappedResource.pData;
@@ -291,7 +244,7 @@ void TerrainGenerator::SetShaderParameters(ID3D11DeviceContext * deviceContext, 
 	}
 	deviceContext->Unmap(lightBuffer2, 0);
 	bufferNumber = 2;
-	deviceContext->VSSetConstantBuffers(3, 1, &lightBuffer2);
+	deviceContext->VSSetConstantBuffers(2, 1, &lightBuffer2);
 
 
 	for (int i = 0; i < NUM_LIGHTS; i++)
