@@ -5,14 +5,12 @@
 #include "../DXFramework/Model.h"
 /*
 
-Shows off geo shader with explotion 
+Shows off Geomatary shader with explotion 
 */
 class GeomertyShaderScene :
 	public Scene
 {
 public:
-
-
 
 
 	/*
@@ -85,15 +83,24 @@ private:
 	*/
 	virtual void SceneInformationPopUp(bool* is_open);
  
+	/*
+	Geomtary shader used to make explotion effect
+	*/
 	GeomentryShader* geomentryShader;
 
-	GeomentryShader::GeomentryBufferType geoSettings;
-	PlaneMesh* floor;
+	/*
+	Setting used to affect the explotion
+	*/
+	GeomentryShader::GeomentryBufferType expSettings;
 
-	bool isTerrainMeunOpen;
-
+	/*
+	Flag used to note if first time explotion has been used 
+	*/
 	bool firstTimeExplotion; 
 
+	/*
+	model that is used for explotions
+	*/
 	Model* teaTop;
 };
 

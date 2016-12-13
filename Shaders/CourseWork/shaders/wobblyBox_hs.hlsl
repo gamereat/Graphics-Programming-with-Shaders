@@ -60,25 +60,7 @@ struct OutputType
     float3 viewDirection : TEXCOORD11;
 };
 
-
-
 float getTessenationAmount(float3 pos);
-ConstantOutputTriType PatchConstantTriFunction(InputPatch<InputType, 3> inputPatch, uint patchId : SV_PrimitiveID)
-{
-    ConstantOutputTriType output;
-
-    //// Set the tessellation factors for the three edges of the triangle.
-    //output.edges[0] = outerTesselationValue[0];
-    //output.edges[1] = outerTesselationValue[1];
-    //output.edges[2] = outerTesselationValue[2];
-
-
-    //// Set the tessellation factor for tessallating inside the triangle.
-    //output.inside = innerTesselationValue[0];
-
-
-    return output;
-}
 
 ConstantOutputQuadType PatchConstantQuadFunction(InputPatch<InputType, 4> inputPatch, uint patchId : SV_PrimitiveID)
 {
@@ -94,15 +76,6 @@ ConstantOutputQuadType PatchConstantQuadFunction(InputPatch<InputType, 4> inputP
     output.inside[0] = getTessenationAmount(  (inputPatch[0].position + inputPatch[1].position + inputPatch[2].position + inputPatch[3].position) / 4 );
     output.inside[1] = getTessenationAmount( (inputPatch[0].position + inputPatch[1].position + inputPatch[2].position + inputPatch[3].position) / 4);
 
-  //  output.edges[0] = outerTesselationValue[0];
-//  output.edges[1] = outerTesselationValue[1];
- //   output.edges[2] = outerTesselationValue[2];
- // output.edges[3] = outerTesselationValue[3];
-    
-    
-    /// Set the tessellation factor for tessallatin
-  //  output.inside[0] = innerTesselationValue[0];
-  //  output.inside[1] = innerTesselationValue[1];
     
     return output;
 }
@@ -142,10 +115,14 @@ float getTessenationAmount(float3 pos)
     // Get rid of padding value added ;
     float3 realCamPos = camPos.xyz;
     // find distance between current pos and the cam pos
-    float distanc = distance(pos, realCamPos);
+    float dis = distance(pos, realCamPos);
 
-    // 
-    float clampedVal = saturate((distanc - minDistance) / (maxDistance - minDistance));
-     return lerp(maxTesselationAmmount, minTesselationAmmount, clampedVal) * lerp(maxTesselationAmmount, minTesselationAmmount, clampedVal);
+    // Work out what distance away from minimu and max distance based
+    float lerpAmmount = saturate((dis - minDistance) / (maxDistance - minDistance));
+
+    // find tesselastion ammount 
+    return lerp(maxTesselationAmmount, minTesselationAmmount, lerpAmmount);
+
+
 
 }

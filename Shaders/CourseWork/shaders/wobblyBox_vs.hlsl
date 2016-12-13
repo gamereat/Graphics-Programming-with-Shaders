@@ -59,13 +59,11 @@ OutputType main(InputType input)
     OutputType output;
     input.position.w = 1.0f;
 
-  //  input.position.y = amplutude * sin(speed * (input.position.x + time));
 
 	// Store the texture coordinates for the pixel shader.
     output.tex = input.tex;
 
  
-    //output.tex = mul(float4(input.tex, 0.0f, 1.0f), 1).xy;
 
     float3 normalPos;
     float length = sqrt(output.position.x * output.position.x + output.position.y * output.position.y + output.position.z * output.position.z);
@@ -74,13 +72,18 @@ OutputType main(InputType input)
     normalPos.z = output.position.z / length;
 
   
-
+    
      float3 direction = float3(1, 1, 1) * freqancy ;
  
+    // only simulate if wave is high than 0 
     if (freqancy.x > 0 && freqancy.y > 0 && freqancy.z >0 )
     {
-        input.position += (float) (((steepnesss / direction * amplutude * 4) * amplutude) * direction * cos(float3(1, input.id + 1, 0) * (dot(direction, input.position.xyz)) + speed * time));
-        input.normal += (float) (((steepnesss / direction * amplutude * 4) * amplutude) * direction * cos(float3(1, input.id + 1, 0) * (dot(direction, input.position.xyz)) + speed * time));
+        input.position += (float) (((steepnesss / direction * amplutude * 4) * amplutude) * direction *
+         cos(float3(1, input.id + 1, 0) * (dot(direction, input.position.xyz)) + speed * time));
+
+
+        input.normal += (float) (((steepnesss / direction * amplutude * 4) * amplutude) * direction * 
+        cos(float3(1, input.id + 1, 0) * (dot(direction, input.position.xyz)) + speed * time));
 
     } 
      output.position = mul(input.position , worldMatrix);

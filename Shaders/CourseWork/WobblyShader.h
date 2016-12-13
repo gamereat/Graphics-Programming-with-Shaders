@@ -2,7 +2,7 @@
 #include "..\DXFramework\BaseShader.h"
 #include "VertexShader.h"
 #include "../DXFramework/Light.h"
-class PlanetShader :public BaseShader
+class WobblyShader :public BaseShader
 {
 
 	
@@ -21,7 +21,7 @@ struct TessellationBufferType
 		XMFLOAT4 camPos;
 
 	};
-	struct PlanetBufferType
+	struct WavetBufferType
 	{
 	
  
@@ -85,14 +85,14 @@ struct TessellationBufferType
 		XMFLOAT4 position[NUM_LIGHTS];
 		//float padding;
 	};
-	PlanetShader(ID3D11Device* device, HWND hwnd);
-	~PlanetShader();
+	WobblyShader(ID3D11Device* device, HWND hwnd);
+	~WobblyShader();
 
  	void SetShaderParameters(ID3D11DeviceContext * deviceContext,
 		const XMMATRIX & worldMatrix, const XMMATRIX & viewMatrix,
 		const XMMATRIX & projectionMatrix, ID3D11ShaderResourceView * texture,
 		ID3D11ShaderResourceView * highMap, TessellationBufferType tesselationInfo, 
-		PlanetBufferType plantinfo,
+		WavetBufferType plantinfo,
 		ID3D11ShaderResourceView*depthMap[], Light* light[]);
 	void Render(ID3D11DeviceContext* deviceContext, int vertexCount);
 

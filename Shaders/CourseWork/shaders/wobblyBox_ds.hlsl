@@ -1,6 +1,4 @@
-// Tessellation domain shader
-// After tessellation the domain shader processes the all the vertices
-
+ 
 cbuffer MatrixBuffer : register(cb0)
 {
     matrix worldMatrix;
@@ -45,7 +43,7 @@ struct OutputType
     float3 position3D : TEXCOORD10;
     float3 viewDirection : TEXCOORD11;
 };
- 
+ // Function used use to lerp
 float2 tesselationLept(float2 cords1, float2 cords2, float2 cords3, float2 cords4, float2 uvCord);
 float4 tesselationLept(float4 cords1, float4 cords2, float4 cords3, float4 cords4 , float2 uvCord);
 float3 tesselationLept(float3 cords1, float3 cords2, float3 cords3, float3 cords4, float2 uvCord);

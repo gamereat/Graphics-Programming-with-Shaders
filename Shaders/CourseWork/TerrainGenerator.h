@@ -1,6 +1,5 @@
 #pragma once
 #include "..\DXFramework\BaseShader.h"
-#include "HeightMap.h"
 #include "VertexShader.h"
 
 using namespace std;

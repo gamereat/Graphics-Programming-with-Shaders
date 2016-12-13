@@ -25,7 +25,6 @@
 #include "ShadowShader.h"
 #include "GeomentryShader.h"
 #include "TerrainGenerator.h"
-#include "HeightMap.h"
 #include "wobblyBox.h"
 #include "Scene.h"
 #include "GeomertyShaderScene.h"

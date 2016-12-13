@@ -132,11 +132,10 @@
     <ClInclude Include="DepthShader.h" />
     <ClInclude Include="GeomentryShader.h" />
     <ClInclude Include="GeomertyShaderScene.h" />
-    <ClInclude Include="HeightMap.h" />
     <ClInclude Include="HorizontalBlurShader.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="WobblyBox.h" />
-    <ClInclude Include="PlanetShader.h" />
+    <ClInclude Include="WobblyShader.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="TesselatedQuadMess.h" />
     <ClInclude Include="TessilatedShereMeshShereMesh.h" />
@@ -147,7 +146,6 @@
     <ClInclude Include="PostProcessingBase.h" />
     <ClInclude Include="PostProcessingChromaticAberration.h" />
     <ClInclude Include="PostProcessingGaussianBlur.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="ShadowShader.h" />
     <ClInclude Include="TerrainGenerator.h" />
     <ClInclude Include="TessellationShader.h" />
@@ -355,10 +353,9 @@
     <ClCompile Include="DepthShader.cpp" />
     <ClCompile Include="GeomentryShader.cpp" />
     <ClCompile Include="GeomertyShaderScene.cpp" />
-    <ClCompile Include="HeightMap.cpp" />
     <ClCompile Include="HorizontalBlurShader.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="PlanetShader.cpp" />
+    <ClCompile Include="WobblyShader.cpp" />
     <ClCompile Include="PostProccessBoxBlur.cpp" />
     <ClCompile Include="PostProccessingDownScale.cpp" />
     <ClCompile Include="PostProccessingUpScale.cpp" />

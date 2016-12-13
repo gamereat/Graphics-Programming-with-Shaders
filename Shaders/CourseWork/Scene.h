@@ -53,7 +53,7 @@ public:
 
 	@param lights The lights from within the world 
 	*/
-	virtual void ResetLights(Light* lights[]);
+	virtual void ResetLights(Light* lights[])  =0 ;
 
 	/*
 	The given menu options for the scene 
@@ -91,6 +91,7 @@ protected:
 	Scene information pop up will tell the user about the current scene 
 	*/
 	virtual void SceneInformationPopUp(bool* is_open) =0;
+
 	/*
 	Depth shader used to generate our depth maps
 	*/

@@ -12,9 +12,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="shaders\Tessellation">
-      <UniqueIdentifier>{8d065e93-6772-4858-ae45-99bd578ceacd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="shaders\PostProcessing">
       <UniqueIdentifier>{5a3697e6-10e0-4d75-ab1b-3874a2b72fdf}</UniqueIdentifier>
     </Filter>
@@ -26,9 +23,6 @@
     </Filter>
     <Filter Include="shaders\SHadow">
       <UniqueIdentifier>{4f803bb2-59ab-4bd1-b8b3-fb57b91c1198}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Terrain">
-      <UniqueIdentifier>{fdc0de2d-c597-4811-bdf7-0d4f0ccb9cf8}</UniqueIdentifier>
     </Filter>
     <Filter Include="shaders\Terrain">
       <UniqueIdentifier>{3553f8bb-45d4-4ede-8a91-3a0705975836}</UniqueIdentifier>
@@ -53,6 +47,15 @@
     </Filter>
     <Filter Include="Source\Shaders\PostProccessing">
       <UniqueIdentifier>{bd49da23-5a33-4baa-b256-166d5fa7fc71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\Explotiion shader">
+      <UniqueIdentifier>{fc3e4dff-7835-44ce-88ba-2d49c0da5741}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\Tessellation">
+      <UniqueIdentifier>{8d065e93-6772-4858-ae45-99bd578ceacd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Scenes">
+      <UniqueIdentifier>{649a268e-20f1-487f-8bfe-556b19594376}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -93,9 +96,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="App1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="VertexShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -119,12 +119,6 @@
     </ClInclude>
     <ClInclude Include="DepthShader.h">
       <Filter>Header Files\Depth</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HeightMap.h">
-      <Filter>Header Files\Terrain</Filter>
     </ClInclude>
     <ClInclude Include="PostProcessingChromaticAberration.h">
       <Filter>Header Files\Shaders\Post Proccessing</Filter>
@@ -162,20 +156,23 @@
     <ClInclude Include="Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WobblyBox.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeomertyShaderScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PlanetShader.h">
-      <Filter>Header Files\Shaders</Filter>
-    </ClInclude>
     <ClInclude Include="ShadowShader.h">
       <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="WobblyShader.h">
+      <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="GeomertyShaderScene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="WobblyBox.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="App1.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -233,15 +230,6 @@
     <FxCompile Include="shaders\shadow_vs.hlsl">
       <Filter>shaders\SHadow</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\Geometry_Triangle_ps.hlsl">
-      <Filter>shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\Geometry_Triangle_vs.hlsl">
-      <Filter>shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\Geometry_Triangle_gs.hlsl">
-      <Filter>shaders</Filter>
-    </FxCompile>
     <FxCompile Include="shaders\ChromaticAberration_ps.hlsl">
       <Filter>shaders\PostProcessing</Filter>
     </FxCompile>
@@ -269,15 +257,21 @@
     <FxCompile Include="shaders\wobblyBox_vs.hlsl">
       <Filter>shaders\Sphere</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\Geometry_Triangle_gs.hlsl">
+      <Filter>shaders\Explotiion shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\Geometry_Triangle_ps.hlsl">
+      <Filter>shaders\Explotiion shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\Geometry_Triangle_vs.hlsl">
+      <Filter>shaders\Explotiion shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App1.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="HeightMap.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
@@ -295,9 +289,6 @@
     <ClCompile Include="TessilatedShereMeshShereMesh.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="VertexShader.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="WobblyBox.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -311,9 +302,6 @@
       <Filter>Source\Shaders\PostProccessing</Filter>
     </ClCompile>
     <ClCompile Include="PostProccessingUpScale.cpp">
-      <Filter>Source\Shaders\PostProccessing</Filter>
-    </ClCompile>
-    <ClCompile Include="PostProcessing.cpp">
       <Filter>Source\Shaders\PostProccessing</Filter>
     </ClCompile>
     <ClCompile Include="PostProcessingBase.cpp">
@@ -346,15 +334,23 @@
     <ClCompile Include="DepthShader.cpp">
       <Filter>Source\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="PlanetShader.cpp">
-      <Filter>Source\Shaders</Filter>
-    </ClCompile>
     <ClCompile Include="TessellationShader.cpp">
       <Filter>Source\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="TextureShader.cpp">
       <Filter>Source\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="GeomertyShaderScene.cpp" />
+    <ClCompile Include="VertexShader.cpp">
+      <Filter>Source\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessing.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GeomertyShaderScene.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="WobblyShader.cpp">
+      <Filter>Source\Shaders</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

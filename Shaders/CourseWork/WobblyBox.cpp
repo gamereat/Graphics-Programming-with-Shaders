@@ -1,8 +1,6 @@
 #include "wobblyBox.h"
 
-#include "../DXFramework/BaseApplication.h"
-bool WobblyBox::isTessMenuOpen = false;
-bool WobblyBox::isWaterMenuOpen = false;
+#include "../DXFramework/BaseApplication.h" 
  
 WobblyBox::WobblyBox(std::string sceneName)
 	: Scene(sceneName)
@@ -12,16 +10,16 @@ WobblyBox::WobblyBox(std::string sceneName)
 WobblyBox::~WobblyBox()
 {
 	// clean up my memories
-	if (PlanetShpere)
+	if (boxShape)
 	{
-		delete PlanetShpere;
-		PlanetShpere = nullptr;
+		delete boxShape;
+		boxShape = nullptr;
 	}
 
-	if (planetShader)
+	if (wobblyShader)
 	{
-		delete planetShader;
-		planetShader = nullptr;
+		delete wobblyShader;
+		wobblyShader = nullptr;
 	}
 }
 
@@ -30,22 +28,22 @@ void WobblyBox::Init(HWND hwnd, ID3D11Device * device, ID3D11DeviceContext * dev
 {
 	Scene::Init(hwnd, device, deviceContext);
 
-	PlanetShpere = new CubeMesh(device, deviceContext, L"../res/bunny.png", 10);
-	planetShader = new PlanetShader(device, hwnd);
+	boxShape = new CubeMesh(device, deviceContext, L"../res/bunny.png", 10);
+	wobblyShader = new WobblyShader(device, hwnd);
 
 	heightMapTexture = new Texture(device, deviceContext, L"../res/cloud.png");
 
 	//tesselationInfo.outerTessellationValue = XMINT4(1, 1, 1, 1);
 	//tesselationInfo.innerTesselastionValue = XMINT2(1, 1);
  
-	plantinfo.amplutude = 0.2;
-	plantinfo.speed = 0.2;
-	plantinfo.steepnesss = 0.2;
-	plantinfo.freqancy = XMFLOAT3(1.75, 1.75, 1.75);
+	waveInfo.amplutude = 0.4;
+	waveInfo.speed = 1.2;
+	waveInfo.steepnesss = 0.2;
+	waveInfo.freqancy = XMFLOAT3(1.9, 1.75, 1.75);
 
-	tesselationInfo.maxDistance = 100;
+	tesselationInfo.maxDistance = 10;
 	tesselationInfo.maxTesselationAmmount = 6;
-	tesselationInfo.minDistance = 10;
+	tesselationInfo.minDistance = 1;
 	tesselationInfo.minTesselationAmmount = 1;
 
  		
@@ -57,7 +55,7 @@ void WobblyBox::Update(Timer* timer)
 
  
 
-	plantinfo.time = timer->GetTotalTimePast();
+	waveInfo.time = timer->GetTotalTimePast();
 }
 
 void WobblyBox::Render(RenderTexture * renderTexture, D3D * device, Camera * camera, RenderTexture * depthMap[], Light * light[])
@@ -89,11 +87,11 @@ void WobblyBox::Render(RenderTexture * renderTexture, D3D * device, Camera * cam
 	}
 
 	tesselationInfo.camPos = XMFLOAT4(camera->GetPosition().x, camera->GetPosition().y, camera->GetPosition().z, 0);
-	PlanetShpere->SendData(device->GetDeviceContext());
+	boxShape->SendData(device->GetDeviceContext());
 
-	planetShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, PlanetShpere->GetTexture(), heightMapTexture->GetTexture(), tesselationInfo, plantinfo, depthMaps,light);
+	wobblyShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, boxShape->GetTexture(), heightMapTexture->GetTexture(), tesselationInfo, waveInfo, depthMaps,light);
 
-	planetShader->Render(device->GetDeviceContext(), PlanetShpere->GetIndexCount());
+	wobblyShader->Render(device->GetDeviceContext(), boxShape->GetIndexCount());
 
 
 	// Present the rendered scene to the screen.
@@ -159,6 +157,23 @@ void WobblyBox::SceneInformationPopUp(bool * is_open)
 
 }
 
+void WobblyBox::ResetLights(Light * lights[])
+{
+	lights[0]->SetAmbientColour(0, 0.48, 0, 1);
+	lights[0]->SetAttenuationContantFactor(1);
+	lights[0]->SetPosition(0, 2,0);;
+	lights[0]->SetDiffuseColour(0, 0, 1, 1);
+
+	lights[1]->SetAttenuationContantFactor(1);
+	lights[1]->SetPosition(0, 0, -9);;
+	lights[1]->SetDiffuseColour(1, 0.6, 1, 1);
+
+	tesselationInfo.maxDistance = 10;
+	tesselationInfo.maxTesselationAmmount = 6;
+	tesselationInfo.minDistance = 1;
+	tesselationInfo.minTesselationAmmount = 1;
+}
+
 void WobblyBox::GenerateDepthPass(D3D* device, Camera* camera, RenderTexture * depthMap[], Light * light[])
 {
 	// Loop though for each light to generate depth map for each
@@ -189,11 +204,11 @@ void WobblyBox::GenerateDepthPass(D3D* device, Camera* camera, RenderTexture * d
 
 		////// Send geometry data (from mesh)
 
-		PlanetShpere->SendData(device->GetDeviceContext());
+		boxShape->SendData(device->GetDeviceContext());
 
 		depthShader->SetShaderParameters(device->GetDeviceContext(), worldMatrix, lightViewMartix, lightProjectionMatrix);
 
-		depthShader->Render(device->GetDeviceContext(), PlanetShpere->GetIndexCount());
+		depthShader->Render(device->GetDeviceContext(), boxShape->GetIndexCount());
 
 		 
 		// Reset the render target back to the original back buffer and not the render to texture anymore.
@@ -213,13 +228,13 @@ void WobblyBox::waterOptions(bool * is_open)
 			ImGui::End();
 			return;
 		}
-		ImGui::DragFloat("Speed", &plantinfo.speed);
+		ImGui::DragFloat("Speed", &waveInfo.speed);
 
 
-		ImGui::DragFloat("Amp", &plantinfo.amplutude);
-		ImGui::DragFloat3("freq", &plantinfo.freqancy.x);
-		ImGui::DragFloat("time", &plantinfo.time);
-		ImGui::DragFloat("steepnees", &plantinfo.steepnesss);
+		ImGui::SliderFloat("Amplutude", &waveInfo.amplutude,-0.4,0.4);
+		ImGui::SliderFloat3("freq", &waveInfo.freqancy.x,0,10);
+		ImGui::DragFloat("Steepess", &waveInfo.steepnesss, -0.4, 0.4);
+		ImGui::Text("Time: %f", &waveInfo.time);
 
 
 		ImGui::End();

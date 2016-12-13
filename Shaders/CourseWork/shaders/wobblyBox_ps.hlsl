@@ -94,133 +94,69 @@ float4 main(InputType input) : SV_TARGET
         projectTexCoord[i].x = input.lightViewPosition[i].x / input.lightViewPosition[i].w / 2.0f + 0.5f;
         projectTexCoord[i].y = -input.lightViewPosition[i].y / input.lightViewPosition[i].w / 2.0f + 0.5f;
 
-
-	
-		//// Determine if the projected coordinates are in the 0 to 1 range.  If so then this pixel is in the view of the light.
-		
-  //      if ((saturate(projectTexCoord[i].x) == projectTexCoord[i].x) && (saturate(projectTexCoord[i].y) == projectTexCoord[i].y))
-  //      {
-
-  //          switch (i)
-  //          {
-  //              case 0:
-  //                  depthValue = depthMapTexture.Sample(SampleTypeClamp, projectTexCoord[i]).r;
-
-  //                  break;
-  //              case 1:
-  //                  depthValue = depthMapTexture1.Sample(SampleTypeClamp, projectTexCoord[i]).r;
-
-  //                  break;
-  //              case 2:
-  //                  depthValue = depthMapTexture2.Sample(SampleTypeClamp, projectTexCoord[i]).r;
-
-  //                  break;
-  //              case 3:
-  //                  depthValue = depthMapTexture.Sample(SampleTypeClamp, projectTexCoord[i]).r;
-
-  //                  break;
-  //              default:
-  //                  depthValue = depthMapTexture3.Sample(SampleTypeClamp, projectTexCoord[i]).r;
-
-  //                  break;
-  //          }
-		//	// Sample the shadow map depth value from the depth texture using the sampler at the projected texture coordinate location.
-
-		//	// Calculate the depth of the light.
-  //          lightDepthValue = input.lightViewPosition[i].z / input.lightViewPosition[i].w;
-
-		//	// Subtract the bias from the lightDepthValue.
-  //          lightDepthValue = lightDepthValue - bias;
-
-		//	// Compare the depth of the shadow map value and the depth of the light to determine whether to shadow or to light this pixel.
-		//	// If the light is in front of the object then light the pixel, if not then shadow this pixel since an object (occluder) is casting a shadow on it.
-  //          if (lightDepthValue < depthValue)
-  //          {
-		//		 //Calculate the amount of light on this pixel.
-  //              lightIntensity = saturate(dot(input.normal, input.lightPos[i]));
-
-  //              if (lightIntensity > 0.0f)
-  //              {
-
-		//			//Determine the final diffuse color based on the diffuse color and the amount of light intensity.
-  //                  shadowColourValue[i] += (diffuseColour[i] * lightIntensity);
-
-		//			// Saturate the final light color.
-  //                  shadowColourValue[i] = saturate(shadowColourValue[i]);
-
  
+        distance = length(input.position3D - position[i].xyz);
 
-						
-  //                  color += shadowColourValue[0];
-
-  //              }
-  //          }
-  //      }
-        //else
+        if (distance < attenuationValues[i].w || lightType[i].x == 1)
         {
-            distance = length(input.position3D - position[i].xyz);
+            if (lightType[i].y == 1)
+            {
+				// Invert the light direction for calculations.
+                lightDir = normalize(input.position3D - position[i].xyz);
 
-            if (distance < attenuationValues[i].w || lightType[i].x == 1)
+				// Calculate the amount of light on this pixel.
+                lightIntensity = saturate(dot(input.normal, -lightDir));
+
+            }
+            else if (lightType[i].x == 1)
+            {
+
+				// Invert the light direction for calculations.
+                lightDir = -lightDirection[i].xyz;
+
+				// Calculate the amount of light on this pixel.
+                lightIntensity = saturate(dot(input.normal, lightDir));
+            }
+
+
+
+            if (lightIntensity > 0.0f)
             {
                 if (lightType[i].y == 1)
                 {
-					// Invert the light direction for calculations.
-                    lightDir = normalize(input.position3D - position[i].xyz);
-
-					// Calculate the amount of light on this pixel.
-                    lightIntensity = saturate(dot(input.normal, -lightDir));
-
+					// Work out the attenation value
+                    attenuation = 1 / (attenuationValues[i].x +
+						attenuationValues[i].y * distance + pow(attenuationValues[i].z, 2));
                 }
-                else if (lightType[i].x == 1)
+
+
+                color += (diffuseColour[i] * lightIntensity);
+
+                if (lightType[i].y == 1)
                 {
-
-					// Invert the light direction for calculations.
-                    lightDir = -lightDirection[i].xyz;
-
-					// Calculate the amount of light on this pixel.
-                    lightIntensity = saturate(dot(input.normal, lightDir));
+                    color = color * attenuation;
                 }
+                color = saturate(color);
 
-
-
-                if (lightIntensity > 0.0f)
+                if (isSpecular[i] == 1)
                 {
-                    if (lightType[i].y == 1)
-                    {
-						// Work out the attenation value
-                        attenuation = 1 / (attenuationValues[i].x +
-							attenuationValues[i].y * distance + pow(attenuationValues[i].z, 2));
-                    }
+					// Calculate reflection vector based on the light intensity, normal vector and light direction
+                    reflection = reflect(lightDir, input.normal);
 
+					// Determine the amount of specular light based on the reflection vector, viewing direction, and specular power.
+                    specular = pow(saturate(dot(reflection, input.viewDirection)), specularPower[i]);
 
-                    color += (diffuseColour[i] * lightIntensity);
+					//sum up specular light
+                    finalSpec = specularColour[i] * specular;
 
-                    if (lightType[i].y == 1)
-                    {
-                        color = color * attenuation;
-                    }
-                    color = saturate(color);
-
-                    if (isSpecular[i] == 1)
-                    {
-						// Calculate reflection vector based on the light intensity, normal vector and light direction
-                        reflection = reflect(lightDir, input.normal);
-
-						// Determine the amount of specular light based on the reflection vector, viewing direction, and specular power.
-                        specular = pow(saturate(dot(reflection, input.viewDirection)), specularPower[i]);
-
-						//sum up specular light
-                        finalSpec = specularColour[i] * specular;
-
-						// Add the specular component last to the output colour.
-                        color = saturate(color + finalSpec);
-                    }
+					// Add the specular component last to the output colour.
+                    color = saturate(color + finalSpec);
                 }
-				
             }
+				
         }
-
     }
+ 
 
 
 	// Sample the pixel color from the texture using the sampler at this texture coordinate location.

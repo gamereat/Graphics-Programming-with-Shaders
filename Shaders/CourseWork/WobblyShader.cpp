@@ -1,14 +1,14 @@
 // tessellation shader.cpp
-#include "PlanetShader.h"
+#include "WobblyShader.h"
 
-PlanetShader::PlanetShader(ID3D11Device* device, HWND hwnd) : BaseShader(device, hwnd)
+WobblyShader::WobblyShader(ID3D11Device* device, HWND hwnd) : BaseShader(device, hwnd)
 {
 	InitShader(L"shaders/wobblyBox_vs.hlsl", L"shaders/wobblyBox_hs.hlsl", L"shaders/wobblyBox_ds.hlsl", L"shaders/wobblyBox_ps.hlsl");
 	//InitShader(L"shaders/planet_vs.hlsl", L"shaders/planet_ps.hlsl");
 }
 
 
-PlanetShader::~PlanetShader()
+WobblyShader::~WobblyShader()
 {
 	// Release the sampler state.
 	if (m_sampleState)
@@ -53,7 +53,7 @@ PlanetShader::~PlanetShader()
 	BaseShader::~BaseShader();
 }
 
-void PlanetShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
+void WobblyShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 {
 	D3D11_BUFFER_DESC matrixBufferDesc;
 	D3D11_SAMPLER_DESC samplerDesc;
@@ -112,7 +112,7 @@ void PlanetShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 
 
 	planetDesc.Usage = D3D11_USAGE_DYNAMIC;
-	planetDesc.ByteWidth = sizeof(PlanetBufferType);
+	planetDesc.ByteWidth = sizeof(WavetBufferType);
 	planetDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	planetDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	planetDesc.MiscFlags = 0;
@@ -160,7 +160,7 @@ void PlanetShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 
 }
 
-void PlanetShader::InitShader(WCHAR* vsFilename, WCHAR* hsFilename, WCHAR* dsFilename, WCHAR* psFilename)
+void WobblyShader::InitShader(WCHAR* vsFilename, WCHAR* hsFilename, WCHAR* dsFilename, WCHAR* psFilename)
 {
 
 	// InitShader must be overwritten and it will load both vertex and pixel shaders + setup buffers
@@ -174,13 +174,13 @@ void PlanetShader::InitShader(WCHAR* vsFilename, WCHAR* hsFilename, WCHAR* dsFil
 }
 
 
-void PlanetShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const XMMATRIX & worldMatrix, const XMMATRIX & viewMatrix, const XMMATRIX & projectionMatrix, ID3D11ShaderResourceView * texture, ID3D11ShaderResourceView * highMap, TessellationBufferType tesselationInfo, PlanetBufferType plantinfo, ID3D11ShaderResourceView * depthMap[], Light * light[])
+void WobblyShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, const XMMATRIX & worldMatrix, const XMMATRIX & viewMatrix, const XMMATRIX & projectionMatrix, ID3D11ShaderResourceView * texture, ID3D11ShaderResourceView * highMap, TessellationBufferType tesselationInfo, WavetBufferType plantinfo, ID3D11ShaderResourceView * depthMap[], Light * light[])
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	MatrixBufferType* dataPtr;
 	TessellationBufferType* tessPtr;
-	PlanetBufferType* plantPtr;
+	WavetBufferType* plantPtr;
 	unsigned int bufferNumber;
 	XMMATRIX tworld, tview, tproj;
 
@@ -254,7 +254,7 @@ void PlanetShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, cons
 
 
 	deviceContext->Map(planetBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	plantPtr = (PlanetBufferType*)mappedResource.pData;
+	plantPtr = (WavetBufferType*)mappedResource.pData;
 
 	plantPtr->speed = plantinfo.speed;
 	plantPtr->amplutude = plantinfo.amplutude;
@@ -358,7 +358,7 @@ void PlanetShader::SetShaderParameters(ID3D11DeviceContext * deviceContext, cons
 
 }
 
-void PlanetShader::Render(ID3D11DeviceContext* deviceContext, int indexCount)
+void WobblyShader::Render(ID3D11DeviceContext* deviceContext, int indexCount)
 {
 	// Set the sampler state in the pixel shader.
 	deviceContext->PSSetSamplers(0, 1, &m_sampleState);
