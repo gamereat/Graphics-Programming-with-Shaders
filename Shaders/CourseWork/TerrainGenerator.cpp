@@ -309,7 +309,7 @@ void TerrainGenerator::SetShaderParameters(ID3D11DeviceContext * deviceContext, 
 	}
 	deviceContext->Unmap(lightBuffer, 0);
 	bufferNumber = 0;
-	deviceContext->PSSetConstantBuffers(bufferNumber, 1, &lightBuffer);
+	deviceContext->PSSetConstantBuffers(0, 1, &lightBuffer);
 
 
 

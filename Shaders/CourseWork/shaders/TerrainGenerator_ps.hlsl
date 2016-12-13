@@ -81,7 +81,7 @@ float4 main(InputType input) : SV_TARGET
 
     if (scaler> 0)
     {
-        float hight = shaderTexture.SampleLevel(SampleTypeClamp, input.tex, 0).r * scaler;
+        float hight = hightMap.SampleLevel(SampleTypeClamp, input.tex, 0).r * scaler;
   
     // Star at green colour 
    
